@@ -5,12 +5,18 @@
  */
 package CapaPresentacion;
 
+import CapaDatos.Tipoproveedores;
+import CapaNegocios.TipoproveedoresJpaController;
+import java.util.List;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author mario
  */
 public class TipoProveedor extends javax.swing.JFrame {
-
+    //TipoproveedoresJpaController ControlTipoProv = new TipoproveedoresJpaController();
+    
     /**
      * Creates new form TipoProveedor
      */
@@ -36,7 +42,7 @@ public class TipoProveedor extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jLabel12 = new javax.swing.JLabel();
-        jTextField11 = new javax.swing.JTextField();
+        txtTipoProveedor = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -46,6 +52,11 @@ public class TipoProveedor extends javax.swing.JFrame {
         jLabel11.setText("Buscar Tipo:");
 
         jButton5.setText("Registar");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -85,7 +96,7 @@ public class TipoProveedor extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel12)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtTipoProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(38, 38, 38)
                         .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
@@ -107,7 +118,7 @@ public class TipoProveedor extends javax.swing.JFrame {
                 .addGap(55, 55, 55)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel12)
-                    .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTipoProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton5))
                 .addGap(94, 94, 94)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -125,6 +136,26 @@ public class TipoProveedor extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        String tipoProveedor = this.txtTipoProveedor.getText();
+        TipoproveedoresJpaController t = new TipoproveedoresJpaController(entityMain.getInstance());
+        Tipoproveedores tp = new Tipoproveedores();
+        tp.setTipoprov(tipoProveedor);
+        
+        try{
+         t.create(tp);
+         JOptionPane.showConfirmDialog(null, "Datos registrados correctamente");
+        }
+        catch (Exception e){
+            JOptionPane.showConfirmDialog(null, "Hubo un error. " + e.toString());
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    public void LlenarTabla(){
+        
+        
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -170,6 +201,6 @@ public class TipoProveedor extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField10;
-    private javax.swing.JTextField jTextField11;
+    private javax.swing.JTextField txtTipoProveedor;
     // End of variables declaration//GEN-END:variables
 }
