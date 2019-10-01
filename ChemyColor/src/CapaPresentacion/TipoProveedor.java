@@ -19,6 +19,7 @@ import javax.swing.table.DefaultTableModel;
 public class TipoProveedor extends javax.swing.JFrame {
 
     //TipoproveedoresJpaController ControlTipoProv = new TipoproveedoresJpaController();
+   // TipoproveedoresJpaController tabla = new TipoproveedoresJpaController(entityMain.getInstance());
     TipoproveedoresJpaController tabla = new TipoproveedoresJpaController(entityMain.getInstance());
 
     /**
