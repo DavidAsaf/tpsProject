@@ -17,7 +17,7 @@ CodTipoProv int primary key,
 TipoProv varchar(50)
 );
 
-create sequence CodTipoProv minvalue 1 start with 1 cache 10;
+create sequence CodTipoProv minvalue 1 start with 1 INCREMENT BY 1 cache 10;
 
 create table Proveedores
 (
