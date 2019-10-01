@@ -7,15 +7,8 @@ package CapaDatos;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
+import java.util.List;
+import javax.persistence.*;
 
 /**
  *
@@ -27,9 +20,14 @@ import javax.persistence.Table;
     @NamedQuery(name = "Proveedores.findAll", query = "SELECT p FROM Proveedores p")})
 public class Proveedores implements Serializable {
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoproveedor")
+    //private List<Telefonosproveedor> telefonosproveedorList;
+
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SeqProveedores")
+    @SequenceGenerator(name = "SeqProveedores", sequenceName = "CodigoProveedor_Seq", allocationSize = 1)
     @Basic(optional = false)
     @Column(name = "CODIGOPROVEEDOR")
     private BigDecimal codigoproveedor;
@@ -215,5 +213,7 @@ public class Proveedores implements Serializable {
     public String toString() {
         return "CapaDatos.Proveedores[ codigoproveedor=" + codigoproveedor + " ]";
     }
+
+    
     
 }

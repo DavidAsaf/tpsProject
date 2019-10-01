@@ -4,11 +4,9 @@ CodigoTipoContribuyente int primary key,
 TipoContribuyente varchar(100)
 );
 
-create sequence CodigoTipoContribuyente1 minvalue 1 start with 1 cache 10;
-
-insert into TipoContribuyente values ( CodigoTipoContribuyente1.nextval ,'Grande');
-insert into TipoContribuyente values (CodigoTipoContribuyente1.nextval ,'Mediana');
-insert into TipoContribuyente values (CodigoTipoContribuyente1.nextval ,'Peque�a');
+insert into TipoContribuyente values ( 1,'Grande');
+insert into TipoContribuyente values (2,'Mediana');
+insert into TipoContribuyente values (3,'Pequena');
 
 
 create table TipoProveedores
@@ -34,18 +32,22 @@ DUI varchar(10),
 Giro varchar(20),
 Limite varchar(20),
 CuentaPorPagar varchar(100),
+Celular varchar(10), 
+Telefono varchar(10),
 CodigoTipoContribuyente int, foreign key (CodigoTipoContribuyente) references TipoContribuyente(CodigoTipoContribuyente),
 CodTipoProv int, foreign key (CodTipoProv) references TipoProveedores(CodTipoProv)
 );
 
-CREATE SEQUENCE CodigoProveedor MINVALUE 1 START WITH 1 INCREMENT BY 1 CACHE 10;
+CREATE SEQUENCE CodigoProveedor_Seq MINVALUE 1 START WITH 1 INCREMENT BY 1 CACHE 10;
 
 create table TelefonosProveedor
 (
+CodigoTelefono int primary key,
 CodigoProveedor int, foreign key (CodigoProveedor) references Proveedores(CodigoProveedor),
 Telefono varchar(12)
 );
 
+create sequence TelProv_Seq minvalue 1 start with 1 INCREMENT BY 1 cache 10;
 
 create table Bodegas
 (
