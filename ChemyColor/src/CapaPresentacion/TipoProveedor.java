@@ -8,20 +8,26 @@ package CapaPresentacion;
 import CapaDatos.Tipoproveedores;
 import CapaNegocios.TipoproveedoresJpaController;
 import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author mario
  */
 public class TipoProveedor extends javax.swing.JFrame {
+
     //TipoproveedoresJpaController ControlTipoProv = new TipoproveedoresJpaController();
-    
+    TipoproveedoresJpaController tabla = new TipoproveedoresJpaController(entityMain.getInstance());
+
     /**
      * Creates new form TipoProveedor
      */
     public TipoProveedor() {
         initComponents();
+        verTabla();
+        llenarTabla();
     }
 
     /**
@@ -51,7 +57,7 @@ public class TipoProveedor extends javax.swing.JFrame {
 
         jLabel11.setText("Buscar Tipo:");
 
-        jButton5.setText("Registar");
+        jButton5.setText("Registrar");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
@@ -60,13 +66,13 @@ public class TipoProveedor extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
         jScrollPane1.setViewportView(jTable1);
@@ -85,30 +91,32 @@ public class TipoProveedor extends javax.swing.JFrame {
                 .addGap(0, 85, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 716, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(83, 83, 83))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(226, 226, 226)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(60, 60, 60)
-                        .addComponent(jLabel11)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel12)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtTipoProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(38, 38, 38)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(104, 104, 104)
-                        .addComponent(jLabel1)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(60, 60, 60)
                 .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(289, 289, 289))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(226, 226, 226)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel12)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtTipoProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(38, 38, 38)
+                                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(104, 104, 104)
+                                .addComponent(jLabel1))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(289, 289, 289)
+                        .addComponent(jLabel11)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -120,13 +128,13 @@ public class TipoProveedor extends javax.swing.JFrame {
                     .addComponent(jLabel12)
                     .addComponent(txtTipoProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton5))
-                .addGap(94, 94, 94)
+                .addGap(85, 85, 85)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11)
                     .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(32, 32, 32)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton3)
                     .addComponent(jButton4))
@@ -137,25 +145,31 @@ public class TipoProveedor extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        String tipoProveedor = this.txtTipoProveedor.getText();
-        TipoproveedoresJpaController t = new TipoproveedoresJpaController(entityMain.getInstance());
-        Tipoproveedores tp = new Tipoproveedores();
-        tp.setTipoprov(tipoProveedor);
-        
-        try{
-         t.create(tp);
-         JOptionPane.showConfirmDialog(null, "Datos registrados correctamente");
-        }
-        catch (Exception e){
-            JOptionPane.showConfirmDialog(null, "Hubo un error. " + e.toString());
-        }
+        Guardar();
     }//GEN-LAST:event_jButton5ActionPerformed
 
-    public void LlenarTabla(){
-        
-        
+    private void Guardar() {
+        if (txtTipoProveedor.getText().length()!= 0) {
+            String tipoProveedor = this.txtTipoProveedor.getText();
+            TipoproveedoresJpaController t = new TipoproveedoresJpaController(entityMain.getInstance());
+            Tipoproveedores tp = new Tipoproveedores();
+            tp.setTipoprov(tipoProveedor);
+
+            try {
+                t.create(tp);
+                JOptionPane.showMessageDialog(null, "Datos registrados correctamente");
+                llenarTabla();
+                txtTipoProveedor.setText("");
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Hubo un error. " + e.toString(), 
+                    "Error", JOptionPane.WARNING_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "No ha ingresado el tipo de proveedor.", 
+                    "Error", JOptionPane.WARNING_MESSAGE);
+        }
     }
-    
+
     /**
      * @param args the command line arguments
      */
@@ -190,6 +204,54 @@ public class TipoProveedor extends javax.swing.JFrame {
             }
         });
     }
+
+    public static DefaultTableModel tbpro;
+
+    private void verTabla() {
+        try {
+            tbpro = (new DefaultTableModel(
+                    null, new String[]{
+                        "ID", "Tipo Proveedor"}) {
+                Class[] types = new Class[]{
+                    java.lang.String.class,
+                    java.lang.String.class
+                };
+                boolean[] canEdit = new boolean[]{
+                    false, false
+                };
+
+                @Override
+                public Class getColumnClass(int columbIndex) {
+                    return types[columbIndex];
+                }
+
+                @Override
+                public boolean isCellEditable(int rowIdex, int colIndex) {
+                    return canEdit[colIndex];
+                }
+            });
+            jTable1.setModel(tbpro);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.toString() + "error");
+        }
+    }
+
+    private void llenarTabla() {
+        try {
+            Object A[] = null;
+            List<Tipoproveedores> Listatipo;
+            Listatipo = tabla.findTipoproveedoresEntities();
+            for (int i = 0; i < Listatipo.size(); i++) {
+                tbpro.addRow(A);
+                tbpro.setValueAt(Listatipo.get(i).getCodtipoprov(), i, 0);
+                tbpro.setValueAt(Listatipo.get(i).getTipoprov(), i, 1);
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton3;
