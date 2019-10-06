@@ -4,6 +4,7 @@ CodigoTipoContribuyente int primary key,
 TipoContribuyente varchar(100)
 );
 
+
 insert into TipoContribuyente values ( 1,'Grande');
 insert into TipoContribuyente values (2,'Mediana');
 insert into TipoContribuyente values (3,'Pequena');
@@ -15,7 +16,7 @@ CodTipoProv int primary key,
 TipoProv varchar(50)
 );
 
-create sequence CodTipoProv minvalue 1 start with 1 INCREMENT BY 1 cache 10;
+create sequence CodTipoProv minvalue 1 start with 1 cache 10;
 
 create table Proveedores
 (
@@ -32,22 +33,20 @@ DUI varchar(10),
 Giro varchar(20),
 Limite varchar(20),
 CuentaPorPagar varchar(100),
-Celular varchar(10), 
-Telefono varchar(10),
 CodigoTipoContribuyente int, foreign key (CodigoTipoContribuyente) references TipoContribuyente(CodigoTipoContribuyente),
 CodTipoProv int, foreign key (CodTipoProv) references TipoProveedores(CodTipoProv)
 );
 
-CREATE SEQUENCE CodigoProveedor_Seq MINVALUE 1 START WITH 1 INCREMENT BY 1 CACHE 10;
+create sequence CodigoProveedor minvalue 1 start with 1 cache 10;
 
 create table TelefonosProveedor
 (
-CodigoTelefono int primary key,
+IDTELEFONO NUMBER PRIMARY KEY,
 CodigoProveedor int, foreign key (CodigoProveedor) references Proveedores(CodigoProveedor),
-Telefono varchar(12)
+Telefono varchar(12),
+TIPO VARCHAR2(20)
 );
 
-create sequence TelProv_Seq minvalue 1 start with 1 INCREMENT BY 1 cache 10;
 
 create table Bodegas
 (
@@ -205,9 +204,9 @@ start with 1
 minvalue 1  
 cache 10;
 
-insert into TipoUsuarios values (CodTipoUsuario.nextval,'Administrador');
-insert into TipoUsuarios values (CodTipoUsuario.nextval,'Jefe de Bodega');
-insert into TipoUsuarios values (CodTipoUsuario.nextval,'Auxiliar de Bodega');
+insert into TipoUsuarios values (SeqCodTipoUsuario.nextval,'Administrador');
+insert into TipoUsuarios values (SeqCodTipoUsuario.nextval,'Jefe de Bodega');
+insert into TipoUsuarios values (SeqCodTipoUsuario.nextval,'Auxiliar de Bodega');
 
 
 
@@ -225,14 +224,6 @@ Direccion varchar(300),
 Estado integer
 );
 
---Para poner un usuario por default.
-INSERT INTO 
-	Usuarios 
-VALUES 
-	(1, 'ADMIN','ADMIN', 'admin@chemycolor.com', 'admin', 
-	0x07E6E506A23ABD3E2F0205567EC06CA74D9E45B67D0A32AAF980A8182A91F67B,
-	0x1BD5131FCEF59197DFBB8FB4D9523CFEB0864A4B523BBA8FDF0A8552F1284EA5, '0000-0000', 'Chemy',1);
-
 
 
 
@@ -242,7 +233,7 @@ CREATE TABLE HistorialFacturas
 Codigo INT PRIMARY KEY,
 NumFactura VARCHAR(25) NOT NULL,
 cont_O_credit integer NOT NULL, --Variable para saber si es al contado o al credito. Contado = true y Credito = false
-CantidadDiasCredit INT, --Variable para saber la cantidad de los dias si es al cr�dito
+CantidadDiasCredit INT, --Variable para saber la cantidad de los dias si es al crédito
 Estado integer NOT NULL, --Variable para saber si es entrada o salida. Entrada = false(0) y Salida = true(1)
 CodigoBodega INT, FOREIGN KEY (CodigoBodega) REFERENCES Bodegas(CodigoBodega),
 CodigoArticulo INT, FOREIGN KEY (CodigoArticulo) REFERENCES Articulos(CodigoArticulo),
@@ -253,18 +244,18 @@ Ticket VARCHAR(50),
 AjusteInventario VARCHAR(100),
 CodigoProveedor INT, FOREIGN KEY (CodigoProveedor) REFERENCES Proveedores(CodigoProveedor),
 
---entradas simbolog�a = e
+--entradas simbología = e
 eUnidad INT,
 ePrecio decimal(18,4),
 eTotal decimal(18,4),
 
---salidas simbolog�a = o (Out en ingles)
+--salidas simbología = o (Out en ingles)
 oUnidad INT,
 oPrecio decimal(18,4),
 oTotal decimal(18,4),
 oCliente VARCHAR(100),
 
---Saldos simbolog�a = s
+--Saldos simbología = s
 sUnidad INT,
 sCostoPromedio decimal(18,4),
 sTotal decimal(18,4),
@@ -298,7 +289,7 @@ CREATE TABLE UsuarioSesion
 );
 
 
-INSERT INTO UsuarioSesion VALUES ('admin');
+INSERT INTO UsuarioSesion VALUES (1, 'admin');
 
 
 CREATE TABLE EmailRecuperador
@@ -312,8 +303,7 @@ CREATE TABLE EmailRecuperador
 INSERT INTO 
 	EmailRecuperador 
 VALUES 
-	('prueba@chemy.com','admin');
-GO
+	(1, 'prueba@chemy.com','admin');
 
 
 
