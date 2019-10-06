@@ -187,7 +187,7 @@ public class ProveedoresJpaController implements Serializable {
             em.close();
         }
     }
-
+    
     public int getProveedoresCount() {
         EntityManager em = getEntityManager();
         try {

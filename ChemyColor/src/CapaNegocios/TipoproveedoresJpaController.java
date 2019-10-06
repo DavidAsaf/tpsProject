@@ -14,11 +14,14 @@ import CapaDatos.Proveedores;
 import CapaDatos.Tipoproveedores;
 import CapaNegocios.exceptions.NonexistentEntityException;
 import CapaNegocios.exceptions.PreexistingEntityException;
+import CapaPresentacion.entityMain;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.ParameterMode;
+import javax.persistence.StoredProcedureQuery;
 
 /**
  *
@@ -35,6 +38,30 @@ public class TipoproveedoresJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
+    public Tipoproveedores findIdTipoproveedores(String prov) {
+        
+        EntityManagerFactory factory = entityMain.getInstance();
+        EntityManager em = factory.createEntityManager();
+        
+        em.getTransaction().begin();
+        StoredProcedureQuery storedProcedure=em.createStoredProcedureQuery("idTipoProveedor");
+        
+        storedProcedure.registerStoredProcedureParameter("tipoProveedor", String.class, ParameterMode.IN);
+        storedProcedure.registerStoredProcedureParameter("idTipoProv", Integer.class, ParameterMode.OUT);
+        
+        storedProcedure.setParameter("tipoProveedor", prov);        
+        storedProcedure.execute();
+        
+        Tipoproveedores tipo = new Tipoproveedores();
+        Integer codigo = (Integer) storedProcedure.getOutputParameterValue("idTipoProv");
+        tipo.setCodtipoprov(BigDecimal.valueOf(codigo));
+        
+        em.getTransaction().commit();
+        em.close();
+        
+        return tipo;
+    }
+    
     public void create(Tipoproveedores tipoproveedores) throws PreexistingEntityException, Exception {
         if (tipoproveedores.getProveedoresList() == null) {
             tipoproveedores.setProveedoresList(new ArrayList<Proveedores>());
@@ -180,6 +207,8 @@ public class TipoproveedoresJpaController implements Serializable {
             em.close();
         }
     }
+    
+    
 
     public int getTipoproveedoresCount() {
         EntityManager em = getEntityManager();
