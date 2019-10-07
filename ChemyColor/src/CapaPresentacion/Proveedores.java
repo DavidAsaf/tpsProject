@@ -7,6 +7,7 @@ package CapaPresentacion;
 
 import CapaDatos.*;
 import CapaNegocios.ProveedoresJpaController;
+import CapaNegocios.TelefonosproveedorJpaController;
 import CapaNegocios.TipoproveedoresJpaController;
 import java.math.BigDecimal;
 import java.util.List;
@@ -476,14 +477,16 @@ public class Proveedores extends javax.swing.JFrame {
         int tipoContr = ComprobacionComboContr();
         Tipoproveedores type = new Tipoproveedores();
         Tipocontribuyente contr = new Tipocontribuyente();
-
+        ProveedoresJpaController t = new ProveedoresJpaController(entityMain.getInstance());
+        CapaDatos.Proveedores pro = new CapaDatos.Proveedores();
+        BigDecimal idNewProveedor = t.findIdNewProveedor();
+        
         type.setCodtipoprov(BigDecimal.valueOf(tipoProv));
         type.setTipoprov(this.comboTipoProv.getSelectedItem().toString());
         contr.setCodigotipocontribuyente(BigDecimal.valueOf(tipoContr));
         contr.setTipocontribuyente(this.comboContribuyente.getSelectedItem().toString());
 
-        ProveedoresJpaController t = new ProveedoresJpaController(entityMain.getInstance());
-        CapaDatos.Proveedores pro = new CapaDatos.Proveedores();
+        pro.setCodigoproveedor(idNewProveedor);
         pro.setNombres(nombre);
         pro.setFechaingreso(fecha);
         pro.setDireccion(direccion);
@@ -502,6 +505,7 @@ public class Proveedores extends javax.swing.JFrame {
         if (estado == true) {
             try {
                 t.create(pro);
+                GuardarTelefonos(pro, tel, cel, true); //para guardar telefono y celular
                 llenarTabla();
                 JOptionPane.showMessageDialog(null, "Proveedor creado exitosamente.");
                 LimpiarControles();
@@ -526,6 +530,30 @@ public class Proveedores extends javax.swing.JFrame {
 
     }
 
+    private void GuardarTelefonos(CapaDatos.Proveedores p, String telefono, String cel, boolean var){
+        TelefonosproveedorJpaController t = new TelefonosproveedorJpaController(entityMain.getInstance());
+        CapaDatos.Telefonosproveedor nuevoT = new CapaDatos.Telefonosproveedor();
+        CapaDatos.Telefonosproveedor nuevoC = new CapaDatos.Telefonosproveedor();
+        
+        if (var == true){
+            nuevoT.setCodigoproveedor(p);
+            nuevoT.setTelefono(telefono);
+            nuevoT.setTipo("T");
+            
+            nuevoC.setCodigoproveedor(p);
+            nuevoC.setTelefono(cel);
+            nuevoC.setTipo("C");
+            
+            try {
+                t.create(nuevoT);
+                t.create(nuevoC);
+                System.out.println("Telefono y Celular creado con éxito.");
+            } catch (Exception e) {
+                System.out.println("Hubo un error. " + e.toString());
+            }
+        }
+    }
+    
     private void Eliminar() {
 
         try {

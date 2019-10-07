@@ -21,12 +21,14 @@ import javax.persistence.*;
 public class Proveedores implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoproveedor")
+    private List<Telefonosproveedor> telefonosproveedorList;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoproveedor")
     //private List<Telefonosproveedor> telefonosproveedorList;
 
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "CODIGOPROVEEDOR")
     private BigDecimal codigoproveedor;
@@ -211,6 +213,14 @@ public class Proveedores implements Serializable {
     @Override
     public String toString() {
         return "CapaDatos.Proveedores[ codigoproveedor=" + codigoproveedor + " ]";
+    }
+
+    public List<Telefonosproveedor> getTelefonosproveedorList() {
+        return telefonosproveedorList;
+    }
+
+    public void setTelefonosproveedorList(List<Telefonosproveedor> telefonosproveedorList) {
+        this.telefonosproveedorList = telefonosproveedorList;
     }
 
     

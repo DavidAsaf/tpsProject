@@ -15,10 +15,13 @@ import CapaDatos.Tipocontribuyente;
 import CapaDatos.Tipoproveedores;
 import CapaNegocios.exceptions.NonexistentEntityException;
 import CapaNegocios.exceptions.PreexistingEntityException;
+import CapaPresentacion.entityMain;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.ParameterMode;
+import javax.persistence.StoredProcedureQuery;
 
 /**
  *
@@ -35,6 +38,25 @@ public class ProveedoresJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
+    public BigDecimal findIdNewProveedor() {
+        
+        EntityManagerFactory factory = entityMain.getInstance();
+        EntityManager em = factory.createEntityManager();
+        
+        em.getTransaction().begin();
+        StoredProcedureQuery storedProcedure=em.createStoredProcedureQuery("nextCodProv");
+        
+        storedProcedure.registerStoredProcedureParameter("idProveedor", Integer.class, ParameterMode.OUT);     
+        storedProcedure.execute();
+        
+        BigDecimal codigo = BigDecimal.valueOf(Double.parseDouble(storedProcedure.getOutputParameterValue("idProveedor").toString()));
+        
+        em.getTransaction().commit();
+        em.close();
+        
+        return codigo;
+    }
+    
     public void create(Proveedores proveedores) throws PreexistingEntityException, Exception {
         EntityManager em = null;
         try {
