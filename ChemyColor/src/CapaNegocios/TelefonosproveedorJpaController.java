@@ -5,18 +5,22 @@
  */
 package CapaNegocios;
 
-import CapaDatos.Telefonosproveedor;
-import CapaNegocios.exceptions.NonexistentEntityException;
-import CapaNegocios.exceptions.PreexistingEntityException;
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import CapaDatos.Proveedores;
+import CapaDatos.Telefonosproveedor;
+import CapaNegocios.exceptions.NonexistentEntityException;
+import CapaNegocios.exceptions.PreexistingEntityException;
+import CapaPresentacion.entityMain;
+import java.math.BigDecimal;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.ParameterMode;
+import javax.persistence.StoredProcedureQuery;
 
 /**
  *
@@ -33,12 +37,92 @@ public class TelefonosproveedorJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
+//findIdTelProveedor(idProv IN INT, tipoTel IN VARCHAR2, idTel OUT INT) 
+    public int findIdTel(int id, String tipo) {
+
+        EntityManagerFactory factory = entityMain.getInstance();
+        EntityManager em = factory.createEntityManager();
+
+        em.getTransaction().begin();
+        StoredProcedureQuery storedProcedure = em.createStoredProcedureQuery("findIdTelProveedor");
+
+        storedProcedure.registerStoredProcedureParameter("idProv", Integer.class, ParameterMode.IN);
+        storedProcedure.registerStoredProcedureParameter("tipoTel", String.class, ParameterMode.IN);
+        storedProcedure.registerStoredProcedureParameter("idTel", Integer.class, ParameterMode.OUT);
+
+        storedProcedure.setParameter("idProv", id);
+        storedProcedure.setParameter("tipoTel", tipo);
+        storedProcedure.execute();
+
+        int idT = Integer.parseInt(storedProcedure.getOutputParameterValue("idTel").toString());
+
+        em.getTransaction().commit();
+        em.close();
+
+        return idT;
+    }
+    
+    public void editTelProveedor(int idP, String telT, String telC) {
+
+        EntityManagerFactory factory = entityMain.getInstance();
+        EntityManager em = factory.createEntityManager();
+
+        em.getTransaction().begin();
+        StoredProcedureQuery storedProcedure = em.createStoredProcedureQuery("telEditarProveedor");
+
+        storedProcedure.registerStoredProcedureParameter("idProv", Integer.class, ParameterMode.IN);
+        storedProcedure.registerStoredProcedureParameter("telefonoT", String.class, ParameterMode.IN);
+        storedProcedure.registerStoredProcedureParameter("telefonoC", String.class, ParameterMode.IN);
+
+        storedProcedure.setParameter("idProv", idP);
+        storedProcedure.setParameter("telefonoT", telT);
+        storedProcedure.setParameter("telefonoC", telC);
+        storedProcedure.execute();
+
+        em.getTransaction().commit();
+        em.close();
+
+    }
+
+    public String findTelProveedor(int id, String tipo) {
+
+        EntityManagerFactory factory = entityMain.getInstance();
+        EntityManager em = factory.createEntityManager();
+
+        em.getTransaction().begin();
+        StoredProcedureQuery storedProcedure = em.createStoredProcedureQuery("telProveedor");
+
+        storedProcedure.registerStoredProcedureParameter("idProv", Integer.class, ParameterMode.IN);
+        storedProcedure.registerStoredProcedureParameter("tipoTel", String.class, ParameterMode.IN);
+        storedProcedure.registerStoredProcedureParameter("telefonoP", String.class, ParameterMode.OUT);
+
+        storedProcedure.setParameter("idProv", id);
+        storedProcedure.setParameter("tipoTel", tipo);
+        storedProcedure.execute();
+
+        String telefono = storedProcedure.getOutputParameterValue("telefonoP").toString();
+
+        em.getTransaction().commit();
+        em.close();
+
+        return telefono;
+    }
+
     public void create(Telefonosproveedor telefonosproveedor) throws PreexistingEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            Proveedores codigoproveedor = telefonosproveedor.getCodigoproveedor();
+            if (codigoproveedor != null) {
+                codigoproveedor = em.getReference(codigoproveedor.getClass(), codigoproveedor.getCodigoproveedor());
+                telefonosproveedor.setCodigoproveedor(codigoproveedor);
+            }
             em.persist(telefonosproveedor);
+            if (codigoproveedor != null) {
+                codigoproveedor.getTelefonosproveedorList().add(telefonosproveedor);
+                codigoproveedor = em.merge(codigoproveedor);
+            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             if (findTelefonosproveedor(telefonosproveedor.getIdtelefono()) != null) {
@@ -57,7 +141,22 @@ public class TelefonosproveedorJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            Telefonosproveedor persistentTelefonosproveedor = em.find(Telefonosproveedor.class, telefonosproveedor.getIdtelefono());
+            Proveedores codigoproveedorOld = persistentTelefonosproveedor.getCodigoproveedor();
+            Proveedores codigoproveedorNew = telefonosproveedor.getCodigoproveedor();
+            if (codigoproveedorNew != null) {
+                codigoproveedorNew = em.getReference(codigoproveedorNew.getClass(), codigoproveedorNew.getCodigoproveedor());
+                telefonosproveedor.setCodigoproveedor(codigoproveedorNew);
+            }
             telefonosproveedor = em.merge(telefonosproveedor);
+            if (codigoproveedorOld != null && !codigoproveedorOld.equals(codigoproveedorNew)) {
+                codigoproveedorOld.getTelefonosproveedorList().remove(telefonosproveedor);
+                codigoproveedorOld = em.merge(codigoproveedorOld);
+            }
+            if (codigoproveedorNew != null && !codigoproveedorNew.equals(codigoproveedorOld)) {
+                codigoproveedorNew.getTelefonosproveedorList().add(telefonosproveedor);
+                codigoproveedorNew = em.merge(codigoproveedorNew);
+            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -86,6 +185,11 @@ public class TelefonosproveedorJpaController implements Serializable {
                 telefonosproveedor.getIdtelefono();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The telefonosproveedor with id " + id + " no longer exists.", enfe);
+            }
+            Proveedores codigoproveedor = telefonosproveedor.getCodigoproveedor();
+            if (codigoproveedor != null) {
+                codigoproveedor.getTelefonosproveedorList().remove(telefonosproveedor);
+                codigoproveedor = em.merge(codigoproveedor);
             }
             em.remove(telefonosproveedor);
             em.getTransaction().commit();
@@ -141,5 +245,5 @@ public class TelefonosproveedorJpaController implements Serializable {
             em.close();
         }
     }
-    
+
 }

@@ -5,17 +5,26 @@
  */
 package CapaPresentacion;
 
+import CapaDatos.Grupos;
+import CapaNegocios.GruposJpaController;
+import java.math.BigDecimal;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Amaya
  */
 public class GruposForm extends javax.swing.JFrame {
-
+    CapaNegocios.GruposJpaController tabla = new CapaNegocios.GruposJpaController(entityMain.getInstance());
     /**
      * Creates new form GruposForm
      */
     public GruposForm() {
         initComponents();
+        verTabla();
+        Llenar_Tabla();
     }
 
     /**
@@ -30,12 +39,12 @@ public class GruposForm extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
+        txtGrupo = new javax.swing.JTextField();
+        txtComision = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tablaGrupos = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
@@ -49,7 +58,7 @@ public class GruposForm extends javax.swing.JFrame {
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox<String>();
+        jComboBox1 = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -59,10 +68,15 @@ public class GruposForm extends javax.swing.JFrame {
 
         jButton1.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
         jButton1.setText("Guardar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
-        jTextField1.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
+        txtGrupo.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
 
-        jTextField2.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
+        txtComision.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
 
         jLabel3.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         jLabel3.setText("Comisión");
@@ -70,25 +84,16 @@ public class GruposForm extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         jLabel2.setText("Grupo:");
 
-        jTable1.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tablaGrupos.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        tablaGrupos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
-                "ID Grupo", "Grupo", "Comisión"
+
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setMinWidth(20);
-            jTable1.getColumnModel().getColumn(0).setMaxWidth(50);
-            jTable1.getColumnModel().getColumn(2).setMinWidth(30);
-            jTable1.getColumnModel().getColumn(2).setMaxWidth(70);
-        }
+        jScrollPane1.setViewportView(tablaGrupos);
 
         jButton2.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
         jButton2.setText("Nuevo");
@@ -110,8 +115,8 @@ public class GruposForm extends javax.swing.JFrame {
                     .addComponent(jLabel3))
                 .addGap(25, 25, 25)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtComision, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtGrupo, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(27, 27, 27)
                 .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 82, Short.MAX_VALUE)
@@ -134,11 +139,11 @@ public class GruposForm extends javax.swing.JFrame {
                         .addGap(36, 36, 36)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtGrupo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtComision, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(43, 43, 43)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -289,6 +294,91 @@ public class GruposForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        Guardar();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    
+    private void Guardar() {
+        if (txtGrupo.getText().length() != 0) {
+            String grupo = this.txtGrupo.getText();
+            String comi = this.txtComision.getText();
+             double dnum =Double.parseDouble(comi) ;
+            GruposJpaController t = new GruposJpaController(entityMain.getInstance());
+            Grupos tp = new Grupos();
+            tp.setNombregrupo(grupo);
+            tp.setComision(BigDecimal.valueOf(dnum));
+
+            try {
+                t.create(tp);
+                Llenar_Tabla();
+                JOptionPane.showMessageDialog(null, "Datos registrados correctamente");
+               // Llenar_Tabla();
+                txtGrupo.setText("");
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Hubo un error. " + e.toString(),
+                        "Error", JOptionPane.WARNING_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "No ha ingresado el tipo de proveedor.",
+                    "Error", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+    
+    public static DefaultTableModel tbpro;
+
+    private void verTabla() {
+        try {
+            tbpro = (new DefaultTableModel(
+                    null, new String[]{
+                        "ID", "Grupo", "Comision"}) {
+                Class[] types = new Class[]{
+                    java.lang.String.class,
+                    java.lang.String.class,
+                        java.lang.String.class
+                };
+                boolean[] canEdit = new boolean[]{
+                    false, false, false
+                };
+
+                @Override
+                public Class getColumnClass(int columbIndex) {
+                    return types[columbIndex];
+                }
+
+                @Override
+                public boolean isCellEditable(int rowIdex, int colIndex) {
+                    return canEdit[colIndex];
+                }
+            });
+            tablaGrupos.setModel(tbpro);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.toString() + "error");
+        }
+    }
+     private void Llenar_Tabla() {
+
+        try {
+
+            Object A[] = null;
+            List<Grupos> ListaGrupos;
+            ListaGrupos = tabla.findGruposEntities();
+            for (int i = 0; i < ListaGrupos.size(); i++) {
+                tbpro.addRow(A);
+                tbpro.setValueAt(ListaGrupos.get(i).getCodigogrupo(), i, 0);
+                tbpro.setValueAt(ListaGrupos.get(i).getNombregrupo(), i, 1);
+                tbpro.setValueAt(ListaGrupos.get(i).getComision(), i, 2);
+            
+            }
+            
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error " + e.toString());
+
+        }
+
+     }
+    
     /**
      * @param args the command line arguments
      */
@@ -344,10 +434,10 @@ public class GruposForm extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField4;
+    private javax.swing.JTable tablaGrupos;
+    private javax.swing.JTextField txtComision;
+    private javax.swing.JTextField txtGrupo;
     // End of variables declaration//GEN-END:variables
 }

@@ -13,56 +13,35 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import CapaDatos.Tipocontribuyente;
 import CapaDatos.Tipoproveedores;
+import CapaDatos.Telefonosproveedor;
+import CapaNegocios.exceptions.IllegalOrphanException;
 import CapaNegocios.exceptions.NonexistentEntityException;
 import CapaNegocios.exceptions.PreexistingEntityException;
-import CapaPresentacion.entityMain;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.ParameterMode;
-import javax.persistence.StoredProcedureQuery;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Amaya
  */
-public class ProveedoresJpaController implements Serializable {
+public class ProveedoresJpaController1 implements Serializable {
 
-    public ProveedoresJpaController(EntityManagerFactory emf) {
+    public ProveedoresJpaController1(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
-    private static EntityManager manager;
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
-
-
-    public BigDecimal findIdNewProveedor() {
-
-        EntityManagerFactory factory = entityMain.getInstance();
-        EntityManager em = factory.createEntityManager();
-
-        em.getTransaction().begin();
-        StoredProcedureQuery storedProcedure = em.createStoredProcedureQuery("nextCodProv");
-
-        storedProcedure.registerStoredProcedureParameter("idProveedor", Integer.class, ParameterMode.OUT);
-        storedProcedure.execute();
-
-        BigDecimal codigo = BigDecimal.valueOf(Double.parseDouble(storedProcedure.getOutputParameterValue("idProveedor").toString()));
-
-        em.getTransaction().commit();
-        em.close();
-
-        return codigo;
-    }
-
     public void create(Proveedores proveedores) throws PreexistingEntityException, Exception {
+        if (proveedores.getTelefonosproveedorList() == null) {
+            proveedores.setTelefonosproveedorList(new ArrayList<Telefonosproveedor>());
+        }
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -77,6 +56,12 @@ public class ProveedoresJpaController implements Serializable {
                 codtipoprov = em.getReference(codtipoprov.getClass(), codtipoprov.getCodtipoprov());
                 proveedores.setCodtipoprov(codtipoprov);
             }
+            List<Telefonosproveedor> attachedTelefonosproveedorList = new ArrayList<Telefonosproveedor>();
+            for (Telefonosproveedor telefonosproveedorListTelefonosproveedorToAttach : proveedores.getTelefonosproveedorList()) {
+                telefonosproveedorListTelefonosproveedorToAttach = em.getReference(telefonosproveedorListTelefonosproveedorToAttach.getClass(), telefonosproveedorListTelefonosproveedorToAttach.getIdtelefono());
+                attachedTelefonosproveedorList.add(telefonosproveedorListTelefonosproveedorToAttach);
+            }
+            proveedores.setTelefonosproveedorList(attachedTelefonosproveedorList);
             em.persist(proveedores);
             if (codigotipocontribuyente != null) {
                 codigotipocontribuyente.getProveedoresList().add(proveedores);
@@ -85,6 +70,15 @@ public class ProveedoresJpaController implements Serializable {
             if (codtipoprov != null) {
                 codtipoprov.getProveedoresList().add(proveedores);
                 codtipoprov = em.merge(codtipoprov);
+            }
+            for (Telefonosproveedor telefonosproveedorListTelefonosproveedor : proveedores.getTelefonosproveedorList()) {
+                Proveedores oldCodigoproveedorOfTelefonosproveedorListTelefonosproveedor = telefonosproveedorListTelefonosproveedor.getCodigoproveedor();
+                telefonosproveedorListTelefonosproveedor.setCodigoproveedor(proveedores);
+                telefonosproveedorListTelefonosproveedor = em.merge(telefonosproveedorListTelefonosproveedor);
+                if (oldCodigoproveedorOfTelefonosproveedorListTelefonosproveedor != null) {
+                    oldCodigoproveedorOfTelefonosproveedorListTelefonosproveedor.getTelefonosproveedorList().remove(telefonosproveedorListTelefonosproveedor);
+                    oldCodigoproveedorOfTelefonosproveedorListTelefonosproveedor = em.merge(oldCodigoproveedorOfTelefonosproveedorListTelefonosproveedor);
+                }
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -99,7 +93,7 @@ public class ProveedoresJpaController implements Serializable {
         }
     }
 
-    public void edit(Proveedores proveedores) throws NonexistentEntityException, Exception {
+    public void edit(Proveedores proveedores) throws IllegalOrphanException, NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -109,6 +103,20 @@ public class ProveedoresJpaController implements Serializable {
             Tipocontribuyente codigotipocontribuyenteNew = proveedores.getCodigotipocontribuyente();
             Tipoproveedores codtipoprovOld = persistentProveedores.getCodtipoprov();
             Tipoproveedores codtipoprovNew = proveedores.getCodtipoprov();
+            List<Telefonosproveedor> telefonosproveedorListOld = persistentProveedores.getTelefonosproveedorList();
+            List<Telefonosproveedor> telefonosproveedorListNew = proveedores.getTelefonosproveedorList();
+            List<String> illegalOrphanMessages = null;
+            for (Telefonosproveedor telefonosproveedorListOldTelefonosproveedor : telefonosproveedorListOld) {
+                if (!telefonosproveedorListNew.contains(telefonosproveedorListOldTelefonosproveedor)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain Telefonosproveedor " + telefonosproveedorListOldTelefonosproveedor + " since its codigoproveedor field is not nullable.");
+                }
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
+            }
             if (codigotipocontribuyenteNew != null) {
                 codigotipocontribuyenteNew = em.getReference(codigotipocontribuyenteNew.getClass(), codigotipocontribuyenteNew.getCodigotipocontribuyente());
                 proveedores.setCodigotipocontribuyente(codigotipocontribuyenteNew);
@@ -117,6 +125,13 @@ public class ProveedoresJpaController implements Serializable {
                 codtipoprovNew = em.getReference(codtipoprovNew.getClass(), codtipoprovNew.getCodtipoprov());
                 proveedores.setCodtipoprov(codtipoprovNew);
             }
+            List<Telefonosproveedor> attachedTelefonosproveedorListNew = new ArrayList<Telefonosproveedor>();
+            for (Telefonosproveedor telefonosproveedorListNewTelefonosproveedorToAttach : telefonosproveedorListNew) {
+                telefonosproveedorListNewTelefonosproveedorToAttach = em.getReference(telefonosproveedorListNewTelefonosproveedorToAttach.getClass(), telefonosproveedorListNewTelefonosproveedorToAttach.getIdtelefono());
+                attachedTelefonosproveedorListNew.add(telefonosproveedorListNewTelefonosproveedorToAttach);
+            }
+            telefonosproveedorListNew = attachedTelefonosproveedorListNew;
+            proveedores.setTelefonosproveedorList(telefonosproveedorListNew);
             proveedores = em.merge(proveedores);
             if (codigotipocontribuyenteOld != null && !codigotipocontribuyenteOld.equals(codigotipocontribuyenteNew)) {
                 codigotipocontribuyenteOld.getProveedoresList().remove(proveedores);
@@ -133,6 +148,17 @@ public class ProveedoresJpaController implements Serializable {
             if (codtipoprovNew != null && !codtipoprovNew.equals(codtipoprovOld)) {
                 codtipoprovNew.getProveedoresList().add(proveedores);
                 codtipoprovNew = em.merge(codtipoprovNew);
+            }
+            for (Telefonosproveedor telefonosproveedorListNewTelefonosproveedor : telefonosproveedorListNew) {
+                if (!telefonosproveedorListOld.contains(telefonosproveedorListNewTelefonosproveedor)) {
+                    Proveedores oldCodigoproveedorOfTelefonosproveedorListNewTelefonosproveedor = telefonosproveedorListNewTelefonosproveedor.getCodigoproveedor();
+                    telefonosproveedorListNewTelefonosproveedor.setCodigoproveedor(proveedores);
+                    telefonosproveedorListNewTelefonosproveedor = em.merge(telefonosproveedorListNewTelefonosproveedor);
+                    if (oldCodigoproveedorOfTelefonosproveedorListNewTelefonosproveedor != null && !oldCodigoproveedorOfTelefonosproveedorListNewTelefonosproveedor.equals(proveedores)) {
+                        oldCodigoproveedorOfTelefonosproveedorListNewTelefonosproveedor.getTelefonosproveedorList().remove(telefonosproveedorListNewTelefonosproveedor);
+                        oldCodigoproveedorOfTelefonosproveedorListNewTelefonosproveedor = em.merge(oldCodigoproveedorOfTelefonosproveedorListNewTelefonosproveedor);
+                    }
+                }
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -151,7 +177,7 @@ public class ProveedoresJpaController implements Serializable {
         }
     }
 
-    public void destroy(BigDecimal id) throws NonexistentEntityException {
+    public void destroy(BigDecimal id) throws IllegalOrphanException, NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -162,6 +188,17 @@ public class ProveedoresJpaController implements Serializable {
                 proveedores.getCodigoproveedor();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The proveedores with id " + id + " no longer exists.", enfe);
+            }
+            List<String> illegalOrphanMessages = null;
+            List<Telefonosproveedor> telefonosproveedorListOrphanCheck = proveedores.getTelefonosproveedorList();
+            for (Telefonosproveedor telefonosproveedorListOrphanCheckTelefonosproveedor : telefonosproveedorListOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Proveedores (" + proveedores + ") cannot be destroyed since the Telefonosproveedor " + telefonosproveedorListOrphanCheckTelefonosproveedor + " in its telefonosproveedorList field has a non-nullable codigoproveedor field.");
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
             }
             Tipocontribuyente codigotipocontribuyente = proveedores.getCodigotipocontribuyente();
             if (codigotipocontribuyente != null) {
@@ -227,5 +264,5 @@ public class ProveedoresJpaController implements Serializable {
             em.close();
         }
     }
-
+    
 }

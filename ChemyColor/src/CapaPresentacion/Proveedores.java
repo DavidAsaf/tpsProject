@@ -6,9 +6,7 @@
 package CapaPresentacion;
 
 import CapaDatos.*;
-import CapaNegocios.ProveedoresJpaController;
-import CapaNegocios.TelefonosproveedorJpaController;
-import CapaNegocios.TipoproveedoresJpaController;
+import CapaNegocios.*;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -16,6 +14,7 @@ import javax.persistence.Persistence;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 /**
  *
@@ -34,6 +33,7 @@ public class Proveedores extends javax.swing.JFrame {
     public Proveedores() {
         initComponents();
         llenarComboTipo();
+        AutoCompleteDecorator.decorate(comboTipoProv);
         verTabla();
         llenarTabla();
     }
@@ -48,7 +48,7 @@ public class Proveedores extends javax.swing.JFrame {
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
-        jTextField10 = new javax.swing.JTextField();
+        txtBusqueda = new javax.swing.JTextField();
         btnEliminar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabla1 = new javax.swing.JTable();
@@ -83,7 +83,6 @@ public class Proveedores extends javax.swing.JFrame {
         jLabel18 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
         txtId = new javax.swing.JTextField();
-        txtFecha = new javax.swing.JFormattedTextField();
         txtLimite = new javax.swing.JTextField();
         jLabel20 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
@@ -93,8 +92,15 @@ public class Proveedores extends javax.swing.JFrame {
         txtDui = new javax.swing.JFormattedTextField();
         txtNit = new javax.swing.JFormattedTextField();
         txtCelular = new javax.swing.JFormattedTextField();
+        txtFecha = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        txtBusqueda.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtBusquedaKeyTyped(evt);
+            }
+        });
 
         btnEliminar.setText("Eliminar");
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
@@ -178,6 +184,8 @@ public class Proveedores extends javax.swing.JFrame {
 
         jLabel16.setText("Celular:");
 
+        comboTipoProv.setEditable(true);
+
         comboContribuyente.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Grande", "Mediana", "Pequeña" }));
 
         jLabel17.setText("Tipo de Proveedor:");
@@ -187,8 +195,6 @@ public class Proveedores extends javax.swing.JFrame {
         jLabel19.setText("ID");
 
         txtId.setEnabled(false);
-
-        txtFecha.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
 
         jLabel20.setText("Limite:");
 
@@ -230,6 +236,12 @@ public class Proveedores extends javax.swing.JFrame {
             ex.printStackTrace();
         }
 
+        try {
+            txtFecha.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -238,7 +250,7 @@ public class Proveedores extends javax.swing.JFrame {
                 .addGap(439, 439, 439)
                 .addComponent(jLabel11)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(351, 465, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -254,9 +266,9 @@ public class Proveedores extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1074, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(48, 48, 48)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(rbPersona)
                         .addGap(18, 18, 18)
                         .addComponent(rbEmpresa))
@@ -381,7 +393,7 @@ public class Proveedores extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel11)
-                            .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -457,6 +469,16 @@ public class Proveedores extends javax.swing.JFrame {
     private void txtNitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNitActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNitActionPerformed
+/*
+    "Codigo", "Proveedor", "NRC", "Fecha Ingreso", "Saldo", "Direccion", */
+    private void txtBusquedaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaKeyTyped
+        String []titulos = {"Codigo","Proveedor","NRC","Fecha Ingreso","Saldo","Dirección",
+        "Email", "Registro","Nit", "Dui", "Giro", "Limite", "Cuenta Por Pagar", "CodigoTipoContribuyente", 
+        "Tipo Proveedor", "Telefono", "Celular"};
+        
+        //ProveedoresJpaController.fillJTable(this.tabla1, "Producto","producto",this.txtBusqueda.getText(), titulos);
+        this.tabla1.setDefaultEditor(Object.class,null);
+    }//GEN-LAST:event_txtBusquedaKeyTyped
 
     public void Guardar() {
         String fecha = this.txtFecha.getText();
@@ -480,7 +502,7 @@ public class Proveedores extends javax.swing.JFrame {
         ProveedoresJpaController t = new ProveedoresJpaController(entityMain.getInstance());
         CapaDatos.Proveedores pro = new CapaDatos.Proveedores();
         BigDecimal idNewProveedor = t.findIdNewProveedor();
-        
+
         type.setCodtipoprov(BigDecimal.valueOf(tipoProv));
         type.setTipoprov(this.comboTipoProv.getSelectedItem().toString());
         contr.setCodigotipocontribuyente(BigDecimal.valueOf(tipoContr));
@@ -519,6 +541,7 @@ public class Proveedores extends javax.swing.JFrame {
 
             try {
                 t.edit(pro);
+                GuardarTelefonos(pro, tel, cel, false);
                 llenarTabla();
                 JOptionPane.showMessageDialog(null, "Proveedor editado exitosamente.");
                 LimpiarControles();
@@ -530,16 +553,18 @@ public class Proveedores extends javax.swing.JFrame {
 
     }
 
-    private void GuardarTelefonos(CapaDatos.Proveedores p, String telefono, String cel, boolean var){
+    private void GuardarTelefonos(CapaDatos.Proveedores p, String telefono, String cel, boolean var) {
         TelefonosproveedorJpaController t = new TelefonosproveedorJpaController(entityMain.getInstance());
-        CapaDatos.Telefonosproveedor nuevoT = new CapaDatos.Telefonosproveedor();
-        CapaDatos.Telefonosproveedor nuevoC = new CapaDatos.Telefonosproveedor();
         
-        if (var == true){
+        if (var == true) {
+            
+            CapaDatos.Telefonosproveedor nuevoT = new CapaDatos.Telefonosproveedor();
+            CapaDatos.Telefonosproveedor nuevoC = new CapaDatos.Telefonosproveedor();
+
             nuevoT.setCodigoproveedor(p);
             nuevoT.setTelefono(telefono);
             nuevoT.setTipo("T");
-            
+
             nuevoC.setCodigoproveedor(p);
             nuevoC.setTelefono(cel);
             nuevoC.setTipo("C");
@@ -548,12 +573,22 @@ public class Proveedores extends javax.swing.JFrame {
                 t.create(nuevoT);
                 t.create(nuevoC);
                 System.out.println("Telefono y Celular creado con éxito.");
+                
+            } catch (Exception e) {
+                System.out.println("Hubo un error. " + e.toString());
+            }
+            
+        } else {
+            try {
+                t.editTelProveedor(Integer.parseInt(p.getCodigoproveedor().toString()), telefono, cel);
+                System.out.println("Telefono y Celular editado con éxito.");
+                
             } catch (Exception e) {
                 System.out.println("Hubo un error. " + e.toString());
             }
         }
     }
-    
+
     private void Eliminar() {
 
         try {
@@ -561,20 +596,33 @@ public class Proveedores extends javax.swing.JFrame {
             int codigoP = Integer.parseInt(tabla1.getModel().getValueAt(indice, 0).toString());
             String proveedor = tabla1.getModel().getValueAt(indice, 1).toString();
             ProveedoresJpaController t = new ProveedoresJpaController(entityMain.getInstance());
-            
-            int r = JOptionPane.showConfirmDialog(null, "¿Desea eliminar a " + proveedor + "?", "Acción de Eliminar", 
-                        JOptionPane.YES_NO_CANCEL_OPTION);
+            TelefonosproveedorJpaController telPro = new TelefonosproveedorJpaController(entityMain.getInstance());
+
+            int r = JOptionPane.showConfirmDialog(null, "¿Desea eliminar a " + proveedor + "?", "Acción de Eliminar",
+                    JOptionPane.YES_NO_CANCEL_OPTION);
 
             if (r == JOptionPane.YES_OPTION) {
+                //Primero eliminamos los telefonos
+                int idTelefono = telPro.findIdTel(codigoP, "T");
+                int idCel = telPro.findIdTel(codigoP, "C");
+                
+                try {
+                    telPro.destroy(BigDecimal.valueOf(idTelefono));
+                    telPro.destroy(BigDecimal.valueOf(idCel));
+                } catch (Exception e){
+                    
+                }
+                //Luego eliminamos el proveedor
                 try {
                     t.destroy(BigDecimal.valueOf(codigoP));
-                    verTabla(); llenarTabla();
+                    verTabla();
+                    llenarTabla();
                     JOptionPane.showMessageDialog(null, "Proveedor eliminado con éxito.");
 
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(null, "Error al eliminar." + e.toString());
                 }
-                
+
             } else if (r == JOptionPane.NO_OPTION) {
 
             } else if (r == JOptionPane.CLOSED_OPTION) {
@@ -606,6 +654,8 @@ public class Proveedores extends javax.swing.JFrame {
             this.txtCtaPorPagar.setText(tabla1.getModel().getValueAt(indice, 12).toString());
             this.comboContribuyente.setSelectedItem(tabla1.getModel().getValueAt(indice, 13).toString());
             this.comboTipoProv.setSelectedItem(tabla1.getModel().getValueAt(indice, 14).toString());
+            this.txtTelefono.setText(tabla1.getModel().getValueAt(indice, 15).toString());
+            this.txtCelular.setText(tabla1.getModel().getValueAt(indice, 16).toString());
 
             estado = false;
 
@@ -673,15 +723,17 @@ public class Proveedores extends javax.swing.JFrame {
             tbpro = (new DefaultTableModel(
                     null, new String[]{
                         "Codigo", "Proveedor", "NRC", "Fecha Ingreso", "Saldo", "Direccion", "Email", "Registro",
-                        "Nit", "Dui", "Giro", "Limite", "Cuenta Por Pagar", "CodigoTipoContribuyente", "Tipo Proveedor"}) {
+                        "Nit", "Dui", "Giro", "Limite", "Cuenta Por Pagar", "CodigoTipoContribuyente", "Tipo Proveedor",
+                        "Telefono", "Celular"}) {
                 Class[] types = new Class[]{
                     java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class,
                     java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class,
                     java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class,
-                    java.lang.String.class, java.lang.String.class, java.lang.String.class
+                    java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class,
+                    java.lang.String.class
                 };
                 boolean[] canEdit = new boolean[]{
-                    false, false, false, false, false, false, false, false, false, false, false, false, false, false, false
+                    false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false
                 };
 
                 @Override
@@ -702,11 +754,17 @@ public class Proveedores extends javax.swing.JFrame {
 //"Nit", "Dui", "Giro", "Limite", "Cuenta Por Pagar", "CodigoTipoContribuyente", "Tipo Proveedor"
 
     private void llenarTabla() {
+        int valorId = 0;
+        String tipo;
+        TelefonosproveedorJpaController t = new TelefonosproveedorJpaController(entityMain.getInstance());
+
         try {
             Object A[] = null;
             List<CapaDatos.Proveedores> Listatipo;
             Listatipo = tabla.findProveedoresEntities();
             for (int i = 0; i < Listatipo.size(); i++) {
+                valorId = Integer.parseInt(Listatipo.get(i).getCodigoproveedor().toString());
+
                 tbpro.addRow(A);
                 tbpro.setValueAt(Listatipo.get(i).getCodigoproveedor(), i, 0);
                 tbpro.setValueAt(Listatipo.get(i).getNombres(), i, 1);
@@ -723,6 +781,8 @@ public class Proveedores extends javax.swing.JFrame {
                 tbpro.setValueAt(Listatipo.get(i).getCuentaporpagar(), i, 12);
                 tbpro.setValueAt(Listatipo.get(i).getCodigotipocontribuyente().getTipocontribuyente(), i, 13);
                 tbpro.setValueAt(Listatipo.get(i).getCodtipoprov().getTipoprov(), i, 14);
+                tbpro.setValueAt(t.findTelProveedor(valorId, "T"), i, 15);
+                tbpro.setValueAt(t.findTelProveedor(valorId, "C"), i, 16);
             }
 
         } catch (Exception e) {
@@ -793,10 +853,10 @@ public class Proveedores extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField10;
     private javax.swing.JRadioButton rbEmpresa;
     private javax.swing.JRadioButton rbPersona;
     private javax.swing.JTable tabla1;
+    private javax.swing.JTextField txtBusqueda;
     private javax.swing.JFormattedTextField txtCelular;
     private javax.swing.JTextField txtCtaPorPagar;
     private javax.swing.JTextField txtDireccion;
