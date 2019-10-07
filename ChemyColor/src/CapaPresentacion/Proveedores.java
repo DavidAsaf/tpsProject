@@ -476,7 +476,8 @@ public class Proveedores extends javax.swing.JFrame {
         "Email", "Registro","Nit", "Dui", "Giro", "Limite", "Cuenta Por Pagar", "CodigoTipoContribuyente", 
         "Tipo Proveedor", "Telefono", "Celular"};
         
-        //ProveedoresJpaController.fillJTable(this.tabla1, "Producto","producto",this.txtBusqueda.getText(), titulos);
+        CapaNegocios.ProveedoresJpaController llenado = new CapaNegocios.ProveedoresJpaController(entityMain.getInstance());
+        llenado.fillJTable(this.tabla1, "Producto","producto",this.txtBusqueda.getText(), titulos);
         this.tabla1.setDefaultEditor(Object.class,null);
     }//GEN-LAST:event_txtBusquedaKeyTyped
 
