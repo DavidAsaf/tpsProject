@@ -17,7 +17,8 @@ import javax.persistence.*;
 @Entity
 @Table(name = "PROVEEDORES")
 @NamedQueries({
-    @NamedQuery(name = "Proveedores.findAll", query = "SELECT p FROM Proveedores p")})
+    @NamedQuery(name = "Proveedores.findAll", query = "SELECT p FROM Proveedores p")
+, @NamedQuery(name = "Producto.findByProducto", query = "SELECT p FROM Proveedores p WHERE p.nombres LIKE :nombres")})
 public class Proveedores implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoproveedor")

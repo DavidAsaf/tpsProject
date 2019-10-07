@@ -97,6 +97,12 @@ public class Proveedores extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         txtBusqueda.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtBusquedaKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtBusquedaKeyReleased(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtBusquedaKeyTyped(evt);
             }
@@ -472,15 +478,32 @@ public class Proveedores extends javax.swing.JFrame {
 /*
     "Codigo", "Proveedor", "NRC", "Fecha Ingreso", "Saldo", "Direccion", */
     private void txtBusquedaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaKeyTyped
-        String []titulos = {"Codigo","Proveedor","NRC","Fecha Ingreso","Saldo","Dirección",
+        //Busqueda();
+    }//GEN-LAST:event_txtBusquedaKeyTyped
+
+    private void txtBusquedaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaKeyPressed
+        
+    }//GEN-LAST:event_txtBusquedaKeyPressed
+
+    private void txtBusquedaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaKeyReleased
+        Busqueda();
+    }//GEN-LAST:event_txtBusquedaKeyReleased
+
+    public void Busqueda(){
+        try {
+            String []titulos = {"Codigo","Proveedor","NRC","Fecha Ingreso","Saldo","Dirección",
         "Email", "Registro","Nit", "Dui", "Giro", "Limite", "Cuenta Por Pagar", "CodigoTipoContribuyente", 
         "Tipo Proveedor", "Telefono", "Celular"};
         
         CapaNegocios.ProveedoresJpaController llenado = new CapaNegocios.ProveedoresJpaController(entityMain.getInstance());
-        llenado.fillJTable(this.tabla1, "Producto","producto",this.txtBusqueda.getText(), titulos);
+        llenado.fillJTable(this.tabla1, "Proveedores","nombres",this.txtBusqueda.getText(), titulos);
         this.tabla1.setDefaultEditor(Object.class,null);
-    }//GEN-LAST:event_txtBusquedaKeyTyped
-
+        
+        } catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Hubo un error en la búsqueda. " + e.toString());
+        }
+    }
+    
     public void Guardar() {
         String fecha = this.txtFecha.getText();
         String nombre = this.txtNombre.getText();

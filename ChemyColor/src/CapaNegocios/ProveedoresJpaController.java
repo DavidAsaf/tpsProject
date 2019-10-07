@@ -42,20 +42,20 @@ public class ProveedoresJpaController implements Serializable {
     }
 
     public void fillJTable(JTable jtable, String tabla, String filtro, String busqueda, String[] titulos) {
-//                                      SELECT p FROM Producto p where p.producto like "%a%"
-/*
-"Codigo","Proveedor","NRC","Fecha Ingreso","Saldo","Dirección",
-        "Email", "Registro","Nit", "Dui", "Giro", "Limite", "Cuenta Por Pagar", "CodigoTipoContribuyente", 
-        "Tipo Proveedor", "Telefono", "Celular"*/
-        List<Proveedores> listado = manager.createQuery("SELECT p FROM " + tabla + " p where p." + filtro + " like \"%" + busqueda + "%\"").getResultList();
+        TelefonosproveedorJpaController t = new TelefonosproveedorJpaController(entityMain.getInstance());
+
+        List<Proveedores> listado = getEntityManager().createQuery("SELECT p FROM " + tabla + " p where p." + filtro + " like \"%" + busqueda + "%\"").getResultList();
         DefaultTableModel Modelo = new DefaultTableModel(null, titulos);
         for (Proveedores p : listado) {
             //Modelo.addRow(new Object[]{Integer.toString(p.getIdProducto()), p.getProducto(), p.getIdMarca().getMarca(),
-                //p.getIdCategoria().getCategoria(), p.getDescripcion()});
+            //p.getIdCategoria().getCategoria(), p.getDescripcion()});
             Modelo.addRow(new Object[]{p.getCodigoproveedor(), p.getNombres(), p.getNrc(), p.getFechaingreso(),
-                            p.getSaldo(), p.getDireccion(), p.getEmail(), p.getRegistro(), p.getNit(),p.getDui(),
-                            p.getGiro(), p.getLimite(), p.getCuentaporpagar(), 
-                            p.getCodigotipocontribuyente().getTipocontribuyente(), });
+                p.getSaldo(), p.getDireccion(), p.getEmail(), p.getRegistro(), p.getNit(), p.getDui(),
+                p.getGiro(), p.getLimite(), p.getCuentaporpagar(),
+                p.getCodigotipocontribuyente().getTipocontribuyente(),
+                p.getCodtipoprov().getTipoprov(), 
+                t.findTelProveedor(Integer.parseInt(p.getCodigoproveedor().toString()), "T"),
+                t.findTelProveedor(Integer.parseInt(p.getCodigoproveedor().toString()), "C")});
         }
         jtable.setModel(Modelo);
         jtable.setDefaultEditor(Object.class, null);
