@@ -342,12 +342,12 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnProveedoresActionPerformed
 
     private void btnBodegasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBodegasActionPerformed
-        Bodegas abrir = new Bodegas();
+        Bodegas1 abrir = new Bodegas1();
         abrir.setVisible(true);
     }//GEN-LAST:event_btnBodegasActionPerformed
 
     private void btnArticulosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnArticulosActionPerformed
-        Articulos abrir = new Articulos();
+        Articulos1 abrir = new Articulos1();
         abrir.setVisible(true);
     }//GEN-LAST:event_btnArticulosActionPerformed
 

@@ -45,6 +45,25 @@ public class ArticulosJpaController implements Serializable {
         return emf.createEntityManager();
     }
     
+    public BigDecimal findIdNewArticulos() {
+
+        EntityManagerFactory factory = entityMain.getInstance();
+        EntityManager em = factory.createEntityManager();
+
+        em.getTransaction().begin();
+        StoredProcedureQuery storedProcedure = em.createStoredProcedureQuery("nextCodArticulo");
+
+        storedProcedure.registerStoredProcedureParameter("idArticulo", Integer.class, ParameterMode.OUT);
+        storedProcedure.execute();
+
+        BigDecimal codigo = BigDecimal.valueOf(Double.parseDouble(storedProcedure.getOutputParameterValue("idArticulo").toString()));
+
+        em.getTransaction().commit();
+        em.close();
+
+        return codigo;
+    } 
+    
     public int findIdArticulos(String art) {
         
         EntityManagerFactory factory = entityMain.getInstance();

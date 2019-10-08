@@ -17,9 +17,12 @@ import java.util.List;
 import CapaDatos.Lineas;
 import CapaNegocios.exceptions.NonexistentEntityException;
 import CapaNegocios.exceptions.PreexistingEntityException;
+import CapaPresentacion.entityMain;
 import java.math.BigDecimal;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.ParameterMode;
+import javax.persistence.StoredProcedureQuery;
 
 /**
  *
@@ -36,6 +39,30 @@ public class GruposJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
+    public Grupos findIdGrupos(String grupo) {
+        
+        EntityManagerFactory factory = entityMain.getInstance();
+        EntityManager em = factory.createEntityManager();
+        
+        em.getTransaction().begin();
+        StoredProcedureQuery storedProcedure=em.createStoredProcedureQuery("idGrupos");
+        
+        storedProcedure.registerStoredProcedureParameter("grupos", String.class, ParameterMode.IN);
+        storedProcedure.registerStoredProcedureParameter("idgrupos", Integer.class, ParameterMode.OUT);
+        
+        storedProcedure.setParameter("grupos", grupo);        
+        storedProcedure.execute();
+        
+        Grupos tipo = new Grupos();
+        Integer codigo = (Integer) storedProcedure.getOutputParameterValue("idgrupos");
+        tipo.setCodigogrupo(BigDecimal.valueOf(codigo));
+        
+        em.getTransaction().commit();
+        em.close();
+        
+        return tipo;
+    }
+    
     public void create(Grupos grupos) throws PreexistingEntityException, Exception {
         if (grupos.getArticulosList() == null) {
             grupos.setArticulosList(new ArrayList<Articulos>());

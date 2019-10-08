@@ -14,10 +14,15 @@ import CapaDatos.Tipousuarios;
 import CapaDatos.Usuarios;
 import CapaNegocios.exceptions.NonexistentEntityException;
 import CapaNegocios.exceptions.PreexistingEntityException;
+import CapaPresentacion.entityMain;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.ParameterMode;
+import javax.persistence.StoredProcedureQuery;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -34,6 +39,39 @@ public class UsuariosJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
+    public void fillJTable(JTable jtable, String tabla, String filtro, String busqueda, String[] titulos) {
+
+        List<Usuarios> listado = getEntityManager().createQuery("SELECT p FROM " + tabla + " p where p." + filtro + " like \"%" + busqueda + "%\"").getResultList();
+        DefaultTableModel Modelo = new DefaultTableModel(null, titulos);
+        for (Usuarios p : listado) {
+            //Modelo.addRow(new Object[]{Integer.toString(p.getIdProducto()), p.getProducto(), p.getIdMarca().getMarca(),
+                //p.getIdCategoria().getCategoria(), p.getDescripcion()});
+            Modelo.addRow(new Object[]{p.getCodigousuario(), p.getUsuario(), p.getApellidousuario(), p.getCelular(),
+                            p.getCodtipousuario(), p.getDireccion(), p.getEmail(), p.getUsuario(), });
+        }
+        jtable.setModel(Modelo);
+        jtable.setDefaultEditor(Object.class, null);
+    }
+    
+      public BigDecimal findIdNewUsuario() {
+
+        EntityManagerFactory factory = entityMain.getInstance();
+        EntityManager em = factory.createEntityManager();
+
+        em.getTransaction().begin();
+        StoredProcedureQuery storedProcedure = em.createStoredProcedureQuery("nextCodUsuario");
+
+        storedProcedure.registerStoredProcedureParameter("idUsuario", Integer.class, ParameterMode.OUT);
+        storedProcedure.execute();
+
+        BigDecimal codigo = BigDecimal.valueOf(Double.parseDouble(storedProcedure.getOutputParameterValue("idUsuario").toString()));
+
+        em.getTransaction().commit();
+        em.close();
+
+        return codigo;
+    }
+    
     public void create(Usuarios usuarios) throws PreexistingEntityException, Exception {
         EntityManager em = null;
         try {

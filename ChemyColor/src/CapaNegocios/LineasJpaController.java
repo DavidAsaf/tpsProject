@@ -15,11 +15,14 @@ import CapaDatos.Articulos;
 import CapaDatos.Lineas;
 import CapaNegocios.exceptions.NonexistentEntityException;
 import CapaNegocios.exceptions.PreexistingEntityException;
+import CapaPresentacion.entityMain;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.ParameterMode;
+import javax.persistence.StoredProcedureQuery;
 
 /**
  *
@@ -36,6 +39,30 @@ public class LineasJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
+    public Lineas findIdLineas(String linea) {
+        
+        EntityManagerFactory factory = entityMain.getInstance();
+        EntityManager em = factory.createEntityManager();
+        
+        em.getTransaction().begin();
+        StoredProcedureQuery storedProcedure=em.createStoredProcedureQuery("idLineas");
+        
+        storedProcedure.registerStoredProcedureParameter("lineas", String.class, ParameterMode.IN);
+        storedProcedure.registerStoredProcedureParameter("idlineas", Integer.class, ParameterMode.OUT);
+        
+        storedProcedure.setParameter("lineas", linea);        
+        storedProcedure.execute();
+        
+        Lineas tipo = new Lineas();
+        Integer codigo = (Integer) storedProcedure.getOutputParameterValue("idlineas");
+        tipo.setCodigolinea(BigDecimal.valueOf(codigo));
+        
+        em.getTransaction().commit();
+        em.close();
+        
+        return tipo;
+    }
+    
     public void create(Lineas lineas) throws PreexistingEntityException, Exception {
         if (lineas.getArticulosList() == null) {
             lineas.setArticulosList(new ArrayList<Articulos>());
@@ -223,4 +250,7 @@ public class LineasJpaController implements Serializable {
         }
     }
     
+    public BigDecimal findidNewSubGrupo() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

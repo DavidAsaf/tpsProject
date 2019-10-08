@@ -39,7 +39,48 @@ public class BodegasJpaController implements Serializable {
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
+public BigDecimal findIdNewBodegas() {
 
+        EntityManagerFactory factory = entityMain.getInstance();
+        EntityManager em = factory.createEntityManager();
+
+        em.getTransaction().begin();
+        StoredProcedureQuery storedProcedure = em.createStoredProcedureQuery("nextCodBodegas");
+
+        storedProcedure.registerStoredProcedureParameter("idBodegas", Integer.class, ParameterMode.OUT);
+        storedProcedure.execute();
+
+        BigDecimal codigo = BigDecimal.valueOf(Double.parseDouble(storedProcedure.getOutputParameterValue("idBodegas").toString()));
+
+        em.getTransaction().commit();
+        em.close();
+
+        return codigo;
+    }
+    
+     public Bodegas findIdBodegas(String bodega) {
+        
+        EntityManagerFactory factory = entityMain.getInstance();
+        EntityManager em = factory.createEntityManager();
+        
+        em.getTransaction().begin();
+        StoredProcedureQuery storedProcedure=em.createStoredProcedureQuery("idBodegas");
+        
+        storedProcedure.registerStoredProcedureParameter("bodega", String.class, ParameterMode.IN);
+        storedProcedure.registerStoredProcedureParameter("idbodegas", Integer.class, ParameterMode.OUT);
+        
+        storedProcedure.setParameter("bodega", bodega);        
+        storedProcedure.execute();
+        
+        Bodegas tipo = new Bodegas();
+        Integer codigo = (Integer) storedProcedure.getOutputParameterValue("idbodegas");
+        tipo.setCodigobodega(BigDecimal.valueOf(codigo));
+        
+        em.getTransaction().commit();
+        em.close();
+        
+        return tipo;
+    }
     //findIdBodega(bodega IN VARCHAR2, idBod OUT INT)
     public BigDecimal findIdBodega(String bodega) {
 

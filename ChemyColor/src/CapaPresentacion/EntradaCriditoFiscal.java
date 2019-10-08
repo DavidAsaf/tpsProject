@@ -11,7 +11,7 @@ import CapaNegocios.BodegasJpaController;
 import CapaNegocios.HistorialfacturasJpaController;
 import CapaNegocios.ProveedoresJpaController;
 import java.math.BigDecimal;
-import java.sql.Date;
+import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -535,7 +535,7 @@ public class EntradaCriditoFiscal extends javax.swing.JFrame {
         if(rbCredito.isSelected() == true) cantidadDias = Integer.parseInt(this.comboDias.getSelectedItem().toString());
         int idBodega = b.findIdBodegaInteger(this.comboBodega.getSelectedItem().toString());
         int articulo = a.findIdArticulos(this.comboProductos.getSelectedItem().toString());
-        Date fecha = new java.sql.Date((Date) this.txtFecha.getDate());
+        Date fecha = txtFecha.getDate();
         String giro = this.txtGiro.getText();
         String dui = this.txtDui.getText();
         String nit = this.txtNit.getText();

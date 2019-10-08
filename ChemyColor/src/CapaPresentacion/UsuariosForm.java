@@ -5,17 +5,35 @@
  */
 package CapaPresentacion;
 
+import CapaDatos.Tipousuarios;
+import CapaNegocios.TipousuariosJpaController;
+import CapaNegocios.UsuariosJpaController;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+
 /**
  *
  * @author Amaya
  */
 public class UsuariosForm extends javax.swing.JFrame {
-
+    UsuariosJpaController usu = new  UsuariosJpaController(entityMain.getInstance());
+    TipousuariosJpaController tipoP = new  TipousuariosJpaController(entityMain.getInstance());
+    boolean estado = true; 
+    
     /**
      * Creates new form UsuariosForm
      */
     public UsuariosForm() {
         initComponents();
+        llenarComboTipo();
+        AutoCompleteDecorator.decorate(jComboBox1);
+        verTabla();
+        llenarTabla();
     }
 
     /**
@@ -28,69 +46,54 @@ public class UsuariosForm extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        table = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
+        txtnombre = new javax.swing.JTextField();
+        txtapellido = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jFormattedTextField1 = new javax.swing.JFormattedTextField();
-        jPasswordField1 = new javax.swing.JPasswordField();
-        jPasswordField2 = new javax.swing.JPasswordField();
+        txtcelular = new javax.swing.JFormattedTextField();
         jLabel8 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        txtemail = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        txtdireccion = new javax.swing.JTextArea();
         jButton1 = new javax.swing.JButton();
+        txtId = new javax.swing.JTextField();
+        jLabel19 = new javax.swing.JLabel();
+        txtnomUsuario = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        txtcontra = new javax.swing.JPasswordField();
+        jLabel6 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jLabel2 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
+        jLabel10 = new javax.swing.JLabel();
+        txtbuscar = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jTable1.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        table.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        table.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+
             },
             new String [] {
-                "ID", "Usuario", "Nombre", "Apellido", "Celular", "Email", "Dirección"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, true, false, false, false, true, false
-            };
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
             }
-        });
-        jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setMinWidth(20);
-            jTable1.getColumnModel().getColumn(0).setMaxWidth(50);
-        }
+        ));
+        jScrollPane1.setViewportView(table);
 
         jLabel1.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
         jLabel1.setText("Usuarios");
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel2.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
-        jLabel2.setText("Usuario:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 49, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
         jLabel3.setText("Nombre:");
@@ -100,72 +103,113 @@ public class UsuariosForm extends javax.swing.JFrame {
         jLabel4.setText("Apellido:");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 109, -1, -1));
 
-        jTextField1.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
-        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 49, 44, -1));
+        txtnombre.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
+        jPanel1.add(txtnombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 75, 142, -1));
 
-        jTextField2.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
-        jPanel1.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 75, 142, -1));
-
-        jTextField3.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
-        jPanel1.add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 106, 142, -1));
+        txtapellido.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
+        jPanel1.add(txtapellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 106, 142, -1));
 
         jLabel5.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
         jLabel5.setText("Celular:");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(323, 52, -1, -1));
 
-        jLabel6.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
-        jLabel6.setText("Contraseña:");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 78, -1, -1));
-
-        jLabel7.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
-        jLabel7.setText("Repetir Contraseña:");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(262, 109, -1, -1));
-
         try {
-            jFormattedTextField1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("####-####")));
+            txtcelular.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("####-####")));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
-        jFormattedTextField1.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
-        jPanel1.add(jFormattedTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 49, 100, -1));
-
-        jPasswordField1.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
-        jPanel1.add(jPasswordField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 75, 100, -1));
-
-        jPasswordField2.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
-        jPanel1.add(jPasswordField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 106, 100, -1));
+        txtcelular.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
+        jPanel1.add(txtcelular, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 49, 100, -1));
 
         jLabel8.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
         jLabel8.setText("Email:");
         jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(546, 52, -1, -1));
-        jPanel1.add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(584, 49, 131, -1));
+        jPanel1.add(txtemail, new org.netbeans.lib.awtextra.AbsoluteConstraints(584, 49, 131, -1));
 
         jLabel9.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
         jLabel9.setText("Dirección: ");
         jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 110, -1, -1));
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        jTextArea1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea1);
+        txtdireccion.setColumns(20);
+        txtdireccion.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        txtdireccion.setRows(5);
+        jScrollPane2.setViewportView(txtdireccion);
 
         jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 90, 200, 60));
 
         jButton1.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
         jButton1.setText("Guardar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
         jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 60, 94, 39));
+
+        txtId.setEnabled(false);
+        jPanel1.add(txtId, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 10, 35, -1));
+
+        jLabel19.setText("ID");
+        jPanel1.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 20, -1, -1));
+
+        txtnomUsuario.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
+        jPanel1.add(txtnomUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 80, 100, -1));
+
+        jLabel7.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
+        jLabel7.setText("Usuario:");
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 80, -1, -1));
+
+        txtcontra.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
+        jPanel1.add(txtcontra, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 110, 100, -1));
+
+        jLabel6.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
+        jLabel6.setText("Contraseña:");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 110, -1, -1));
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 50, 130, -1));
+
+        jLabel2.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
+        jLabel2.setText("Usuario:");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 49, -1, -1));
 
         jButton2.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
         jButton2.setText("Editar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
         jButton3.setText("Eliminar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton5.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
         jButton5.setText("Salir");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         jButton6.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
         jButton6.setText("Regresar al Menú");
+
+        jLabel10.setText("Buscar Usuario:");
+
+        txtbuscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtbuscarKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtbuscarKeyTyped(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -194,6 +238,12 @@ public class UsuariosForm extends javax.swing.JFrame {
                     .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 923, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(22, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(381, 381, 381))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -202,8 +252,12 @@ public class UsuariosForm extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(txtbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -216,6 +270,256 @@ public class UsuariosForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        Guardar();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        Editar();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        Eliminar();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void txtbuscarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtbuscarKeyTyped
+        
+    }//GEN-LAST:event_txtbuscarKeyTyped
+
+    private void txtbuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtbuscarKeyReleased
+        try {
+            String []titulos = {"Codigo", "Nombre", "Apellido", "Celular", "Usuario", "Email", "Dirrecion", "Tipo"};
+
+        CapaNegocios.UsuariosJpaController llenado = new CapaNegocios.UsuariosJpaController(entityMain.getInstance());
+        llenado.fillJTable(this.table, "Producto","producto",this.txtbuscar.getText(), titulos);
+        this.table.setDefaultEditor(Object.class,null);
+        }catch (Exception e){
+            
+        }
+    }//GEN-LAST:event_txtbuscarKeyReleased
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        dispose();
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    public void Guardar() {
+        String nombre = this.txtnombre.getText();
+        String direccion = this.txtdireccion.getText();
+        String apellido = this.txtapellido.getText();
+        String nomUsuario = this.txtnomUsuario.getText();
+        String contra = this.txtcontra.getText();
+        int est = 1;
+        String email = this.txtemail.getText();
+        String cel = this.txtcelular.getText();
+        int tipousu = EncontrarUsuario(this.jComboBox1.getSelectedItem().toString());
+        Tipousuarios type = new  Tipousuarios ();
+        
+        UsuariosJpaController t = new UsuariosJpaController(entityMain.getInstance());
+        CapaDatos.Usuarios pro = new CapaDatos.Usuarios();
+        BigDecimal idNewUsuario = t.findIdNewUsuario();
+
+        type.setCodtipousuario(BigDecimal.valueOf(tipousu));
+        type.setTipousuario(this.jComboBox1.getSelectedItem().toString());
+
+        pro.setCodigousuario(idNewUsuario);
+        pro.setUsuario(nomUsuario);
+        pro.setNombreusuario(nombre);
+        pro.setDireccion(direccion);
+        pro.setApellidousuario(apellido);
+        pro.setEstado(BigInteger.valueOf(est));
+        pro.setContrasena(contra);
+        pro.setCelular(cel);
+        pro.setEmail(email);
+        pro.setCodtipousuario(type);
+
+        if (estado == true) {
+            try {
+                t.create(pro);
+                llenarTabla();
+                JOptionPane.showMessageDialog(null, "Usuario creado exitosamente.");
+                LimpiarControles();
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Hubo un error al guardar nuevo proveedor. " + e.toString());
+            }
+        } else {
+            int idP = Integer.parseInt(this.txtId.getText());
+            pro.setCodigousuario(BigDecimal.valueOf(idP));
+
+            try {
+                t.edit(pro);
+                llenarTabla();
+                JOptionPane.showMessageDialog(null, "Usuario editado exitosamente.");
+                LimpiarControles();
+                estado = true;
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Hubo un error al editar. " + e.toString());
+            }
+        }
+
+    }
+
+
+    private void Eliminar() {
+
+        try {
+            int indice = this.table.getSelectedRow();
+            int codigoP = Integer.parseInt(table.getModel().getValueAt(indice, 0).toString());
+            String proveedor = table.getModel().getValueAt(indice, 1).toString();
+            UsuariosJpaController t = new  UsuariosJpaController(entityMain.getInstance());
+
+            int r = JOptionPane.showConfirmDialog(null, "¿Desea eliminar a " + proveedor + "?", "Acción de Eliminar",
+                    JOptionPane.YES_NO_CANCEL_OPTION);
+
+            if (r == JOptionPane.YES_OPTION) {
+                //Primero eliminamos los telefonos
+                
+                try {
+                } catch (Exception e){
+                    
+                }
+                //Luego eliminamos el proveedor
+                try {
+                    t.destroy(BigDecimal.valueOf(codigoP));
+                    verTabla();
+                    llenarTabla();
+                    JOptionPane.showMessageDialog(null, "Usuario eliminado con éxito.");
+
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "Error al eliminar." + e.toString());
+                }
+
+            } else if (r == JOptionPane.NO_OPTION) {
+
+            } else if (r == JOptionPane.CLOSED_OPTION) {
+
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Es necesario primero seleccionar una fila para eliminar.");
+            estado = true;
+        }
+    }
+
+        private void Editar() {
+            try {
+                int indice = this.table.getSelectedRow();
+                LimpiarControles();
+                this.txtId.setText(table.getModel().getValueAt(indice, 0).toString());
+                this.txtnombre.setText(table.getModel().getValueAt(indice, 1).toString());
+                this.txtapellido.setText(table.getModel().getValueAt(indice, 2).toString());
+                this.txtcelular.setText(table.getModel().getValueAt(indice, 3).toString());
+                this.txtnomUsuario.setText(table.getModel().getValueAt(indice, 4).toString());
+                this.txtdireccion.setText(table.getModel().getValueAt(indice, 6).toString());
+                this.txtemail.setText(table.getModel().getValueAt(indice, 5).toString());
+                this.jComboBox1.setSelectedItem(table.getModel().getValueAt(indice, 7).toString());
+
+                estado = false;
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Es necesario primero seleccionar una fila para editar.");
+                estado = true;
+            }
+        }
+
+    private int EncontrarUsuario(String usu) {
+        int retorno = 0;
+      TipousuariosJpaController t = new  TipousuariosJpaController(entityMain.getInstance());
+        CapaDatos.Tipousuarios pro = new CapaDatos.Tipousuarios();
+
+        try {
+            pro = t.findIdTipoUsuario(usu);
+            retorno = Integer.parseInt(pro.getCodtipousuario().toString());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Hubo un error al encontrar el id del Usuario. " + e.toString());
+        }
+
+        return retorno;
+    }
+
+
+    DefaultComboBoxModel dc = new DefaultComboBoxModel();
+
+    private void llenarComboTipo() {
+        jComboBox1.setModel(dc);
+        List<Tipousuarios> Listatipo;
+        Listatipo = tipoP.findTipousuariosEntities();
+        for (int i = 0; i < Listatipo.size(); i++) {
+            dc.addElement(Listatipo.get(i).getTipousuario());
+        }
+    }
+
+    public void LimpiarControles() {
+        this.txtId.setText("");
+        this.txtnombre.setText("");
+        this.txtcelular.setText("");
+        this.txtapellido.setText("");
+        this.txtdireccion.setText("");
+        this.txtemail.setText("");
+        this.txtcontra.setText("");
+        this.txtnomUsuario.setText("");
+        this.jComboBox1.setSelectedIndex(0);
+    }
+
+    public static DefaultTableModel tbpro;
+
+    private void verTabla() {
+        try {
+            tbpro = (new DefaultTableModel(
+                    null, new String[]{
+                        "Codigo", "Nombre", "Apellido", "Celular", "Usuario", "Email", "Dirrecion", "Tipo"
+                      }) {
+                Class[] types = new Class[]{
+                    java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class,
+                    java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                         };
+                
+                boolean[] canEdit = new boolean[]{
+                    false, false, false, false, false, false, false, false
+                };
+
+                @Override
+                public Class getColumnClass(int columbIndex) {
+                    return types[columbIndex];
+                }
+
+                @Override
+                public boolean isCellEditable(int rowIdex, int colIndex) {
+                    return canEdit[colIndex];
+                }
+            });
+            table.setModel(tbpro);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.toString() + "error");
+        }
+    }
+//"Nit", "Dui", "Giro", "Limite", "Cuenta Por Pagar", "CodigoTipoContribuyente", "Tipo Proveedor"
+
+    private void llenarTabla() {
+        try {
+            Object A[] = null;
+            List<CapaDatos.Usuarios> Listatipo;
+            Listatipo = usu.findUsuariosEntities();
+            for (int i = 0; i < Listatipo.size(); i++) {
+
+                tbpro.addRow(A);
+                tbpro.setValueAt(Listatipo.get(i).getCodigousuario(), i, 0);
+                tbpro.setValueAt(Listatipo.get(i).getNombreusuario(), i, 1);
+                tbpro.setValueAt(Listatipo.get(i).getApellidousuario(), i, 2);
+                tbpro.setValueAt(Listatipo.get(i).getCelular(), i, 3);
+                tbpro.setValueAt(Listatipo.get(i).getUsuario(), i, 4);
+                tbpro.setValueAt(Listatipo.get(i).getDireccion(), i, 6);
+                tbpro.setValueAt(Listatipo.get(i).getEmail(), i, 5);
+                tbpro.setValueAt(Listatipo.get(i).getCodtipousuario().getTipousuario(), i, 7);
+             
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -257,8 +561,10 @@ public class UsuariosForm extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
-    private javax.swing.JFormattedTextField jFormattedTextField1;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -268,15 +574,17 @@ public class UsuariosForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JPasswordField jPasswordField2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
+    private javax.swing.JTable table;
+    private javax.swing.JTextField txtId;
+    private javax.swing.JTextField txtapellido;
+    private javax.swing.JTextField txtbuscar;
+    private javax.swing.JFormattedTextField txtcelular;
+    private javax.swing.JPasswordField txtcontra;
+    private javax.swing.JTextArea txtdireccion;
+    private javax.swing.JTextField txtemail;
+    private javax.swing.JTextField txtnomUsuario;
+    private javax.swing.JTextField txtnombre;
     // End of variables declaration//GEN-END:variables
 }

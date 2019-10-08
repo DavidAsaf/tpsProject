@@ -14,11 +14,14 @@ import javax.persistence.criteria.Root;
 import CapaDatos.Usuarios;
 import CapaNegocios.exceptions.NonexistentEntityException;
 import CapaNegocios.exceptions.PreexistingEntityException;
+import CapaPresentacion.entityMain;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.ParameterMode;
+import javax.persistence.StoredProcedureQuery;
 
 /**
  *
@@ -35,6 +38,30 @@ public class TipousuariosJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
+    public Tipousuarios findIdTipoUsuario(String usuario) {
+        
+        EntityManagerFactory factory = entityMain.getInstance();
+        EntityManager em = factory.createEntityManager();
+        
+        em.getTransaction().begin();
+        StoredProcedureQuery storedProcedure=em.createStoredProcedureQuery("idTipoUsuario");
+        
+        storedProcedure.registerStoredProcedureParameter("tipoUsu", String.class, ParameterMode.IN);
+        storedProcedure.registerStoredProcedureParameter("idTipousuario", Integer.class, ParameterMode.OUT);
+        
+        storedProcedure.setParameter("tipoUsu", usuario);        
+        storedProcedure.execute();
+        
+        Tipousuarios tipo = new Tipousuarios();
+        Integer codigo = (Integer) storedProcedure.getOutputParameterValue("idTipousuario");
+        tipo.setCodtipousuario(BigDecimal.valueOf(codigo));
+        
+        em.getTransaction().commit();
+        em.close();
+        
+        return tipo;
+    }
+    
     public void create(Tipousuarios tipousuarios) throws PreexistingEntityException, Exception {
         if (tipousuarios.getUsuariosList() == null) {
             tipousuarios.setUsuariosList(new ArrayList<Usuarios>());

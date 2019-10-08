@@ -71,3 +71,62 @@ END;
 
 
 
+
+
+
+
+
+
+--MARIO
+
+CREATE OR REPLACE PROCEDURE nextCodBodegas(idBodegas out NUMBER) 
+AS
+BEGIN
+    SELECT CodigoBodega.NEXTVAL INTO idBodegas FROM DUAL;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE nextCodArticulo(idArticulo out NUMBER) 
+AS
+BEGIN
+    SELECT articulo.NEXTVAL INTO idArticulo FROM DUAL;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE nextCodUsuario(idUsuario out NUMBER) 
+AS
+BEGIN
+    SELECT Codigousuario.NEXTVAL INTO idUsuario FROM DUAL;
+END;
+/
+
+
+CREATE OR REPLACE PROCEDURE idTipoUsuario(tipoUsu IN VARCHAR2, idTipousuario out NUMBER) 
+AS
+BEGIN
+    SELECT CodTipoUsuario INTO idTipousuario  FROM TipoUsuarios WHERE TipoUsuario=tipoUsu;
+END;
+/
+
+
+CREATE OR REPLACE PROCEDURE idGrupos(grupos IN VARCHAR2, idgrupos out NUMBER) 
+AS
+BEGIN
+    SELECT CodigoGrupo INTO idgrupos  FROM Grupos WHERE NombreGrupo=grupos;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE idLineas(lineas IN VARCHAR2, idlineas out NUMBER) 
+AS
+BEGIN
+    SELECT CodigoLinea INTO idlineas  FROM Lineas WHERE NombreLineas =lineas;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE idBodegas(bodega IN VARCHAR2, idbodegas out NUMBER) 
+AS
+BEGIN
+    SELECT CodigoBodega INTO idbodegas  FROM Bodegas WHERE NombreBodega=bodega;
+END;
+/
+

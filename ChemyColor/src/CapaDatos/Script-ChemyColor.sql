@@ -209,6 +209,11 @@ insert into TipoUsuarios values (SeqCodTipoUsuario.nextval,'Jefe de Bodega');
 insert into TipoUsuarios values (SeqCodTipoUsuario.nextval,'Auxiliar de Bodega');
 
 
+create sequence Codigousuario 
+maxvalue 99999999999
+start with 1
+minvalue 1  
+cache 10;
 
 create table Usuarios
 (
