@@ -43,4 +43,31 @@ END;
 /
 
 
+--Para averiguar el id de la bodega. 
+CREATE OR REPLACE PROCEDURE findIdBodega(bodega IN VARCHAR2, idBod OUT INT) 
+AS
+BEGIN
+    SELECT CodigoBodega INTO idBod FROM Bodegas WHERE NombreBodega = bodega;
+END;
+/
+
+
+--Para averiguar el id del proveedor, para formulario entrada...
+CREATE OR REPLACE PROCEDURE findIdProveedor(proveedor IN VARCHAR2, idProveedor OUT INT) 
+AS
+BEGIN
+    SELECT CodigoProveedor INTO idProveedor FROM Proveedores WHERE Nombres = proveedor;
+END;
+/
+
+
+--Para averiguar el id del proveedor, para formulario entrada...
+CREATE OR REPLACE PROCEDURE findIdArticulo(articulo IN VARCHAR2, idArticulo OUT INT) 
+AS
+BEGIN
+    SELECT CodigoArticulo INTO idArticulo FROM Articulos WHERE NombreArticulo = articulo;
+END;
+/
+
+
 

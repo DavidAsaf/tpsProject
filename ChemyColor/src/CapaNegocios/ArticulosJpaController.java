@@ -14,12 +14,21 @@ import javax.persistence.criteria.Root;
 import CapaDatos.Bodegas;
 import CapaDatos.Grupos;
 import CapaDatos.Lineas;
+import CapaDatos.Proveedores;
 import CapaNegocios.exceptions.NonexistentEntityException;
 import CapaNegocios.exceptions.PreexistingEntityException;
+import CapaPresentacion.entityMain;
 import java.math.BigDecimal;
 import java.util.List;
+import javafx.scene.control.ComboBox;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.ParameterMode;
+import javax.persistence.StoredProcedureQuery;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -34,6 +43,42 @@ public class ArticulosJpaController implements Serializable {
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
+    }
+    
+    public int findIdArticulos(String art) {
+        
+        EntityManagerFactory factory = entityMain.getInstance();
+        EntityManager em = factory.createEntityManager();
+        
+        em.getTransaction().begin();
+        StoredProcedureQuery storedProcedure=em.createStoredProcedureQuery("findIdArticulo");
+        
+        storedProcedure.registerStoredProcedureParameter("articulo", String.class, ParameterMode.IN);
+        storedProcedure.registerStoredProcedureParameter("idArticulo", Integer.class, ParameterMode.OUT);
+        
+        storedProcedure.setParameter("articulo", art);        
+        storedProcedure.execute();
+        
+        Integer codigo = (Integer) storedProcedure.getOutputParameterValue("idArticulo");
+        
+        em.getTransaction().commit();
+        em.close();
+        
+        return codigo;
+    }
+    
+    public void fillCombo(JComboBox cb, String codB) {
+        DefaultComboBoxModel dc = new DefaultComboBoxModel();
+        CapaDatos.Bodegas b = new CapaDatos.Bodegas();
+        b.setCodigobodega(BigDecimal.valueOf(Double.parseDouble(codB)));
+        
+        List<Articulos> ListaArticulos = getEntityManager().createNamedQuery("Articulos.findByCodigoBodega")
+                .setParameter("codigobodega", b).getResultList();
+        cb.removeAllItems();
+
+        for (Articulos a : ListaArticulos) {
+            cb.addItem(a.getNombrearticulo());
+        }
     }
 
     public void create(Articulos articulos) throws PreexistingEntityException, Exception {
@@ -229,5 +274,5 @@ public class ArticulosJpaController implements Serializable {
             em.close();
         }
     }
-    
+
 }

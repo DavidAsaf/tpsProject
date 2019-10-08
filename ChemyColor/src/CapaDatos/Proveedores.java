@@ -18,8 +18,11 @@ import javax.persistence.*;
 @Table(name = "PROVEEDORES")
 @NamedQueries({
     @NamedQuery(name = "Proveedores.findAll", query = "SELECT p FROM Proveedores p")
-, @NamedQuery(name = "Producto.findByProducto", query = "SELECT p FROM Proveedores p WHERE p.nombres LIKE :nombres")})
+    , @NamedQuery(name = "Proveedores.findByProveedor", query = "SELECT p FROM Proveedores p WHERE p.nombres LIKE :nombres")})
 public class Proveedores implements Serializable {
+
+    @OneToMany(mappedBy = "codigoproveedor")
+    private List<Historialfacturas> historialfacturasList;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoproveedor")
     private List<Telefonosproveedor> telefonosproveedorList;
@@ -224,6 +227,12 @@ public class Proveedores implements Serializable {
         this.telefonosproveedorList = telefonosproveedorList;
     }
 
-    
-    
+    public List<Historialfacturas> getHistorialfacturasList() {
+        return historialfacturasList;
+    }
+
+    public void setHistorialfacturasList(List<Historialfacturas> historialfacturasList) {
+        this.historialfacturasList = historialfacturasList;
+    }
+
 }

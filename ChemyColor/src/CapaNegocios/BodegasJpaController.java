@@ -18,9 +18,12 @@ import CapaDatos.Articulos;
 import CapaDatos.Bodegas;
 import CapaNegocios.exceptions.NonexistentEntityException;
 import CapaNegocios.exceptions.PreexistingEntityException;
+import CapaPresentacion.entityMain;
 import java.math.BigDecimal;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.ParameterMode;
+import javax.persistence.StoredProcedureQuery;
 
 /**
  *
@@ -37,6 +40,49 @@ public class BodegasJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
+    //findIdBodega(bodega IN VARCHAR2, idBod OUT INT)
+    public BigDecimal findIdBodega(String bodega) {
+
+        EntityManagerFactory factory = entityMain.getInstance();
+        EntityManager em = factory.createEntityManager();
+
+        em.getTransaction().begin();
+        StoredProcedureQuery storedProcedure = em.createStoredProcedureQuery("findIdBodega");
+
+        storedProcedure.registerStoredProcedureParameter("bodega", String.class, ParameterMode.IN);
+        storedProcedure.registerStoredProcedureParameter("idBod", Integer.class, ParameterMode.OUT);
+        storedProcedure.setParameter("bodega", bodega);  
+        storedProcedure.execute();
+
+        BigDecimal codigo = BigDecimal.valueOf(Double.parseDouble(storedProcedure.getOutputParameterValue("idBod").toString()));
+
+        em.getTransaction().commit();
+        em.close();
+
+        return codigo;
+    }
+    
+    public int findIdBodegaInteger(String bodega) {
+
+        EntityManagerFactory factory = entityMain.getInstance();
+        EntityManager em = factory.createEntityManager();
+
+        em.getTransaction().begin();
+        StoredProcedureQuery storedProcedure = em.createStoredProcedureQuery("findIdBodega");
+
+        storedProcedure.registerStoredProcedureParameter("bodega", String.class, ParameterMode.IN);
+        storedProcedure.registerStoredProcedureParameter("idBod", Integer.class, ParameterMode.OUT);
+        storedProcedure.setParameter("bodega", bodega);  
+        storedProcedure.execute();
+
+        Integer codigo = Integer.parseInt(storedProcedure.getOutputParameterValue("idBod").toString());
+
+        em.getTransaction().commit();
+        em.close();
+
+        return codigo;
+    }
+    
     public void create(Bodegas bodegas) throws PreexistingEntityException, Exception {
         if (bodegas.getTiposfacturasList() == null) {
             bodegas.setTiposfacturasList(new ArrayList<Tiposfacturas>());

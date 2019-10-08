@@ -8,6 +8,7 @@ package CapaDatos;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,6 +17,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -25,8 +27,12 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "ARTICULOS")
 @NamedQueries({
-    @NamedQuery(name = "Articulos.findAll", query = "SELECT a FROM Articulos a")})
+    @NamedQuery(name = "Articulos.findAll", query = "SELECT a FROM Articulos a")
+    , @NamedQuery(name = "Articulos.findByCodigoBodega", query = "SELECT a FROM Articulos a WHERE a.codigobodega = :codigobodega")})
 public class Articulos implements Serializable {
+
+    @OneToMany(mappedBy = "codigoarticulo")
+    private List<Historialfacturas> historialfacturasList;
 
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
@@ -177,5 +183,13 @@ public class Articulos implements Serializable {
     public String toString() {
         return "CapaDatos.Articulos[ codigoarticulo=" + codigoarticulo + " ]";
     }
-    
+
+    public List<Historialfacturas> getHistorialfacturasList() {
+        return historialfacturasList;
+    }
+
+    public void setHistorialfacturasList(List<Historialfacturas> historialfacturasList) {
+        this.historialfacturasList = historialfacturasList;
+    }
+
 }

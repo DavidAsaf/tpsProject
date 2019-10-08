@@ -112,9 +112,9 @@
                   <Component id="btnBodegas" min="-2" pref="240" max="-2" attributes="0"/>
                   <Component id="btnArticulos" min="-2" pref="240" max="-2" attributes="0"/>
                   <Component id="btnInventario" min="-2" pref="240" max="-2" attributes="0"/>
-                  <Component id="btnMovimientos" min="-2" pref="240" max="-2" attributes="0"/>
-                  <Component id="btnReportes" min="-2" pref="240" max="-2" attributes="0"/>
-                  <Component id="btnMiCuenta" min="-2" pref="240" max="-2" attributes="0"/>
+                  <Component id="btnEntraFactCre" min="-2" pref="240" max="-2" attributes="0"/>
+                  <Component id="btnEntraFactTicket" min="-2" pref="240" max="-2" attributes="0"/>
+                  <Component id="btnSalidas" min="-2" pref="240" max="-2" attributes="0"/>
                   <Component id="btnAcercaDe" min="-2" pref="240" max="-2" attributes="0"/>
               </Group>
             </DimensionLayout>
@@ -139,11 +139,11 @@
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                       <Component id="btnInventario" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                      <Component id="btnMovimientos" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnEntraFactCre" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                      <Component id="btnReportes" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnEntraFactTicket" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                      <Component id="btnMiCuenta" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnSalidas" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                       <Component id="btnAcercaDe" min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -216,6 +216,9 @@
                 <Property name="horizontalTextPosition" type="int" value="4"/>
                 <Property name="iconTextGap" type="int" value="25"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAdminUsuariosActionPerformed"/>
+              </Events>
             </Component>
             <Component class="rsbuttom.RSButtonMetro" name="btnGrupos">
               <Properties>
@@ -230,6 +233,9 @@
                 <Property name="horizontalTextPosition" type="int" value="4"/>
                 <Property name="iconTextGap" type="int" value="25"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGruposActionPerformed"/>
+              </Events>
             </Component>
             <Component class="rsbuttom.RSButtonMetro" name="btnSubGrupos">
               <Properties>
@@ -244,6 +250,9 @@
                 <Property name="horizontalTextPosition" type="int" value="4"/>
                 <Property name="iconTextGap" type="int" value="25"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSubGruposActionPerformed"/>
+              </Events>
             </Component>
             <Component class="rsbuttom.RSButtonMetro" name="btnTiposProveedores">
               <Properties>
@@ -258,6 +267,9 @@
                 <Property name="horizontalTextPosition" type="int" value="4"/>
                 <Property name="iconTextGap" type="int" value="25"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnTiposProveedoresActionPerformed"/>
+              </Events>
             </Component>
             <Component class="rsbuttom.RSButtonMetro" name="btnProveedores">
               <Properties>
@@ -272,6 +284,9 @@
                 <Property name="horizontalTextPosition" type="int" value="4"/>
                 <Property name="iconTextGap" type="int" value="25"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnProveedoresActionPerformed"/>
+              </Events>
             </Component>
             <Component class="rsbuttom.RSButtonMetro" name="btnBodegas">
               <Properties>
@@ -286,6 +301,9 @@
                 <Property name="horizontalTextPosition" type="int" value="4"/>
                 <Property name="iconTextGap" type="int" value="25"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBodegasActionPerformed"/>
+              </Events>
             </Component>
             <Component class="rsbuttom.RSButtonMetro" name="btnArticulos">
               <Properties>
@@ -300,6 +318,9 @@
                 <Property name="horizontalTextPosition" type="int" value="4"/>
                 <Property name="iconTextGap" type="int" value="25"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnArticulosActionPerformed"/>
+              </Events>
             </Component>
             <Component class="rsbuttom.RSButtonMetro" name="btnInventario">
               <Properties>
@@ -314,13 +335,16 @@
                 <Property name="horizontalTextPosition" type="int" value="4"/>
                 <Property name="iconTextGap" type="int" value="25"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnInventarioActionPerformed"/>
+              </Events>
             </Component>
-            <Component class="rsbuttom.RSButtonMetro" name="btnMovimientos">
+            <Component class="rsbuttom.RSButtonMetro" name="btnEntraFactCre">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/img/home.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Movimientos"/>
+                <Property name="text" type="java.lang.String" value="Entrada Factura Cr&#xe9;dito"/>
                 <Property name="colorNormal" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="99" green="99" red="99" type="rgb"/>
                 </Property>
@@ -328,13 +352,16 @@
                 <Property name="horizontalTextPosition" type="int" value="4"/>
                 <Property name="iconTextGap" type="int" value="25"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEntraFactCreActionPerformed"/>
+              </Events>
             </Component>
-            <Component class="rsbuttom.RSButtonMetro" name="btnReportes">
+            <Component class="rsbuttom.RSButtonMetro" name="btnEntraFactTicket">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/img/home.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Reportes"/>
+                <Property name="text" type="java.lang.String" value="Entrada Factura Ticket"/>
                 <Property name="colorNormal" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="99" green="99" red="99" type="rgb"/>
                 </Property>
@@ -342,13 +369,16 @@
                 <Property name="horizontalTextPosition" type="int" value="4"/>
                 <Property name="iconTextGap" type="int" value="25"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEntraFactTicketActionPerformed"/>
+              </Events>
             </Component>
-            <Component class="rsbuttom.RSButtonMetro" name="btnMiCuenta">
+            <Component class="rsbuttom.RSButtonMetro" name="btnSalidas">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/img/home.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Mi Cuenta"/>
+                <Property name="text" type="java.lang.String" value="Salidas"/>
                 <Property name="colorNormal" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="99" green="99" red="99" type="rgb"/>
                 </Property>
@@ -356,6 +386,9 @@
                 <Property name="horizontalTextPosition" type="int" value="4"/>
                 <Property name="iconTextGap" type="int" value="25"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSalidasActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>

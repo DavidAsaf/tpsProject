@@ -43,9 +43,9 @@ public class MainForm extends javax.swing.JFrame {
         btnBodegas = new rsbuttom.RSButtonMetro();
         btnArticulos = new rsbuttom.RSButtonMetro();
         btnInventario = new rsbuttom.RSButtonMetro();
-        btnMovimientos = new rsbuttom.RSButtonMetro();
-        btnReportes = new rsbuttom.RSButtonMetro();
-        btnMiCuenta = new rsbuttom.RSButtonMetro();
+        btnEntraFactCre = new rsbuttom.RSButtonMetro();
+        btnEntraFactTicket = new rsbuttom.RSButtonMetro();
+        btnSalidas = new rsbuttom.RSButtonMetro();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -120,6 +120,11 @@ public class MainForm extends javax.swing.JFrame {
         btnAdminUsuarios.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnAdminUsuarios.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnAdminUsuarios.setIconTextGap(25);
+        btnAdminUsuarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdminUsuariosActionPerformed(evt);
+            }
+        });
 
         btnGrupos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/home.png"))); // NOI18N
         btnGrupos.setText("Grupos");
@@ -127,6 +132,11 @@ public class MainForm extends javax.swing.JFrame {
         btnGrupos.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnGrupos.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnGrupos.setIconTextGap(25);
+        btnGrupos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGruposActionPerformed(evt);
+            }
+        });
 
         btnSubGrupos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/home.png"))); // NOI18N
         btnSubGrupos.setText("SubGrupos");
@@ -134,6 +144,11 @@ public class MainForm extends javax.swing.JFrame {
         btnSubGrupos.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSubGrupos.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnSubGrupos.setIconTextGap(25);
+        btnSubGrupos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSubGruposActionPerformed(evt);
+            }
+        });
 
         btnTiposProveedores.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/home.png"))); // NOI18N
         btnTiposProveedores.setText("Tipos de Proveedores");
@@ -141,6 +156,11 @@ public class MainForm extends javax.swing.JFrame {
         btnTiposProveedores.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnTiposProveedores.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnTiposProveedores.setIconTextGap(25);
+        btnTiposProveedores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTiposProveedoresActionPerformed(evt);
+            }
+        });
 
         btnProveedores.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/home.png"))); // NOI18N
         btnProveedores.setText("Proveedores");
@@ -148,6 +168,11 @@ public class MainForm extends javax.swing.JFrame {
         btnProveedores.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnProveedores.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnProveedores.setIconTextGap(25);
+        btnProveedores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProveedoresActionPerformed(evt);
+            }
+        });
 
         btnBodegas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/home.png"))); // NOI18N
         btnBodegas.setText("Bodegas");
@@ -155,6 +180,11 @@ public class MainForm extends javax.swing.JFrame {
         btnBodegas.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnBodegas.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnBodegas.setIconTextGap(25);
+        btnBodegas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBodegasActionPerformed(evt);
+            }
+        });
 
         btnArticulos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/home.png"))); // NOI18N
         btnArticulos.setText("Artículos");
@@ -162,6 +192,11 @@ public class MainForm extends javax.swing.JFrame {
         btnArticulos.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnArticulos.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnArticulos.setIconTextGap(25);
+        btnArticulos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnArticulosActionPerformed(evt);
+            }
+        });
 
         btnInventario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/home.png"))); // NOI18N
         btnInventario.setText("Inventario");
@@ -169,27 +204,47 @@ public class MainForm extends javax.swing.JFrame {
         btnInventario.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnInventario.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnInventario.setIconTextGap(25);
+        btnInventario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInventarioActionPerformed(evt);
+            }
+        });
 
-        btnMovimientos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/home.png"))); // NOI18N
-        btnMovimientos.setText("Movimientos");
-        btnMovimientos.setColorNormal(new java.awt.Color(153, 153, 153));
-        btnMovimientos.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnMovimientos.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        btnMovimientos.setIconTextGap(25);
+        btnEntraFactCre.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/home.png"))); // NOI18N
+        btnEntraFactCre.setText("Entrada Factura Crédito");
+        btnEntraFactCre.setColorNormal(new java.awt.Color(153, 153, 153));
+        btnEntraFactCre.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnEntraFactCre.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnEntraFactCre.setIconTextGap(25);
+        btnEntraFactCre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEntraFactCreActionPerformed(evt);
+            }
+        });
 
-        btnReportes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/home.png"))); // NOI18N
-        btnReportes.setText("Reportes");
-        btnReportes.setColorNormal(new java.awt.Color(153, 153, 153));
-        btnReportes.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnReportes.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        btnReportes.setIconTextGap(25);
+        btnEntraFactTicket.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/home.png"))); // NOI18N
+        btnEntraFactTicket.setText("Entrada Factura Ticket");
+        btnEntraFactTicket.setColorNormal(new java.awt.Color(153, 153, 153));
+        btnEntraFactTicket.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnEntraFactTicket.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnEntraFactTicket.setIconTextGap(25);
+        btnEntraFactTicket.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEntraFactTicketActionPerformed(evt);
+            }
+        });
 
-        btnMiCuenta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/home.png"))); // NOI18N
-        btnMiCuenta.setText("Mi Cuenta");
-        btnMiCuenta.setColorNormal(new java.awt.Color(153, 153, 153));
-        btnMiCuenta.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnMiCuenta.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        btnMiCuenta.setIconTextGap(25);
+        btnSalidas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/home.png"))); // NOI18N
+        btnSalidas.setText("Salidas");
+        btnSalidas.setColorNormal(new java.awt.Color(153, 153, 153));
+        btnSalidas.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnSalidas.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnSalidas.setIconTextGap(25);
+        btnSalidas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalidasActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -204,9 +259,9 @@ public class MainForm extends javax.swing.JFrame {
             .addComponent(btnBodegas, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addComponent(btnArticulos, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addComponent(btnInventario, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addComponent(btnMovimientos, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addComponent(btnReportes, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addComponent(btnMiCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(btnEntraFactCre, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(btnEntraFactTicket, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(btnSalidas, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addComponent(btnAcercaDe, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         jPanel3Layout.setVerticalGroup(
@@ -230,11 +285,11 @@ public class MainForm extends javax.swing.JFrame {
                 .addGap(0, 0, 0)
                 .addComponent(btnInventario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(btnMovimientos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnEntraFactCre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(btnReportes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnEntraFactTicket, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(btnMiCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnSalidas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(btnAcercaDe, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -260,6 +315,61 @@ public class MainForm extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAdminUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdminUsuariosActionPerformed
+        UsuariosForm abrir = new UsuariosForm();
+        abrir.setVisible(true);
+    }//GEN-LAST:event_btnAdminUsuariosActionPerformed
+
+    private void btnGruposActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGruposActionPerformed
+        GruposForm abrir = new GruposForm();
+        abrir.setVisible(true);
+    }//GEN-LAST:event_btnGruposActionPerformed
+
+    private void btnSubGruposActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubGruposActionPerformed
+        GruposForm abrir = new GruposForm();
+        abrir.setVisible(true);
+    }//GEN-LAST:event_btnSubGruposActionPerformed
+
+    private void btnTiposProveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTiposProveedoresActionPerformed
+        CapaPresentacion.TipoProveedor abrir = new CapaPresentacion.TipoProveedor();
+        abrir.setVisible(true);
+    }//GEN-LAST:event_btnTiposProveedoresActionPerformed
+
+    private void btnProveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProveedoresActionPerformed
+        Proveedores abrir = new Proveedores();
+        abrir.setVisible(true);
+    }//GEN-LAST:event_btnProveedoresActionPerformed
+
+    private void btnBodegasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBodegasActionPerformed
+        Bodegas abrir = new Bodegas();
+        abrir.setVisible(true);
+    }//GEN-LAST:event_btnBodegasActionPerformed
+
+    private void btnArticulosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnArticulosActionPerformed
+        Articulos abrir = new Articulos();
+        abrir.setVisible(true);
+    }//GEN-LAST:event_btnArticulosActionPerformed
+
+    private void btnInventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInventarioActionPerformed
+        Inventario abrir = new Inventario();
+        abrir.setVisible(true);
+    }//GEN-LAST:event_btnInventarioActionPerformed
+
+    private void btnEntraFactCreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntraFactCreActionPerformed
+        EntradaCriditoFiscal abrir = new EntradaCriditoFiscal();
+        abrir.setVisible(true);
+    }//GEN-LAST:event_btnEntraFactCreActionPerformed
+
+    private void btnEntraFactTicketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntraFactTicketActionPerformed
+        EntradaPorFactura abrir = new EntradaPorFactura();
+        abrir.setVisible(true);
+    }//GEN-LAST:event_btnEntraFactTicketActionPerformed
+
+    private void btnSalidasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalidasActionPerformed
+        Salida abrir = new Salida();
+        abrir.setVisible(true);
+    }//GEN-LAST:event_btnSalidasActionPerformed
 
     /**
      * @param args the command line arguments
@@ -301,12 +411,12 @@ public class MainForm extends javax.swing.JFrame {
     private rsbuttom.RSButtonMetro btnAdminUsuarios;
     private rsbuttom.RSButtonMetro btnArticulos;
     private rsbuttom.RSButtonMetro btnBodegas;
+    private rsbuttom.RSButtonMetro btnEntraFactCre;
+    private rsbuttom.RSButtonMetro btnEntraFactTicket;
     private rsbuttom.RSButtonMetro btnGrupos;
     private rsbuttom.RSButtonMetro btnInventario;
-    private rsbuttom.RSButtonMetro btnMiCuenta;
-    private rsbuttom.RSButtonMetro btnMovimientos;
     private rsbuttom.RSButtonMetro btnProveedores;
-    private rsbuttom.RSButtonMetro btnReportes;
+    private rsbuttom.RSButtonMetro btnSalidas;
     private rsbuttom.RSButtonMetro btnSubGrupos;
     private rsbuttom.RSButtonMetro btnTiposProveedores;
     private CapaPresentacion.DisennioRSButtonMetro disennioRSButtonMetro1;

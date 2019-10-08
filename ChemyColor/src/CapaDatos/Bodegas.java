@@ -31,6 +31,9 @@ import javax.persistence.Table;
     @NamedQuery(name = "Bodegas.findAll", query = "SELECT b FROM Bodegas b")})
 public class Bodegas implements Serializable {
 
+    @OneToMany(mappedBy = "codigobodega")
+    private List<Historialfacturas> historialfacturasList;
+
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
@@ -254,6 +257,14 @@ public class Bodegas implements Serializable {
     @Override
     public String toString() {
         return "CapaDatos.Bodegas[ codigobodega=" + codigobodega + " ]";
+    }
+
+    public List<Historialfacturas> getHistorialfacturasList() {
+        return historialfacturasList;
+    }
+
+    public void setHistorialfacturasList(List<Historialfacturas> historialfacturasList) {
+        this.historialfacturasList = historialfacturasList;
     }
     
 }

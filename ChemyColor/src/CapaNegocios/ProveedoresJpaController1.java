@@ -17,11 +17,14 @@ import CapaDatos.Telefonosproveedor;
 import CapaNegocios.exceptions.IllegalOrphanException;
 import CapaNegocios.exceptions.NonexistentEntityException;
 import CapaNegocios.exceptions.PreexistingEntityException;
+import CapaPresentacion.entityMain;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.ParameterMode;
+import javax.persistence.StoredProcedureQuery;
 
 /**
  *
@@ -37,7 +40,7 @@ public class ProveedoresJpaController1 implements Serializable {
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
-
+   
     public void create(Proveedores proveedores) throws PreexistingEntityException, Exception {
         if (proveedores.getTelefonosproveedorList() == null) {
             proveedores.setTelefonosproveedorList(new ArrayList<Telefonosproveedor>());

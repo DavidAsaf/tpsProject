@@ -5,6 +5,17 @@
  */
 package CapaPresentacion;
 
+import CapaDatos.Tipoproveedores;
+import CapaNegocios.ArticulosJpaController;
+import CapaNegocios.BodegasJpaController;
+import CapaNegocios.HistorialfacturasJpaController;
+import CapaNegocios.ProveedoresJpaController;
+import java.math.BigDecimal;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 /**
@@ -13,12 +24,19 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
  */
 public class EntradaCriditoFiscal extends javax.swing.JFrame {
 
+    BodegasJpaController bod = new BodegasJpaController(entityMain.getInstance());
+    ProveedoresJpaController prov = new ProveedoresJpaController(entityMain.getInstance());
+    
     /**
      * Creates new form EntradaCriditoFiscal
      */
     public EntradaCriditoFiscal() {
         initComponents();
+        llenarComboBodegas();
+        llenarComboProveedores();
         AutoCompleteDecorator.decorate(comboBodega);
+        AutoCompleteDecorator.decorate(comboProveedor);
+        AutoCompleteDecorator.decorate(comboProductos);
     }
 
     /**
@@ -39,7 +57,6 @@ public class EntradaCriditoFiscal extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        txtProveedor = new javax.swing.JTextField();
         txtNumComprobante = new javax.swing.JTextField();
         txtDireccion = new javax.swing.JTextField();
         txtNrc = new javax.swing.JTextField();
@@ -52,29 +69,30 @@ public class EntradaCriditoFiscal extends javax.swing.JFrame {
         jRadioButton3 = new javax.swing.JRadioButton();
         jRadioButton4 = new javax.swing.JRadioButton();
         jLabel6 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        txtDui = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jTextField6 = new javax.swing.JTextField();
+        txtGiro = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        jTextField7 = new javax.swing.JTextField();
+        txtNit = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
-        jTextField8 = new javax.swing.JTextField();
-        jTextField9 = new javax.swing.JTextField();
+        txtCantidad = new javax.swing.JTextField();
+        txtPrecio = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
-        jTextField10 = new javax.swing.JTextField();
+        txtCostoTotal = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
-        jTextField11 = new javax.swing.JTextField();
+        txtIvaCredito = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
-        jTextField14 = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
-        jFormattedTextField1 = new javax.swing.JFormattedTextField();
         jButton1 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
-        jTextField12 = new javax.swing.JTextField();
+        txtDetalles = new javax.swing.JTextField();
         comboBodega = new javax.swing.JComboBox<>();
+        comboProductos = new javax.swing.JComboBox<>();
+        comboProveedor = new javax.swing.JComboBox<>();
+        txtFecha = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -135,12 +153,13 @@ public class EntradaCriditoFiscal extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(rbContado)
-                    .addComponent(rbCredito)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(comboDias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel17)))
+                        .addComponent(jLabel17))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(rbContado)
+                        .addComponent(rbCredito)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -175,35 +194,48 @@ public class EntradaCriditoFiscal extends javax.swing.JFrame {
 
         jLabel7.setText("Giro:");
 
-        jTextField6.addActionListener(new java.awt.event.ActionListener() {
+        txtGiro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField6ActionPerformed(evt);
+                txtGiroActionPerformed(evt);
             }
         });
 
         jLabel8.setText("DUI:");
 
-        jTextField7.addActionListener(new java.awt.event.ActionListener() {
+        txtNit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField7ActionPerformed(evt);
+                txtNitActionPerformed(evt);
             }
         });
 
         jLabel9.setText("NIT:");
 
-        jTextField9.addActionListener(new java.awt.event.ActionListener() {
+        txtCantidad.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtCantidadKeyReleased(evt);
+            }
+        });
+
+        txtPrecio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField9ActionPerformed(evt);
+                txtPrecioActionPerformed(evt);
+            }
+        });
+        txtPrecio.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtPrecioKeyReleased(evt);
             }
         });
 
         jLabel10.setText("Precio:");
 
+        txtCostoTotal.setEditable(false);
+
         jLabel11.setText("Costo Total:");
 
-        jTextField11.addActionListener(new java.awt.event.ActionListener() {
+        txtIvaCredito.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField11ActionPerformed(evt);
+                txtIvaCreditoActionPerformed(evt);
             }
         });
 
@@ -215,28 +247,45 @@ public class EntradaCriditoFiscal extends javax.swing.JFrame {
 
         jLabel16.setText("Fecha de compra");
 
-        jFormattedTextField1.setText("--/-- /----");
-        jFormattedTextField1.addActionListener(new java.awt.event.ActionListener() {
+        jButton1.setText("Guardar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jFormattedTextField1ActionPerformed(evt);
+                jButton1ActionPerformed(evt);
             }
         });
-
-        jButton1.setText("Guardar");
 
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel13.setText("Detalle de entrada");
         jPanel3.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, -1, -1));
 
-        jTextField12.addActionListener(new java.awt.event.ActionListener() {
+        txtDetalles.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField12ActionPerformed(evt);
+                txtDetallesActionPerformed(evt);
             }
         });
-        jPanel3.add(jTextField12, new org.netbeans.lib.awtextra.AbsoluteConstraints(109, 19, 589, 96));
+        jPanel3.add(txtDetalles, new org.netbeans.lib.awtextra.AbsoluteConstraints(109, 19, 589, 96));
 
         comboBodega.setEditable(true);
+        comboBodega.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                comboBodegaItemStateChanged(evt);
+            }
+        });
+        comboBodega.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                comboBodegaKeyReleased(evt);
+            }
+        });
+
+        comboProductos.setEditable(true);
+        comboProductos.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                comboProductosItemStateChanged(evt);
+            }
+        });
+
+        comboProveedor.setEditable(true);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -248,7 +297,7 @@ public class EntradaCriditoFiscal extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(59, 59, 59)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel4)
@@ -257,15 +306,14 @@ public class EntradaCriditoFiscal extends javax.swing.JFrame {
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                             .addComponent(txtDireccion, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
                                             .addComponent(txtNrc)))
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                            .addComponent(jLabel2)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(txtNumComprobante, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                            .addComponent(jLabel3)
-                                            .addGap(63, 63, 63)
-                                            .addComponent(txtProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel2)
+                                        .addGap(33, 33, 33)
+                                        .addComponent(txtNumComprobante, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel3)
+                                        .addGap(63, 63, 63)
+                                        .addComponent(comboProveedor, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(9, 9, 9)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -274,9 +322,9 @@ public class EntradaCriditoFiscal extends javax.swing.JFrame {
                                             .addComponent(jLabel16))
                                         .addGap(18, 18, 18)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(jTextField14, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
-                                            .addComponent(jFormattedTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
-                                            .addComponent(comboBodega, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                            .addComponent(comboBodega, 0, 161, Short.MAX_VALUE)
+                                            .addComponent(comboProductos, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(txtFecha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(51, 51, 51)
                                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -289,20 +337,19 @@ public class EntradaCriditoFiscal extends javax.swing.JFrame {
                                     .addComponent(jLabel6))
                                 .addGap(103, 103, 103)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtNit, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(jLabel11)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel8)
-                                        .addGap(128, 128, 128))
+                                    .addComponent(jLabel8)
                                     .addComponent(jLabel10))
+                                .addGap(117, 117, 117)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(txtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtDui, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtCostoTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtIvaCredito, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
@@ -311,19 +358,19 @@ public class EntradaCriditoFiscal extends javax.swing.JFrame {
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                         .addComponent(jLabel7)
                                         .addGap(126, 126, 126)))
-                                .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(txtGiro, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 109, Short.MAX_VALUE)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(134, 134, 134))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(360, 360, 360))
             .addGroup(layout.createSequentialGroup()
                 .addGap(271, 271, 271)
                 .addComponent(jLabel1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(336, 336, 336))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -337,23 +384,23 @@ public class EntradaCriditoFiscal extends javax.swing.JFrame {
                         .addGap(12, 12, 12)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel7)
-                            .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtGiro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel8)
-                            .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtDui, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(11, 11, 11)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel9)
-                            .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtNit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(14, 14, 14)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel6)
-                            .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel10)
-                            .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(3, 3, 3)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -362,7 +409,7 @@ public class EntradaCriditoFiscal extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
-                            .addComponent(txtProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(comboProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4)
@@ -378,11 +425,11 @@ public class EntradaCriditoFiscal extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel11)
-                            .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtCostoTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel12)
-                            .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtIvaCredito, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel14)
@@ -390,15 +437,15 @@ public class EntradaCriditoFiscal extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel15)
-                            .addComponent(jTextField14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(comboProductos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel16)
-                            .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(55, 55, 55)
-                .addComponent(jButton1)
+                .addGap(41, 41, 41)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(39, 39, 39))
         );
 
@@ -413,34 +460,142 @@ public class EntradaCriditoFiscal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtDireccionActionPerformed
 
-    private void jTextField6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField6ActionPerformed
+    private void txtGiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtGiroActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField6ActionPerformed
+    }//GEN-LAST:event_txtGiroActionPerformed
 
-    private void jTextField7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField7ActionPerformed
+    private void txtNitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNitActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField7ActionPerformed
+    }//GEN-LAST:event_txtNitActionPerformed
 
-    private void jTextField9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField9ActionPerformed
+    private void txtPrecioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPrecioActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField9ActionPerformed
+    }//GEN-LAST:event_txtPrecioActionPerformed
 
-    private void jTextField11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField11ActionPerformed
+    private void txtIvaCreditoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIvaCreditoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField11ActionPerformed
-
-    private void jFormattedTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jFormattedTextField1ActionPerformed
+    }//GEN-LAST:event_txtIvaCreditoActionPerformed
 
     private void comboDiasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboDiasActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_comboDiasActionPerformed
 
-    private void jTextField12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField12ActionPerformed
+    private void txtDetallesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDetallesActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField12ActionPerformed
+    }//GEN-LAST:event_txtDetallesActionPerformed
 
+    private void comboBodegaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_comboBodegaKeyReleased
+        
+    }//GEN-LAST:event_comboBodegaKeyReleased
+
+    private void comboProductosItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboProductosItemStateChanged
+        
+    }//GEN-LAST:event_comboProductosItemStateChanged
+
+    private void comboBodegaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboBodegaItemStateChanged
+        String bodega = this.comboBodega.getSelectedItem().toString();
+        BigDecimal idBodega;
+        BodegasJpaController b = new BodegasJpaController(entityMain.getInstance());
+        
+        try{
+            idBodega = b.findIdBodega(bodega);
+            llenarComboProductos(idBodega);
+            this.comboProductos.setEnabled(true);
+        } catch(Exception e){
+            //System.out.println("Error al llenar combo de productos." + e.toString());
+            this.comboProductos.setEnabled(false);
+        }
+    }//GEN-LAST:event_comboBodegaItemStateChanged
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        Guardar();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void txtCantidadKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadKeyReleased
+        Calculo();
+    }//GEN-LAST:event_txtCantidadKeyReleased
+
+    private void txtPrecioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioKeyReleased
+        Calculo();
+    }//GEN-LAST:event_txtPrecioKeyReleased
+
+    private void Guardar(){
+        ProveedoresJpaController control = new ProveedoresJpaController(entityMain.getInstance());
+        BodegasJpaController b = new BodegasJpaController(entityMain.getInstance());
+        ArticulosJpaController a = new ArticulosJpaController(entityMain.getInstance());
+        HistorialfacturasJpaController h = new HistorialfacturasJpaController(entityMain.getInstance());
+        
+        String numComprobante = this.txtNumComprobante.getText();
+        CapaDatos.Proveedores p = new CapaDatos.Proveedores();
+        int proveedor = control.findIdProveedores(this.comboProveedor.getSelectedItem().toString());
+        String direccion = this.txtDireccion.getText();
+        String nrc = this.txtNrc.getText();
+        int estadoCompra = 0; if(rbCredito.isSelected() == true) estadoCompra = 1;
+        int cantidadDias = 0; 
+        if(rbCredito.isSelected() == true) cantidadDias = Integer.parseInt(this.comboDias.getSelectedItem().toString());
+        int idBodega = b.findIdBodegaInteger(this.comboBodega.getSelectedItem().toString());
+        int articulo = a.findIdArticulos(this.comboProductos.getSelectedItem().toString());
+        Date fecha = new java.sql.Date((Date) this.txtFecha.getDate());
+        String giro = this.txtGiro.getText();
+        String dui = this.txtDui.getText();
+        String nit = this.txtNit.getText();
+        int cantidad = Integer.parseInt(this.txtCantidad.getText());
+        Double precio = Double.parseDouble(this.txtPrecio.getText());
+        String costoT = this.txtCostoTotal.getText();
+        String ivaCre = this.txtIvaCredito.getText();
+        String detalles = this.txtDetalles.getText();
+        
+        try {
+            h.EntraFactura(numComprobante, estadoCompra, cantidadDias, 1, idBodega, articulo, fecha, "", ivaCre, 
+                "", "", proveedor, cantidad, precio,detalles);
+            
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(null, "Hubo un error. " + e.toString());
+        }
+        
+        
+    }
+    
+    private void Calculo(){
+        try {
+            double v1 = Double.parseDouble(this.txtCantidad.getText());
+            double v2 = Double.parseDouble(this.txtPrecio.getText());
+            double total = v1 * v2;
+            this.txtCostoTotal.setText(String.valueOf(total));
+        } catch(Exception e){
+            
+        }
+    }
+    
+    private void llenarComboProductos(BigDecimal bodega) {
+        //this.comboProductos.removeAllItems();
+        ArticulosJpaController art = new ArticulosJpaController(entityMain.getInstance());
+        String val = bodega.toString();
+        art.fillCombo(this.comboProductos, val);
+        
+    }
+    
+    DefaultComboBoxModel dc = new DefaultComboBoxModel();
+
+    private void llenarComboBodegas() {
+        comboBodega.setModel(dc);
+        List<CapaDatos.Bodegas> Listatipo;
+        Listatipo = bod.findBodegasEntities();
+        for (int i = 0; i < Listatipo.size(); i++) {
+            dc.addElement(Listatipo.get(i).getNombrebodega());
+        }
+    }
+    
+    DefaultComboBoxModel dc2 = new DefaultComboBoxModel();
+    private void llenarComboProveedores() {
+        comboProveedor.setModel(dc2);
+        List<CapaDatos.Proveedores> Listatipo;
+        Listatipo = prov.findProveedoresEntities();
+        for (int i = 0; i < Listatipo.size(); i++) {
+            dc2.addElement(Listatipo.get(i).getNombres());
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -484,8 +639,9 @@ public class EntradaCriditoFiscal extends javax.swing.JFrame {
     private javax.swing.ButtonGroup buttonGroup4;
     private javax.swing.JComboBox<String> comboBodega;
     private javax.swing.JComboBox comboDias;
+    private javax.swing.JComboBox<String> comboProductos;
+    private javax.swing.JComboBox<String> comboProveedor;
     private javax.swing.JButton jButton1;
-    private javax.swing.JFormattedTextField jFormattedTextField1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -508,20 +664,19 @@ public class EntradaCriditoFiscal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JRadioButton jRadioButton3;
     private javax.swing.JRadioButton jRadioButton4;
-    private javax.swing.JTextField jTextField10;
-    private javax.swing.JTextField jTextField11;
-    private javax.swing.JTextField jTextField12;
-    private javax.swing.JTextField jTextField14;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField8;
-    private javax.swing.JTextField jTextField9;
     private javax.swing.JRadioButton rbContado;
     private javax.swing.JRadioButton rbCredito;
+    private javax.swing.JTextField txtCantidad;
+    private javax.swing.JTextField txtCostoTotal;
+    private javax.swing.JTextField txtDetalles;
     private javax.swing.JTextField txtDireccion;
+    private javax.swing.JTextField txtDui;
+    private com.toedter.calendar.JDateChooser txtFecha;
+    private javax.swing.JTextField txtGiro;
+    private javax.swing.JTextField txtIvaCredito;
+    private javax.swing.JTextField txtNit;
     private javax.swing.JTextField txtNrc;
     private javax.swing.JTextField txtNumComprobante;
-    private javax.swing.JTextField txtProveedor;
+    private javax.swing.JTextField txtPrecio;
     // End of variables declaration//GEN-END:variables
 }

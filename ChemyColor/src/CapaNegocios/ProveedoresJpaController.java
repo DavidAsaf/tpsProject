@@ -41,6 +41,30 @@ public class ProveedoresJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
+     public int findIdProveedores(String prov) {
+        
+        EntityManagerFactory factory = entityMain.getInstance();
+        EntityManager em = factory.createEntityManager();
+        
+        em.getTransaction().begin();
+        StoredProcedureQuery storedProcedure=em.createStoredProcedureQuery("findIdProveedor");
+        
+        storedProcedure.registerStoredProcedureParameter("proveedor", String.class, ParameterMode.IN);
+        storedProcedure.registerStoredProcedureParameter("idProveedor", Integer.class, ParameterMode.OUT);
+        
+        storedProcedure.setParameter("proveedor", prov);        
+        storedProcedure.execute();
+        
+        Proveedores tipo = new Proveedores();
+        Integer codigo = (Integer) storedProcedure.getOutputParameterValue("idProveedor");
+        tipo.setCodigoproveedor(BigDecimal.valueOf(codigo));
+        
+        em.getTransaction().commit();
+        em.close();
+        
+        return codigo;
+    }
+    
     public void fillJTable(JTable jtable, String tabla, String filtro, String busqueda, String[] titulos) {
         TelefonosproveedorJpaController t = new TelefonosproveedorJpaController(entityMain.getInstance());
 
