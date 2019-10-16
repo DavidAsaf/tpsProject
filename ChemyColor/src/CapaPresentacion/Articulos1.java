@@ -84,6 +84,7 @@ public class Articulos1 extends javax.swing.JFrame {
         txtId = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         txtexistencia = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -151,13 +152,18 @@ public class Articulos1 extends javax.swing.JFrame {
             }
         });
 
-        cbsub.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "rojo" }));
-
         jLabel19.setText("ID");
 
         txtId.setEnabled(false);
 
         jLabel12.setText("Existencia:");
+
+        jButton1.setText("Salir");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -181,38 +187,31 @@ public class Articulos1 extends javax.swing.JFrame {
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 913, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 146, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(47, 47, 47)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(361, 361, 361)
-                        .addComponent(bneditar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(60, 60, 60)
-                        .addComponent(bneliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel10)
+                        .addGap(70, 70, 70)
+                        .addComponent(txtexistenciamin, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(47, 47, 47)
+                        .addComponent(jLabel12)
+                        .addGap(70, 70, 70)
+                        .addComponent(txtexistencia, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel10)
-                                .addGap(70, 70, 70)
-                                .addComponent(txtexistenciamin, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel12)
-                                .addGap(70, 70, 70)
-                                .addComponent(txtexistencia, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel3)
-                                            .addComponent(jLabel2))
-                                        .addGap(63, 63, 63))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel4)
-                                        .addGap(70, 70, 70)))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtcodpro, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtcodbarras, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtnomArticulos, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel2))
+                                .addGap(63, 63, 63))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addGap(70, 70, 70)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtcodpro, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtcodbarras, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtnomArticulos, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(147, 147, 147)
@@ -239,6 +238,14 @@ public class Articulos1 extends javax.swing.JFrame {
                             .addComponent(cbgrupo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(cbsub, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(146, 146, 146))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(361, 361, 361)
+                .addComponent(bneditar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(60, 60, 60)
+                .addComponent(bneliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -278,11 +285,17 @@ public class Articulos1 extends javax.swing.JFrame {
                             .addComponent(jButton2))
                         .addGap(27, 27, 27)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
-                        .addGap(43, 43, 43)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(bneditar)
-                            .addComponent(bneliminar))
-                        .addContainerGap())
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(43, 43, 43)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(bneditar)
+                                    .addComponent(bneliminar))
+                                .addContainerGap())
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton1)
+                                .addGap(22, 22, 22))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(40, 40, 40)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -302,7 +315,7 @@ public class Articulos1 extends javax.swing.JFrame {
                             .addComponent(txtutilidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(bnguardar)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addContainerGap())))
         );
 
         pack();
@@ -323,6 +336,10 @@ public class Articulos1 extends javax.swing.JFrame {
     private void bneditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bneditarActionPerformed
         Editar();
     }//GEN-LAST:event_bneditarActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     public void Guardar() {
         String nombre = this.txtnomArticulos.getText();
@@ -366,11 +383,11 @@ public class Articulos1 extends javax.swing.JFrame {
             try {
                 t.create(pro);
                 llenarTabla();
-                JOptionPane.showMessageDialog(null, "Proveedor creado exitosamente.");
+                JOptionPane.showMessageDialog(null, "Artículo creado exitosamente.");
                 LimpiarControles();
 
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, "Hubo un error al guardar nuevo proveedor. " + e.toString());
+                JOptionPane.showMessageDialog(null, "Hubo un error al guardar nuevo artículo. " + e.toString());
             }
         } else {
             int idP = Integer.parseInt(this.txtId.getText());
@@ -379,7 +396,7 @@ public class Articulos1 extends javax.swing.JFrame {
             try {
                 t.edit(pro);
                 llenarTabla();
-                JOptionPane.showMessageDialog(null, "Proveedor editado exitosamente.");
+                JOptionPane.showMessageDialog(null, "Artículo editado exitosamente.");
                 LimpiarControles();
                 estado = true;
             } catch (Exception e) {
@@ -472,7 +489,7 @@ public class Articulos1 extends javax.swing.JFrame {
             pro = t.findIdGrupos(prov);
             retorno = Integer.parseInt(pro.getCodigogrupo().toString());
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Hubo un error al encontrar el id del proveedor. " + e.toString());
+            JOptionPane.showMessageDialog(null, "Hubo un error al encontrar el id. " + e.toString());
         }
 
         return retorno;
@@ -505,19 +522,22 @@ public class Articulos1 extends javax.swing.JFrame {
     }
      DefaultComboBoxModel dc1 = new DefaultComboBoxModel();
      private void llenarComboGrupo() {
-        cbbodega.setModel(dc1);
+        cbgrupo.setModel(dc1);
         List<Grupos> Listatipo;
         Listatipo = tipog.findGruposEntities();
         for (int i = 0; i < Listatipo.size(); i++) {
-            dc.addElement(Listatipo.get(i).getNombregrupo());
+            dc1.addElement(Listatipo.get(i).getNombregrupo());
         }
     }
+     
+     
+     DefaultComboBoxModel dc2 = new DefaultComboBoxModel();
       private void llenarComboLineas() {
-        cbbodega.setModel(dc);
+        cbsub.setModel(dc2);
         List<Lineas> Listatipo;
         Listatipo = tipos.findLineasEntities();
         for (int i = 0; i < Listatipo.size(); i++) {
-            dc.addElement(Listatipo.get(i).getNombrelineas());
+            dc2.addElement(Listatipo.get(i).getNombrelineas());
         }
     }
 
@@ -584,9 +604,9 @@ public class Articulos1 extends javax.swing.JFrame {
                 tbpro.setValueAt(Listatipo.get(i).getExistencia(), i, 4);
                 tbpro.setValueAt(Listatipo.get(i).getExistenciamin(), i, 5);
                 tbpro.setValueAt(Listatipo.get(i).getUtilidad(), i, 6);
-                tbpro.setValueAt(Listatipo.get(i).getCodigobodega(), i, 7);
-                tbpro.setValueAt(Listatipo.get(i).getCodigogrupo(), i, 8);
-                tbpro.setValueAt(Listatipo.get(i).getCodigolinea(), i, 9);
+                tbpro.setValueAt(Listatipo.get(i).getCodigobodega().getNombrebodega(), i, 7);
+                tbpro.setValueAt(Listatipo.get(i).getCodigogrupo().getNombregrupo(), i, 8);
+                tbpro.setValueAt(Listatipo.get(i).getCodigolinea().getNombrelineas(), i, 9);
             }
 
         } catch (Exception e) {
@@ -637,6 +657,7 @@ public class Articulos1 extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cbbodega;
     private javax.swing.JComboBox<String> cbgrupo;
     private javax.swing.JComboBox<String> cbsub;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;

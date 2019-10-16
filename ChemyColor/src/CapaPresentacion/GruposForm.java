@@ -113,6 +113,11 @@ public class GruposForm extends javax.swing.JFrame {
 
         jButton3.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
         jButton3.setText("Editar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
         jButton4.setText("Eliminar");
@@ -228,9 +233,8 @@ public class GruposForm extends javax.swing.JFrame {
                 .addGap(25, 25, 25)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(txtIds, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(txtSub)
-                        .addComponent(jCombo, 0, 109, Short.MAX_VALUE)))
+                    .addComponent(txtSub)
+                    .addComponent(jCombo, 0, 109, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 82, Short.MAX_VALUE)
@@ -341,6 +345,26 @@ public class GruposForm extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_jButton9ActionPerformed
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        //Editar();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+//     private void Editar() {
+//        try {
+//            int indice = this.tablaGrupos.getSelectedRow();
+//           
+//            this.txtId.setText(tablaGrupos.getModel().getValueAt(indice, 0).toString());
+//            this.txtgrupo.setText(tablaGrupos.getModel().getValueAt(indice, 1).toString());
+//            this.txtcomi.setText(tablaGrupos.getModel().getValueAt(indice, 2).toString());
+//            
+//
+//            estado = false;
+//
+//        } catch (Exception e) {
+//            JOptionPane.showMessageDialog(null, "Es necesario primero seleccionar una fila para editar.");
+//            estado = true;
+//        }
+//    }
     
     private void Guardar() {
         if (txtGrupo.getText().length() != 0) {
