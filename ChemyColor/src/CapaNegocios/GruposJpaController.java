@@ -23,6 +23,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureQuery;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -39,6 +41,30 @@ public class GruposJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
+    public Grupos findIdGrupo(String grupo) {
+        
+        EntityManagerFactory factory = entityMain.getInstance();
+        EntityManager em = factory.createEntityManager();
+        
+        em.getTransaction().begin();
+        StoredProcedureQuery storedProcedure=em.createStoredProcedureQuery("findIdGrupo");
+        
+        storedProcedure.registerStoredProcedureParameter("Grupo", String.class, ParameterMode.IN);
+        storedProcedure.registerStoredProcedureParameter("idGrupo", Integer.class, ParameterMode.OUT);
+        
+        storedProcedure.setParameter("Grupo", grupo);        
+        storedProcedure.execute();
+        
+        Grupos tipo = new Grupos();
+        Integer codigo = (Integer) storedProcedure.getOutputParameterValue("idGrupo");
+        tipo.setCodigogrupo(BigDecimal.valueOf(codigo));
+        
+        em.getTransaction().commit();
+        em.close();
+        
+        return tipo;
+    }
+    //Pendiente de revisar sí funciona en Artículos. Sino, ocupar el metodo anterior. 
     public Grupos findIdGrupos(String grupo) {
         //idGrupos(grupo IN VARCHAR2, idGrupo out NUMBER) 
         EntityManagerFactory factory = entityMain.getInstance();
@@ -62,6 +88,43 @@ public class GruposJpaController implements Serializable {
         
         return tipo;
     }
+    
+    public void EditarGrupo(int id, String grupo, BigDecimal Comision) {
+        
+        EntityManagerFactory factory = entityMain.getInstance();
+        EntityManager em = factory.createEntityManager();
+        
+        em.getTransaction().begin();
+        StoredProcedureQuery storedProcedure=em.createStoredProcedureQuery("EditarGrupo");
+        
+        storedProcedure.registerStoredProcedureParameter("idGrupo", Integer.class, ParameterMode.IN);
+        storedProcedure.registerStoredProcedureParameter("Grupo", String.class, ParameterMode.IN);
+        storedProcedure.registerStoredProcedureParameter("Comi", BigDecimal.class, ParameterMode.IN);
+        
+        
+        storedProcedure.setParameter("idGrupo", id);        
+        storedProcedure.setParameter("Grupo", grupo);        
+        storedProcedure.setParameter("Comi", Comision);        
+        storedProcedure.execute();
+        
+        em.getTransaction().commit();
+        em.close();
+        
+    }
+    
+    public void fillJTable(JTable jtable, String tabla, String filtro, String busqueda, String[] titulos) {
+        
+        List<Grupos> listado = getEntityManager().createQuery("SELECT g FROM " + tabla + " g where g." + filtro + " like \"%" + busqueda + "%\"").getResultList();
+        DefaultTableModel Modelo = new DefaultTableModel(null, titulos);
+        for (Grupos g : listado) {
+            //Modelo.addRow(new Object[]{Integer.toString(p.getIdProducto()), p.getProducto(), p.getIdMarca().getMarca(),
+            //p.getIdCategoria().getCategoria(), p.getDescripcion()});
+            Modelo.addRow(new Object[]{g.getCodigogrupo(), g.getNombregrupo(), g.getComision()});
+        }
+        jtable.setModel(Modelo);
+        jtable.setDefaultEditor(Object.class, null);
+    }    
+    
     
     public void create(Grupos grupos) throws PreexistingEntityException, Exception {
         if (grupos.getArticulosList() == null) {

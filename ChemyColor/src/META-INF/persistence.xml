@@ -17,6 +17,7 @@
     <class>CapaDatos.Tiposmovimientos</class>
     <class>CapaDatos.Tipousuarios</class>
     <class>CapaDatos.Usuarios</class>
+    <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@localhost:1521:XE"/>
       <property name="javax.persistence.jdbc.user" value="system"/>

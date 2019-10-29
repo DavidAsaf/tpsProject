@@ -23,6 +23,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureQuery;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -62,6 +64,20 @@ public class LineasJpaController implements Serializable {
         
         return tipo;
     }
+    
+    
+    public void fillJTable(JTable jtable, String tabla, String filtro, String busqueda, String[] titulos) {
+        
+        List<Lineas> listado = getEntityManager().createQuery("SELECT l FROM " + tabla + " l where l." + filtro + " like \"%" + busqueda + "%\"").getResultList();
+        DefaultTableModel Modelo = new DefaultTableModel(null, titulos);
+        for (Lineas l : listado) {
+            //Modelo.addRow(new Object[]{Integer.toString(p.getIdProducto()), p.getProducto(), p.getIdMarca().getMarca(),
+            //p.getIdCategoria().getCategoria(), p.getDescripcion()});
+            Modelo.addRow(new Object[]{l.getCodigolinea(), l.getCodigogrupo().getNombregrupo(), l.getNombrelineas()});
+        }
+        jtable.setModel(Modelo);
+        jtable.setDefaultEditor(Object.class, null);
+    }  
     
     public void create(Lineas lineas) throws PreexistingEntityException, Exception {
         if (lineas.getArticulosList() == null) {
@@ -109,6 +125,29 @@ public class LineasJpaController implements Serializable {
         }
     }
 
+    public void EditarSubGrupo(int id, int grupo, String subGrupo) {
+        
+        EntityManagerFactory factory = entityMain.getInstance();
+        EntityManager em = factory.createEntityManager();
+        
+        em.getTransaction().begin();
+        StoredProcedureQuery storedProcedure=em.createStoredProcedureQuery("EditarSubGrupo");
+        
+        storedProcedure.registerStoredProcedureParameter("IdSubGrupo", Integer.class, ParameterMode.IN);
+        storedProcedure.registerStoredProcedureParameter("Grupo", Integer.class, ParameterMode.IN);
+        storedProcedure.registerStoredProcedureParameter("SubGrupo", String.class, ParameterMode.IN);
+        
+        
+        storedProcedure.setParameter("IdSubGrupo", id);        
+        storedProcedure.setParameter("Grupo", grupo);        
+        storedProcedure.setParameter("SubGrupo", subGrupo);        
+        storedProcedure.execute();
+        
+        em.getTransaction().commit();
+        em.close();
+        
+    }
+    
     public void edit(Lineas lineas) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {

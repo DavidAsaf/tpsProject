@@ -130,3 +130,35 @@ BEGIN
 END;
 /
 
+
+--Para encontrar los id de grupo
+CREATE OR REPLACE PROCEDURE findIdGrupo(Grupo IN VARCHAR2, idGrupo out NUMBER) 
+AS
+BEGIN
+    SELECT CodigoGrupo INTO idGrupo FROM Grupos WHERE NombreGrupo=Grupo;
+END;
+/
+
+
+
+CREATE OR REPLACE PROCEDURE EditarGrupo(idGrupo IN NUMBER, Grupo IN VARCHAR2, Comi IN VARCHAR2)
+AS
+BEGIN
+    UPDATE Grupos SET NombreGrupo = Grupo, Comision = Comi WHERE CodigoGrupo = idGrupo; 
+END;
+/
+
+
+
+CREATE OR REPLACE PROCEDURE EditarSubGrupo(IdSubGrupo IN NUMBER, Grupo IN NUMBER, SubGrupo IN VARCHAR2)
+AS
+BEGIN
+    UPDATE Lineas SET CodigoGrupo = Grupo, NombreLineas = SubGrupo WHERE CodigoLinea = IdSubGrupo; 
+END;
+/
+
+
+
+
+
+
