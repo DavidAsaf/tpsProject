@@ -21,76 +21,70 @@ import org.apache.commons.codec.digest.DigestUtils;
  * @author Amaya
  */
 public class LoginForm extends javax.swing.JFrame {
- Connection conn = null;
+
+    Connection conn = null;
     Connection con = null;
 
     OraclePreparedStatement pst = null;
     OracleResultSet rs = null;
-   
-   public static int codtipousuario = 0;
+
+    public static int codtipousuario = 0;
+
     public LoginForm() {
         initComponents();
         setLocationRelativeTo(null);
     }
-    void entraradmin(String usuario1 , String pass){
-    con = JavaConnectBD.ConnecBD();
-    String  sql = "select * from usuarios WHERE usuario='"+usuario1+"'";
+
+    void entraradmin(String usuario1, String pass) {
+
+        con = JavaConnectBD.ConnecBD();
+        String sql = "select * from usuarios WHERE usuario='" + usuario1 + "'";
         try {
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery(sql);
-            int nivelUsuario =1;
-            String contra="", usuario="";
-            
-            if(rs.next()){
-            usuario = rs.getString("usuario");
-            contra = rs.getString("contrasena");
-            nivelUsuario = rs.getInt("codtipousuario");
+            int nivelUsuario = 1;
+            String contra = "", usuario = "";
+
+            if (rs.next()) {
+                usuario = rs.getString("usuario");
+                contra = rs.getString("contrasena");
+                nivelUsuario = rs.getInt("codtipousuario");
             }
-            
-            System.out.println(" "+usuario+" "+pass);
-            
-            
-            if(pass.equals(contra))
-            {
-            System.out.println("Contraseña correcta");
-            LoginForm.codtipousuario = nivelUsuario;
-            
-            }else {
-            
-                JOptionPane.showMessageDialog(null, "Los datos ingresados son incorrectos","java",1);
+
+            if (pass.equals(contra)) {
+               
+                LoginForm.codtipousuario = nivelUsuario;
+
+            } else {
+
+                JOptionPane.showMessageDialog(null, "Los datos ingresados son incorrectos", "java", 1);
                 txtUsuario.setText("");
                 txtContra.setText("");
             }
-            
-            
-            
-            
-            
+
         } catch (SQLException | HeadlessException e) {
         }
-    
-    } 
-    
-    void Entrar(){
-       
-    this.entraradmin(txtUsuario.getText(),DigestUtils.md5Hex(txtContra.getText()));   
-    if(LoginForm.codtipousuario==1) {
-        MainForm a = new MainForm();
-        a.setVisible(true);
-        dispose();
-        JOptionPane.showMessageDialog(null, "Bienvenido","java",1);
-        
-       } else if(LoginForm.codtipousuario==2) {
-    JOptionPane.showMessageDialog(null, "Estamos trabajando en ello");
-    
+
     }
-    else if(LoginForm.codtipousuario==3) {
-    JOptionPane.showMessageDialog(null, "Estamos trabajando en ello proximamente");
-    
+
+    void Entrar() {
+
+        this.entraradmin(txtUsuario.getText(), DigestUtils.md5Hex(txtContra.getText()));
+        if (LoginForm.codtipousuario == 1) {
+            MainForm a = new MainForm();
+            a.setVisible(true);
+            dispose();
+            JOptionPane.showMessageDialog(null, "Bienvenido", "java", 1);
+
+        } else if (LoginForm.codtipousuario == 2) {
+            JOptionPane.showMessageDialog(null, "Estamos trabajando en ello");
+
+        } else if (LoginForm.codtipousuario == 3) {
+            JOptionPane.showMessageDialog(null, "Estamos trabajando en ello proximamente");
+
+        }
     }
-    }
-    
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -178,7 +172,7 @@ public class LoginForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-Entrar();        // TODO add your handling code here:
+        Entrar();        // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

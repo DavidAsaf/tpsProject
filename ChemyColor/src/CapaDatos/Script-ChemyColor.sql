@@ -198,15 +198,10 @@ CodTipoUsuario int primary key,
 TipoUsuario varchar(50) not null
 );
 
-create sequence SeqCodTipoUsuario 
-maxvalue 99999999999
-start with 1
-minvalue 1  
-cache 10;
 
-insert into TipoUsuarios values (SeqCodTipoUsuario.nextval,'Administrador');
-insert into TipoUsuarios values (SeqCodTipoUsuario.nextval,'Jefe de Bodega');
-insert into TipoUsuarios values (SeqCodTipoUsuario.nextval,'Auxiliar de Bodega');
+insert into TipoUsuarios values (1,'Administrador');
+insert into TipoUsuarios values (2,'Jefe de Bodega');
+insert into TipoUsuarios values (3,'Auxiliar de Bodega');
 
 
 create sequence Codigousuario 

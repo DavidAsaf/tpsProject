@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author gerso
+ * @author gersonnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnsitoooooooooooooooo
  */
 
 public class JavaConnectBD {
@@ -21,7 +21,7 @@ public class JavaConnectBD {
     public static Connection ConnecBD() {
         try{
             Class.forName("oracle.jdbc.OracleDriver");
-            Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE", "System", "admin");
+            Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE", "system", "unicaes");
             return con;
             
             
