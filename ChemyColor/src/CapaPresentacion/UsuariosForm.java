@@ -14,6 +14,7 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 /**
@@ -307,7 +308,7 @@ public class UsuariosForm extends javax.swing.JFrame {
         String direccion = this.txtdireccion.getText();
         String apellido = this.txtapellido.getText();
         String nomUsuario = this.txtnomUsuario.getText();
-        String contra = this.txtcontra.getText();
+        String contra = DigestUtils.md5Hex(this.txtcontra.getText());
         int est = 1;
         String email = this.txtemail.getText();
         String cel = this.txtcelular.getText();
