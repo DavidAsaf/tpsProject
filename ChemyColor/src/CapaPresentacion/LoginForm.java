@@ -84,6 +84,10 @@ public class LoginForm extends javax.swing.JFrame {
     JOptionPane.showMessageDialog(null, "Estamos trabajando en ello");
     
     }
+    else if(LoginForm.codtipousuario==3) {
+    JOptionPane.showMessageDialog(null, "Estamos trabajando en ello proximamente");
+    
+    }
     }
     
     
