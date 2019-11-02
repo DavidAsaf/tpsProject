@@ -14,9 +14,13 @@ import CapaNegocios.ArticulosJpaController;
 import CapaNegocios.BodegasJpaController;
 import CapaNegocios.GruposJpaController;
 import CapaNegocios.LineasJpaController;
+import CapaNegocios.clsExportarExcel;
+import java.io.IOException;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
@@ -31,6 +35,7 @@ public class Articulos1 extends javax.swing.JFrame {
  GruposJpaController tipog = new  GruposJpaController(entityMain.getInstance());
   LineasJpaController tipos = new  LineasJpaController(entityMain.getInstance());
     boolean estado = true; 
+    clsExportarExcel obj;
     /**
      * Creates new form Articulos
      */
@@ -115,6 +120,11 @@ public class Articulos1 extends javax.swing.JFrame {
         jLabel1.setText("Articulos");
 
         jButton2.setText("Generar Reporte");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         txtcodpro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -340,6 +350,15 @@ public class Articulos1 extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+         try {
+            obj = new clsExportarExcel();
+            obj.exportarExcel(tabla);
+        } catch (IOException ex) {
+            Logger.getLogger(Articulos1.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     public void Guardar() {
         String nombre = this.txtnomArticulos.getText();
