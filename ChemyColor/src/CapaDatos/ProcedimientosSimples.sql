@@ -158,6 +158,54 @@ END;
 /
 
 
+--06-11-2019
+
+CREATE OR REPLACE PROCEDURE telBodegas(idBodega IN NUMBER, ord IN NUMBER, tel OUT VARCHAR2)
+AS
+BEGIN
+    SELECT telefono INTO tel FROM TelefonosPorBodega WHERE CodigoBodega = idBodega AND Orden = Ord;
+END;
+/
+
+
+CREATE OR REPLACE PROCEDURE insertarTelBodegas(idBodega IN NUMBER, tel IN VARCHAR2, ord IN NUMBER)
+AS
+BEGIN
+    INSERT INTO TelefonosPorBodega (CodigoBodega, Telefono, Orden) VALUES (idBodega, tel, ord);
+END;
+/
+
+
+
+CREATE OR REPLACE PROCEDURE editarTelBodegas(idBodega IN NUMBER, tel IN VARCHAR2, ord IN NUMBER)
+AS
+BEGIN
+    UPDATE TelefonosPorBodega SET Telefono = tel WHERE CodigoBodega = idBodega AND Orden = ord;
+END;
+/
+
+
+
+CREATE OR REPLACE PROCEDURE editarBodegas(idBodega IN NUMBER, Bodega IN VARCHAR2, Dir IN VARCHAR2, Correo IN VARCHAR2, Jefe IN VARCHAR2)
+AS
+BEGIN
+    UPDATE Bodegas SET NombreBodega = Bodega, Direccion = Dir, Email = Correo, Encargado = Jefe WHERE CodigoBodega = idBodega;
+END;
+/
+
+
+
+
+CREATE OR REPLACE PROCEDURE eliminarTelBodegas(idBodega IN NUMBER)
+AS
+BEGIN
+    DELETE FROM TelefonosPorBodega WHERE CodigoBodega = idBodega;
+END;
+/
+
+
+
+
 
 
 

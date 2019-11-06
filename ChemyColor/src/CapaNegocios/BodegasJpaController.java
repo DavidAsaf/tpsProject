@@ -38,8 +38,93 @@ public class BodegasJpaController implements Serializable {
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
+    } 
+
+    public void eliminarTelBodegas(int idBodega){
+        EntityManagerFactory factory = entityMain.getInstance();
+        EntityManager em = factory.createEntityManager();
+
+        em.getTransaction().begin();
+        StoredProcedureQuery storedProcedure = em.createStoredProcedureQuery("eliminarTelBodegas");
+
+        storedProcedure.registerStoredProcedureParameter("idBodega", Integer.class, ParameterMode.IN);
+        storedProcedure.setParameter("idBodega", idBodega);
+
+        storedProcedure.execute();
+        em.getTransaction().commit();
+        em.close();
     }
-public BigDecimal findIdNewBodegas() {
+    
+    public void editarBodegas(int idBodega, String bodega, String direccion, String email, String encargado){
+        EntityManagerFactory factory = entityMain.getInstance();
+        EntityManager em = factory.createEntityManager();
+
+        em.getTransaction().begin();
+        StoredProcedureQuery storedProcedure = em.createStoredProcedureQuery("editarBodegas");
+
+        storedProcedure.registerStoredProcedureParameter("idBodega", Integer.class, ParameterMode.IN);
+        storedProcedure.registerStoredProcedureParameter("Bodega", String.class, ParameterMode.IN);
+        storedProcedure.registerStoredProcedureParameter("Dir", String.class, ParameterMode.IN);
+        storedProcedure.registerStoredProcedureParameter("Correo", String.class, ParameterMode.IN);
+        storedProcedure.registerStoredProcedureParameter("Jefe", String.class, ParameterMode.IN);
+        storedProcedure.setParameter("idBodega", idBodega);
+        storedProcedure.setParameter("Bodega", bodega);
+        storedProcedure.setParameter("Dir", direccion);
+        storedProcedure.setParameter("Correo", email);
+        storedProcedure.setParameter("Jefe", encargado);
+        
+        storedProcedure.execute();
+        em.getTransaction().commit();
+        em.close();
+    }
+    
+    public void procesosTelBodegas(String proceso, int idBodega, String telefono, int orden){
+        EntityManagerFactory factory = entityMain.getInstance();
+        EntityManager em = factory.createEntityManager();
+
+        em.getTransaction().begin();
+        StoredProcedureQuery storedProcedure = em.createStoredProcedureQuery(proceso);
+
+        storedProcedure.registerStoredProcedureParameter("idBodega", Integer.class, ParameterMode.IN);
+        storedProcedure.registerStoredProcedureParameter("tel", String.class, ParameterMode.IN);
+        storedProcedure.registerStoredProcedureParameter("ord", Integer.class, ParameterMode.IN);
+        storedProcedure.setParameter("idBodega", idBodega);
+        storedProcedure.setParameter("tel", telefono);
+        storedProcedure.setParameter("ord", orden);
+        
+        storedProcedure.execute();
+        em.getTransaction().commit();
+        em.close();
+    }
+    
+    public String telBodega(int idBodega, int orden) {
+
+        EntityManagerFactory factory = entityMain.getInstance();
+        EntityManager em = factory.createEntityManager();
+
+        em.getTransaction().begin();
+        StoredProcedureQuery storedProcedure = em.createStoredProcedureQuery("telBodegas");
+
+        storedProcedure.registerStoredProcedureParameter("idBodega", Integer.class, ParameterMode.IN);
+        storedProcedure.registerStoredProcedureParameter("ord", Integer.class, ParameterMode.IN);
+        storedProcedure.registerStoredProcedureParameter("tel", String.class, ParameterMode.OUT);
+
+        storedProcedure.setParameter("idBodega", idBodega);
+        storedProcedure.setParameter("ord", orden);
+        storedProcedure.execute();
+
+        Bodegas tipo = new Bodegas();
+        String telefono = (String) storedProcedure.getOutputParameterValue("tel");
+        
+
+        em.getTransaction().commit();
+        em.close();
+
+        return telefono;
+    }
+    
+    
+    public int findIdNewBodegas() {
 
         EntityManagerFactory factory = entityMain.getInstance();
         EntityManager em = factory.createEntityManager();
@@ -50,37 +135,38 @@ public BigDecimal findIdNewBodegas() {
         storedProcedure.registerStoredProcedureParameter("idBodegas", Integer.class, ParameterMode.OUT);
         storedProcedure.execute();
 
-        BigDecimal codigo = BigDecimal.valueOf(Double.parseDouble(storedProcedure.getOutputParameterValue("idBodegas").toString()));
+        int codigo = Integer.parseInt(storedProcedure.getOutputParameterValue("idBodegas").toString());
 
         em.getTransaction().commit();
         em.close();
 
         return codigo;
     }
-    
-     public Bodegas findIdBodegas(String bodega) {
-        
+
+    public Bodegas findIdBodegas(String bodega) {
+
         EntityManagerFactory factory = entityMain.getInstance();
         EntityManager em = factory.createEntityManager();
-        
+
         em.getTransaction().begin();
-        StoredProcedureQuery storedProcedure=em.createStoredProcedureQuery("idBodegas");
-        
+        StoredProcedureQuery storedProcedure = em.createStoredProcedureQuery("idBodegas");
+
         storedProcedure.registerStoredProcedureParameter("bodega", String.class, ParameterMode.IN);
         storedProcedure.registerStoredProcedureParameter("idbodegas", Integer.class, ParameterMode.OUT);
-        
-        storedProcedure.setParameter("bodega", bodega);        
+
+        storedProcedure.setParameter("bodega", bodega);
         storedProcedure.execute();
-        
+
         Bodegas tipo = new Bodegas();
         Integer codigo = (Integer) storedProcedure.getOutputParameterValue("idbodegas");
         tipo.setCodigobodega(BigDecimal.valueOf(codigo));
-        
+
         em.getTransaction().commit();
         em.close();
-        
+
         return tipo;
     }
+
     //findIdBodega(bodega IN VARCHAR2, idBod OUT INT)
     public BigDecimal findIdBodega(String bodega) {
 
@@ -92,7 +178,7 @@ public BigDecimal findIdNewBodegas() {
 
         storedProcedure.registerStoredProcedureParameter("bodega", String.class, ParameterMode.IN);
         storedProcedure.registerStoredProcedureParameter("idBod", Integer.class, ParameterMode.OUT);
-        storedProcedure.setParameter("bodega", bodega);  
+        storedProcedure.setParameter("bodega", bodega);
         storedProcedure.execute();
 
         BigDecimal codigo = BigDecimal.valueOf(Double.parseDouble(storedProcedure.getOutputParameterValue("idBod").toString()));
@@ -102,7 +188,7 @@ public BigDecimal findIdNewBodegas() {
 
         return codigo;
     }
-    
+
     public int findIdBodegaInteger(String bodega) {
 
         EntityManagerFactory factory = entityMain.getInstance();
@@ -113,7 +199,7 @@ public BigDecimal findIdNewBodegas() {
 
         storedProcedure.registerStoredProcedureParameter("bodega", String.class, ParameterMode.IN);
         storedProcedure.registerStoredProcedureParameter("idBod", Integer.class, ParameterMode.OUT);
-        storedProcedure.setParameter("bodega", bodega);  
+        storedProcedure.setParameter("bodega", bodega);
         storedProcedure.execute();
 
         Integer codigo = Integer.parseInt(storedProcedure.getOutputParameterValue("idBod").toString());
@@ -123,7 +209,7 @@ public BigDecimal findIdNewBodegas() {
 
         return codigo;
     }
-    
+
     public void create(Bodegas bodegas) throws PreexistingEntityException, Exception {
         if (bodegas.getTiposfacturasList() == null) {
             bodegas.setTiposfacturasList(new ArrayList<Tiposfacturas>());
@@ -360,5 +446,5 @@ public BigDecimal findIdNewBodegas() {
             em.close();
         }
     }
-    
+
 }
