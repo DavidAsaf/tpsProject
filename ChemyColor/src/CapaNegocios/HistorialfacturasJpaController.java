@@ -15,11 +15,13 @@ import CapaDatos.Historialfacturas;
 import CapaDatos.Proveedores;
 import CapaNegocios.exceptions.NonexistentEntityException;
 import CapaNegocios.exceptions.PreexistingEntityException;
+import CapaPresentacion.entityMain;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureQuery;
 
 /**
@@ -37,11 +39,31 @@ public class HistorialfacturasJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void EntraFactura(String numFactura, int contOcredit, int cantDiasCredito, int estado, Integer codigoBodega,
+    public int findNextId() { 
+
+        EntityManagerFactory factory = entityMain.getInstance();
+        EntityManager em = factory.createEntityManager();
+
+        em.getTransaction().begin();
+        StoredProcedureQuery storedProcedure = em.createStoredProcedureQuery("nextIdHistorialF");
+
+        storedProcedure.registerStoredProcedureParameter("id", Integer.class, ParameterMode.OUT);
+        storedProcedure.execute();
+
+        int codigo = Integer.parseInt(storedProcedure.getOutputParameterValue("id").toString());
+
+        em.getTransaction().commit();
+        em.close();
+
+        return codigo;
+    } 
+    
+    public void EntraFactura(int codigo, String numFactura, int contOcredit, int cantDiasCredito, int estado, Integer codigoBodega,
             int codigoArticulo, Date fecha, String factura, String ccf, String ticket, String ajusteInv,
             int codigoProveedor, int eUnidad, double ePrecio, String detalle) {
 
         StoredProcedureQuery np = getEntityManager().createNamedStoredProcedureQuery("Historialfacturas.EntraFactura")
+                .setParameter("p_Codigo", codigo)
                 .setParameter("p_NumFactura", numFactura)
                 .setParameter("p_cont_O_credit", contOcredit)
                 .setParameter("p_CantidadDiasCredit", cantDiasCredito)
@@ -61,6 +83,21 @@ public class HistorialfacturasJpaController implements Serializable {
 
     }
 
+    public void AddDetalleFact(int codigo, String nit, String nrc, String giro, String dui, String direccion, 
+            String ivaCredito) {
+
+        StoredProcedureQuery np = getEntityManager().createNamedStoredProcedureQuery("Historialfacturas.insertarDetalleFact")
+                .setParameter("p_codigo", codigo)
+                .setParameter("p_nit", nit)
+                .setParameter("p_nrc", nrc)
+                .setParameter("p_giro", giro)
+                .setParameter("p_dui", dui)
+                .setParameter("p_direccion", direccion)
+                .setParameter("p_ivacreditofiscal", ivaCredito);
+        np.execute();
+
+    }
+    
     public void create(Historialfacturas historialfacturas) throws PreexistingEntityException, Exception {
         EntityManager em = null;
         try {

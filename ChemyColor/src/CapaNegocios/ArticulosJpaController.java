@@ -45,6 +45,23 @@ public class ArticulosJpaController implements Serializable {
         return emf.createEntityManager();
     }
     
+    public void fillJTable(JTable jtable, String tabla, String filtro, String busqueda, String[] titulos) {
+        
+        List<Articulos> listado = getEntityManager()
+                .createQuery("SELECT a FROM " + tabla + " a where a." + filtro + " like \"%" + busqueda + "%\"")
+                .getResultList();
+        DefaultTableModel Modelo = new DefaultTableModel(null, titulos);
+        
+        for (Articulos a : listado) {
+            Modelo.addRow(new Object[]{a.getCodigoarticulo(), a.getNombrearticulo(), a.getCodigoproductos(), 
+                a.getCodigobarra(), a.getExistencia(), a.getExistenciamin(), a.getUtilidad(), 
+                a.getCodigobodega().getNombrebodega(), a.getCodigogrupo().getNombregrupo(),
+                a.getCodigolinea().getNombrelineas()});
+        }
+        jtable.setModel(Modelo);
+        jtable.setDefaultEditor(Object.class, null);
+    }
+    
     public BigDecimal findIdNewArticulos() {
 
         EntityManagerFactory factory = entityMain.getInstance();

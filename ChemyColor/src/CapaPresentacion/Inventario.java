@@ -6,9 +6,13 @@
 package CapaPresentacion;
 
 import CapaNegocios.clsExportarExcel;
+import static CapaPresentacion.Articulos1.tbpro;
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -40,7 +44,7 @@ clsExportarExcel obj;
         jCheckBox1 = new javax.swing.JCheckBox();
         jTextField10 = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tabla = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
@@ -60,7 +64,7 @@ clsExportarExcel obj;
 
         jCheckBox1.setText("Ver Todo");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
                 {},
@@ -71,7 +75,7 @@ clsExportarExcel obj;
 
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tabla);
 
         jButton2.setText("Buscar");
 
@@ -91,19 +95,16 @@ clsExportarExcel obj;
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(53, 53, 53)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 716, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jCheckBox1)
-                                .addGap(99, 99, 99)
-                                .addComponent(jLabel11)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(28, 28, 28)
-                                .addComponent(jButton2)
-                                .addGap(39, 39, 39)
-                                .addComponent(jButton3))))
+                        .addGap(110, 110, 110)
+                        .addComponent(jCheckBox1)
+                        .addGap(99, 99, 99)
+                        .addComponent(jLabel11)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(28, 28, 28)
+                        .addComponent(jButton2)
+                        .addGap(39, 39, 39)
+                        .addComponent(jButton3))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(144, 144, 144)
                         .addComponent(jLabel17)
@@ -117,6 +118,10 @@ clsExportarExcel obj;
                         .addGap(354, 354, 354)
                         .addComponent(jLabel1)))
                 .addContainerGap(64, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 790, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -141,8 +146,8 @@ clsExportarExcel obj;
                     .addComponent(jButton2)
                     .addComponent(jButton3))
                 .addGap(60, 60, 60)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(103, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(42, Short.MAX_VALUE))
         );
 
         pack();
@@ -151,12 +156,71 @@ clsExportarExcel obj;
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
           try {
             obj = new clsExportarExcel();
-            obj.exportarExcel(jTable1);
+            obj.exportarExcel(tabla);
         } catch (IOException ex) {
             Logger.getLogger(Inventario.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    private void verTabla() {
+        try {
+            tbpro = (new DefaultTableModel(
+                    null, new String[]{ //16
+                        "Correlativo", "Fecha", "Factura", "CCF", "Factura", "Ajuste Inventario",
+                        "Proveedor", "Entradas Unidad", "Entradas Precio", "Entradas Total", "Salidas Unidad", 
+                        "Salidas Precio", "Salidas Total", "Saldos Unidad", "Saldos Cto. Prom.", "Saldo Total"}) {
+                Class[] types = new Class[]{
+                    java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class,
+                    java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class,
+                    java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class,
+                    java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                };
+                boolean[] canEdit = new boolean[]{
+                    false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false
+                };
+
+                @Override
+                public Class getColumnClass(int columbIndex) {
+                    return types[columbIndex];
+                }
+
+                @Override
+                public boolean isCellEditable(int rowIdex, int colIndex) {
+                    return canEdit[colIndex];
+                }
+            });
+            tabla.setModel(tbpro);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.toString() + "error");
+        }
+    }
+
+    /*private void llenarTabla() {
+
+        try {
+            Object A[] = null;
+            List<CapaDatos.Articulos> Listatipo;
+            Listatipo = articulo.findArticulosEntities();
+            for (int i = 0; i < Listatipo.size(); i++) {
+
+                tbpro.addRow(A);
+                tbpro.setValueAt(Listatipo.get(i).getCodigoarticulo(), i, 0);
+                tbpro.setValueAt(Listatipo.get(i).getNombrearticulo(), i, 1);
+                tbpro.setValueAt(Listatipo.get(i).getCodigoproductos(), i, 2);
+                tbpro.setValueAt(Listatipo.get(i).getCodigobarra(), i, 3);
+                tbpro.setValueAt(Listatipo.get(i).getExistencia(), i, 4);
+                tbpro.setValueAt(Listatipo.get(i).getExistenciamin(), i, 5);
+                tbpro.setValueAt(Listatipo.get(i).getUtilidad(), i, 6);
+                tbpro.setValueAt(Listatipo.get(i).getCodigobodega().getNombrebodega(), i, 7);
+                tbpro.setValueAt(Listatipo.get(i).getCodigogrupo().getNombregrupo(), i, 8);
+                tbpro.setValueAt(Listatipo.get(i).getCodigolinea().getNombrelineas(), i, 9);
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.toString());
+        }
+    }*/
+    
     /**
      * @param args the command line arguments
      */
@@ -203,7 +267,7 @@ clsExportarExcel obj;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField10;
+    private javax.swing.JTable tabla;
     // End of variables declaration//GEN-END:variables
 }

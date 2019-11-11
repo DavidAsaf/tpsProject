@@ -66,21 +66,21 @@ public class GruposJpaController implements Serializable {
     }
     //Pendiente de revisar sí funciona en Artículos. Sino, ocupar el metodo anterior. 
     public Grupos findIdGrupos(String grupo) {
-        //idGrupos(grupo IN VARCHAR2, idGrupo out NUMBER) 
+        
         EntityManagerFactory factory = entityMain.getInstance();
         EntityManager em = factory.createEntityManager();
-        
+        //idGrupos(gr IN VARCHAR2, idgrupos out NUMBER) 
         em.getTransaction().begin();
         StoredProcedureQuery storedProcedure=em.createStoredProcedureQuery("idGrupos");
         
-        storedProcedure.registerStoredProcedureParameter("grupo", String.class, ParameterMode.IN);
-        storedProcedure.registerStoredProcedureParameter("idGrupo", Integer.class, ParameterMode.OUT);
+        storedProcedure.registerStoredProcedureParameter("gr", String.class, ParameterMode.IN);
+        storedProcedure.registerStoredProcedureParameter("idgrupo", Integer.class, ParameterMode.OUT);
         
-        storedProcedure.setParameter("grupo", grupo);        
+        storedProcedure.setParameter("gr", grupo);        
         storedProcedure.execute();
         
         Grupos tipo = new Grupos();
-        Integer codigo = (Integer) storedProcedure.getOutputParameterValue("idGrupo");
+        Integer codigo = (Integer) storedProcedure.getOutputParameterValue("idgrupo");
         tipo.setCodigogrupo(BigDecimal.valueOf(codigo));
         
         em.getTransaction().commit();

@@ -30,12 +30,14 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
  * @author mario
  */
 public class Articulos1 extends javax.swing.JFrame {
- ArticulosJpaController articulo = new  ArticulosJpaController(entityMain.getInstance());
- BodegasJpaController tipob = new  BodegasJpaController(entityMain.getInstance());
- GruposJpaController tipog = new  GruposJpaController(entityMain.getInstance());
-  LineasJpaController tipos = new  LineasJpaController(entityMain.getInstance());
-    boolean estado = true; 
+
+    ArticulosJpaController articulo = new ArticulosJpaController(entityMain.getInstance());
+    BodegasJpaController tipob = new BodegasJpaController(entityMain.getInstance());
+    GruposJpaController tipog = new GruposJpaController(entityMain.getInstance());
+    LineasJpaController tipos = new LineasJpaController(entityMain.getInstance());
+    boolean estado = true;
     clsExportarExcel obj;
+
     /**
      * Creates new form Articulos
      */
@@ -43,7 +45,7 @@ public class Articulos1 extends javax.swing.JFrame {
         initComponents();
         llenarComboBodega();
         llenarComboGrupo();
-        llenarComboLineas();
+        //llenarComboLineas();
         AutoCompleteDecorator.decorate(cbbodega);
         AutoCompleteDecorator.decorate(cbgrupo);
         AutoCompleteDecorator.decorate(cbsub);
@@ -90,6 +92,8 @@ public class Articulos1 extends javax.swing.JFrame {
         jLabel12 = new javax.swing.JLabel();
         txtexistencia = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        btnNuevo = new javax.swing.JButton();
+        cmbTipoArt = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -101,7 +105,13 @@ public class Articulos1 extends javax.swing.JFrame {
 
         jLabel10.setText("Existencia Minima:");
 
-        jLabel11.setText("Buscar un Producto:");
+        jLabel11.setText("Buscar Artículo por:");
+
+        txtBusqueda.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtBusquedaKeyReleased(evt);
+            }
+        });
 
         tabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -142,7 +152,7 @@ public class Articulos1 extends javax.swing.JFrame {
 
         jLabel3.setText("Codigo de Barras:");
 
-        bnguardar.setText("Registrar");
+        bnguardar.setText("Guardar");
         bnguardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bnguardarActionPerformed(evt);
@@ -152,6 +162,11 @@ public class Articulos1 extends javax.swing.JFrame {
         jLabel4.setText("Nombre:");
 
         bneliminar.setText("Eliminar");
+        bneliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bneliminarActionPerformed(evt);
+            }
+        });
 
         jLabel6.setText("Utilidad:");
 
@@ -159,6 +174,12 @@ public class Articulos1 extends javax.swing.JFrame {
         bneditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bneditarActionPerformed(evt);
+            }
+        });
+
+        cbgrupo.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbgrupoItemStateChanged(evt);
             }
         });
 
@@ -175,18 +196,19 @@ public class Articulos1 extends javax.swing.JFrame {
             }
         });
 
+        btnNuevo.setText("Nuevo");
+        btnNuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevoActionPerformed(evt);
+            }
+        });
+
+        cmbTipoArt.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nombre", "Código Producto", "Código Barra" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel11)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(77, 77, 77)
-                .addComponent(jButton2)
-                .addGap(296, 296, 296))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -195,14 +217,10 @@ public class Articulos1 extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(83, 83, 83)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 913, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 146, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(47, 47, 47)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel10)
-                        .addGap(70, 70, 70)
-                        .addComponent(txtexistenciamin, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel12)
                         .addGap(70, 70, 70)
@@ -221,35 +239,58 @@ public class Articulos1 extends javax.swing.JFrame {
                             .addComponent(txtcodpro, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtcodbarras, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtnomArticulos, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addGap(70, 70, 70)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel11)
+                            .addComponent(txtexistenciamin, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
-                .addGap(147, 147, 147)
-                .addComponent(jLabel19)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(147, 147, 147)
+                        .addComponent(jLabel19)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel9)
+                                    .addComponent(jLabel6))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(86, 86, 86)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(txtutilidad, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(cbbodega, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(96, 96, 96)
+                                        .addComponent(bnguardar, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel7)
+                                    .addComponent(jLabel8))
+                                .addGap(67, 67, 67)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(cbgrupo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(cbsub, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(cmbTipoArt, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel9)
-                            .addComponent(jLabel6))
-                        .addGap(86, 86, 86)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtutilidad, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addComponent(bnguardar))
-                            .addComponent(cbbodega, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel8))
-                        .addGap(67, 67, 67)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(cbgrupo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cbsub, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jButton2)
+                                .addGap(65, 65, 65))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(txtBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(232, 232, 232)))))
                 .addGap(146, 146, 146))
             .addGroup(layout.createSequentialGroup()
-                .addGap(361, 361, 361)
+                .addGap(185, 185, 185)
+                .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(56, 56, 56)
                 .addComponent(bneditar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(60, 60, 60)
                 .addComponent(bneliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -292,20 +333,17 @@ public class Articulos1 extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel11)
                             .addComponent(txtBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton2))
+                            .addComponent(jButton2)
+                            .addComponent(cmbTipoArt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(27, 27, 27)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(43, 43, 43)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(bneditar)
-                                    .addComponent(bneliminar))
-                                .addContainerGap())
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton1)
-                                .addGap(22, 22, 22))))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton1)
+                            .addComponent(btnNuevo, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
+                            .addComponent(bneditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(bneliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addGap(40, 40, 40)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -324,8 +362,8 @@ public class Articulos1 extends javax.swing.JFrame {
                             .addComponent(jLabel6)
                             .addComponent(txtutilidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(bnguardar)
-                        .addContainerGap())))
+                        .addComponent(bnguardar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         pack();
@@ -340,7 +378,7 @@ public class Articulos1 extends javax.swing.JFrame {
     }//GEN-LAST:event_txtnomArticulosActionPerformed
 
     private void bnguardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bnguardarActionPerformed
-    Guardar();
+        Guardar();
     }//GEN-LAST:event_bnguardarActionPerformed
 
     private void bneditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bneditarActionPerformed
@@ -352,7 +390,7 @@ public class Articulos1 extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-         try {
+        try {
             obj = new clsExportarExcel();
             obj.exportarExcel(tabla);
         } catch (IOException ex) {
@@ -360,6 +398,59 @@ public class Articulos1 extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void cbgrupoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbgrupoItemStateChanged
+        String cbLinea = this.cbgrupo.getSelectedItem().toString();
+        BigDecimal idLinea;
+        LineasJpaController l = new LineasJpaController(entityMain.getInstance());
+        GruposJpaController grupo = new GruposJpaController(entityMain.getInstance());
+        CapaDatos.Grupos g = new CapaDatos.Grupos();
+        
+        try{
+            g = grupo.findIdGrupo(cbLinea);
+            idLinea = g.getCodigogrupo();
+            llenarComboLineas(idLinea);
+            this.cbsub.setEnabled(true);
+        } catch(Exception e){
+            //System.out.println("Error al llenar combo de productos." + e.toString());
+            this.cbsub.setEnabled(false);
+        }
+    }//GEN-LAST:event_cbgrupoItemStateChanged
+
+    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
+        estado = true;
+        LimpiarControles();
+        cbbodega.setSelectedIndex(0);
+        cbgrupo.setSelectedIndex(0);
+        
+    }//GEN-LAST:event_btnNuevoActionPerformed
+
+    private void bneliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bneliminarActionPerformed
+        Eliminar();
+    }//GEN-LAST:event_bneliminarActionPerformed
+
+    private void txtBusquedaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaKeyReleased
+        Busqueda(this.cmbTipoArt.getSelectedItem().toString());
+    }//GEN-LAST:event_txtBusquedaKeyReleased
+
+    public void Busqueda(String columna){ //Nombre Código Producto Código Barra
+        String vColumna = "";
+        if (columna.equals("Nombre")) vColumna = "nombrearticulo";
+        if (columna.equals("Código Producto")) vColumna = "codigoproductos";
+        if (columna.equals("Código Barra")) vColumna = "codigobarra";
+        
+        try {
+            String []titulos = {"Código", "Nombre", "Codigo Producto", "Codigo Barras", "Existencia", 
+                "Existencia Min.", "Utilidad", "Bodega", "Grupo", "Sub Grupo"};
+        
+        CapaNegocios.ArticulosJpaController llenado = new CapaNegocios.ArticulosJpaController(entityMain.getInstance());
+        llenado.fillJTable(this.tabla, "Articulos", vColumna, this.txtBusqueda.getText(), titulos);
+        this.tabla.setDefaultEditor(Object.class,null);
+        
+        } catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Hubo un error en la búsqueda. " + e.toString());
+        }
+    }
+    
     public void Guardar() {
         String nombre = this.txtnomArticulos.getText();
         String codprod = this.txtcodpro.getText();
@@ -370,7 +461,7 @@ public class Articulos1 extends javax.swing.JFrame {
         int tipoProv = EncontrarBodega(this.cbbodega.getSelectedItem().toString());
         int tipoProv1 = EncontrarGrupos(this.cbgrupo.getSelectedItem().toString());
         int tipoProv2 = EncontrarLineas(this.cbsub.getSelectedItem().toString());
- 
+
         Bodegas type = new Bodegas();
         Grupos gru = new Grupos();
         Lineas lin = new Lineas();
@@ -380,10 +471,10 @@ public class Articulos1 extends javax.swing.JFrame {
 
         type.setCodigobodega(BigDecimal.valueOf(tipoProv));
         type.setNombrebodega(this.cbbodega.getSelectedItem().toString());
-        
+
         gru.setCodigogrupo(BigDecimal.valueOf(tipoProv1));
         gru.setNombregrupo(this.cbgrupo.getSelectedItem().toString());
-        
+
         lin.setCodigolinea(BigDecimal.valueOf(tipoProv2));
         lin.setNombrelineas(this.cbsub.getSelectedItem().toString());
 
@@ -424,21 +515,21 @@ public class Articulos1 extends javax.swing.JFrame {
         }
 
     }
-    
-     private void Editar() {
+
+    private void Editar() {
         try {
             int indice = this.tabla.getSelectedRow();
             LimpiarControles();
             this.txtId.setText(tabla.getModel().getValueAt(indice, 0).toString());
-            this.txtcodpro.setText(tabla.getModel().getValueAt(indice, 1).toString());
-            this.txtcodbarras.setText(tabla.getModel().getValueAt(indice, 2).toString());
-            this.txtnomArticulos.setText(tabla.getModel().getValueAt(indice, 3).toString());
+            this.txtcodpro.setText(tabla.getModel().getValueAt(indice, 2).toString());
+            this.txtcodbarras.setText(tabla.getModel().getValueAt(indice, 3).toString());
+            this.txtnomArticulos.setText(tabla.getModel().getValueAt(indice, 1).toString());
             this.txtexistencia.setText(tabla.getModel().getValueAt(indice, 4).toString());
             this.txtexistenciamin.setText(tabla.getModel().getValueAt(indice, 5).toString());
             this.txtutilidad.setText(tabla.getModel().getValueAt(indice, 6).toString());
             this.cbbodega.setSelectedItem(tabla.getModel().getValueAt(indice, 7).toString());
             this.cbgrupo.setSelectedItem(tabla.getModel().getValueAt(indice, 8).toString());
-             this.cbsub.setSelectedItem(tabla.getModel().getValueAt(indice, 9).toString());
+            this.cbsub.setSelectedItem(tabla.getModel().getValueAt(indice, 9).toString());
 
             estado = false;
 
@@ -447,26 +538,26 @@ public class Articulos1 extends javax.swing.JFrame {
             estado = true;
         }
     }
-     
-     private void Eliminar() {
+
+    private void Eliminar() {
 
         try {
             int indice = this.tabla.getSelectedRow();
-            int codigoP = Integer.parseInt(tabla.getModel().getValueAt(indice, 0).toString());
-            String proveedor = tabla.getModel().getValueAt(indice, 1).toString();
+            int codigoA = Integer.parseInt(tabla.getModel().getValueAt(indice, 0).toString());
+            String articulo = tabla.getModel().getValueAt(indice, 1).toString();
             ArticulosJpaController t = new ArticulosJpaController(entityMain.getInstance());
 
-            int r = JOptionPane.showConfirmDialog(null, "¿Desea eliminar a " + proveedor + "?", "Acción de Eliminar",
+            int r = JOptionPane.showConfirmDialog(null, "¿Desea eliminar al artículo " + articulo + "?", "Eliminar",
                     JOptionPane.YES_NO_CANCEL_OPTION);
 
             if (r == JOptionPane.YES_OPTION) {
- 
-                //Luego eliminamos el proveedor
+
+                
                 try {
-                    t.destroy(BigDecimal.valueOf(codigoP));
+                    t.destroy(BigDecimal.valueOf(codigoA));
                     verTabla();
                     llenarTabla();
-                    JOptionPane.showMessageDialog(null, "Proveedor eliminado con éxito.");
+                    JOptionPane.showMessageDialog(null, "Artículo eliminado con éxito.");
 
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(null, "Error al eliminar." + e.toString());
@@ -483,7 +574,7 @@ public class Articulos1 extends javax.swing.JFrame {
             estado = true;
         }
     }
-    
+
     private int EncontrarBodega(String prov) {
         int retorno = 0;
         BodegasJpaController t = new BodegasJpaController(entityMain.getInstance());
@@ -498,14 +589,14 @@ public class Articulos1 extends javax.swing.JFrame {
 
         return retorno;
     }
-    
-     private int EncontrarGrupos(String prov) {
+
+    private int EncontrarGrupos(String prov) {
         int retorno = 0;
         GruposJpaController t = new GruposJpaController(entityMain.getInstance());
         CapaDatos.Grupos pro = new CapaDatos.Grupos();
 
         try {
-            pro = t.findIdGrupos(prov);
+            pro = t.findIdGrupo(prov);
             retorno = Integer.parseInt(pro.getCodigogrupo().toString());
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Hubo un error al encontrar el id. " + e.toString());
@@ -513,8 +604,8 @@ public class Articulos1 extends javax.swing.JFrame {
 
         return retorno;
     }
-     
-      private int EncontrarLineas(String prov) {
+
+    private int EncontrarLineas(String prov) {
         int retorno = 0;
         LineasJpaController t = new LineasJpaController(entityMain.getInstance());
         CapaDatos.Lineas pro = new CapaDatos.Lineas();
@@ -523,12 +614,12 @@ public class Articulos1 extends javax.swing.JFrame {
             pro = t.findIdLineas(prov);
             retorno = Integer.parseInt(pro.getCodigolinea().toString());
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Hubo un error al encontrar el id del proveedor. " + e.toString());
+            JOptionPane.showMessageDialog(null, "Hubo un error al encontrar el id. " + e.toString());
         }
 
         return retorno;
     }
-      
+
     DefaultComboBoxModel dc = new DefaultComboBoxModel();
 
     private void llenarComboBodega() {
@@ -539,8 +630,9 @@ public class Articulos1 extends javax.swing.JFrame {
             dc.addElement(Listatipo.get(i).getNombrebodega());
         }
     }
-     DefaultComboBoxModel dc1 = new DefaultComboBoxModel();
-     private void llenarComboGrupo() {
+    DefaultComboBoxModel dc1 = new DefaultComboBoxModel();
+
+    private void llenarComboGrupo() {
         cbgrupo.setModel(dc1);
         List<Grupos> Listatipo;
         Listatipo = tipog.findGruposEntities();
@@ -548,18 +640,17 @@ public class Articulos1 extends javax.swing.JFrame {
             dc1.addElement(Listatipo.get(i).getNombregrupo());
         }
     }
-     
-     
-     DefaultComboBoxModel dc2 = new DefaultComboBoxModel();
-      private void llenarComboLineas() {
-        cbsub.setModel(dc2);
-        List<Lineas> Listatipo;
-        Listatipo = tipos.findLineasEntities();
-        for (int i = 0; i < Listatipo.size(); i++) {
-            dc2.addElement(Listatipo.get(i).getNombrelineas());
-        }
-    }
 
+    DefaultComboBoxModel dc2 = new DefaultComboBoxModel();
+
+    private void llenarComboLineas(BigDecimal linea) {
+        
+        LineasJpaController l = new LineasJpaController(entityMain.getInstance());
+        String val = linea.toString();
+        l.fillCombo(this.cbsub, val);
+        
+    }
+    
     public void LimpiarControles() {
         this.txtId.setText("");
         this.txtcodbarras.setText("");
@@ -579,8 +670,8 @@ public class Articulos1 extends javax.swing.JFrame {
         try {
             tbpro = (new DefaultTableModel(
                     null, new String[]{
-                        "ID", "Codigo Producto", "Codigo Barras", "Nombre", "Existencia", "Existencia MIN", "Utilidad", "Bodega",
-                        "Grupo", "Sub Grupo"}) {
+                        "Código", "Nombre", "Codigo Producto", "Codigo Barras", "Existencia", "Existencia Min.",
+                        "Utilidad", "Bodega", "Grupo", "Sub Grupo"}) {
                 Class[] types = new Class[]{
                     java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class,
                     java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class,
@@ -605,7 +696,6 @@ public class Articulos1 extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, e.toString() + "error");
         }
     }
-//"Nit", "Dui", "Giro", "Limite", "Cuenta Por Pagar", "CodigoTipoContribuyente", "Tipo Proveedor"
 
     private void llenarTabla() {
 
@@ -617,9 +707,9 @@ public class Articulos1 extends javax.swing.JFrame {
 
                 tbpro.addRow(A);
                 tbpro.setValueAt(Listatipo.get(i).getCodigoarticulo(), i, 0);
-                tbpro.setValueAt(Listatipo.get(i).getCodigogrupo(), i, 1);
-                tbpro.setValueAt(Listatipo.get(i).getCodigobarra(), i, 2);
-                tbpro.setValueAt(Listatipo.get(i).getNombrearticulo(), i, 3);
+                tbpro.setValueAt(Listatipo.get(i).getNombrearticulo(), i, 1);
+                tbpro.setValueAt(Listatipo.get(i).getCodigoproductos(), i, 2);
+                tbpro.setValueAt(Listatipo.get(i).getCodigobarra(), i, 3);
                 tbpro.setValueAt(Listatipo.get(i).getExistencia(), i, 4);
                 tbpro.setValueAt(Listatipo.get(i).getExistenciamin(), i, 5);
                 tbpro.setValueAt(Listatipo.get(i).getUtilidad(), i, 6);
@@ -629,10 +719,10 @@ public class Articulos1 extends javax.swing.JFrame {
             }
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error: " + e.toString());
         }
     }
-    
+
     /**
      * @param args the command line arguments
      */
@@ -673,9 +763,11 @@ public class Articulos1 extends javax.swing.JFrame {
     private javax.swing.JButton bneditar;
     private javax.swing.JButton bneliminar;
     private javax.swing.JButton bnguardar;
+    private javax.swing.JButton btnNuevo;
     private javax.swing.JComboBox<String> cbbodega;
     private javax.swing.JComboBox<String> cbgrupo;
     private javax.swing.JComboBox<String> cbsub;
+    private javax.swing.JComboBox<String> cmbTipoArt;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;

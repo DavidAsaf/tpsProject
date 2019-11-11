@@ -109,17 +109,17 @@ END;
 /
 
 
-CREATE OR REPLACE PROCEDURE idGrupos(grupos IN VARCHAR2, idgrupos out NUMBER) 
+CREATE OR REPLACE PROCEDURE idGrupos(gr IN VARCHAR2, idgrupos out NUMBER) 
 AS
 BEGIN
-    SELECT CodigoGrupo INTO idgrupos  FROM Grupos WHERE NombreGrupo=grupos;
+    SELECT CodigoGrupo INTO idgrupos  FROM Grupos WHERE NombreGrupo=gr;
 END;
 /
 
-CREATE OR REPLACE PROCEDURE idLineas(lineas IN VARCHAR2, idlineas out NUMBER) 
+CREATE OR REPLACE PROCEDURE idLineas(lin IN VARCHAR2, idlineas out NUMBER) 
 AS
 BEGIN
-    SELECT CodigoLinea INTO idlineas  FROM Lineas WHERE NombreLineas =lineas;
+    SELECT CodigoLinea INTO idlineas  FROM Lineas WHERE NombreLineas =lin;
 END;
 /
 
@@ -202,6 +202,18 @@ BEGIN
     DELETE FROM TelefonosPorBodega WHERE CodigoBodega = idBodega;
 END;
 /
+
+
+
+
+
+CREATE OR REPLACE PROCEDURE nextIdHistorialF (id OUT NUMBER)
+AS
+BEGIN
+    SELECT historialfacturaseq.nextval INTO id FROM Dual;
+END;
+/
+
 
 
 

@@ -1,6 +1,7 @@
 --Para entrada de factura
 CREATE OR REPLACE PROCEDURE EntraFactura (
-	p_NumFactura VARCHAR2, 
+	p_Codigo NUMBER,
+        p_NumFactura VARCHAR2, 
 	p_cont_O_credit NUMBER, 
 	p_CantidadDiasCredit NUMBER, 
 	p_Estado NUMBER, 
@@ -27,8 +28,7 @@ BEGIN
 
 		v_eTotal := (p_eUnidad * p_ePrecio);
 		
-		 SELECT SSUnidad INTO v_sUnidadAnterior FROM (SELECT sUnidad AS SSUnidad FROM HistorialFacturas 
-								WHERE CodigoArticulo = p_CodigoArticulo ORDER BY Codigo DESC) 
+		 SELECT SSUnidad INTO v_sUnidadAnterior FROM (SELECT sUnidad AS SSUnidad FROM HistorialFacturas WHERE CodigoArticulo = p_CodigoArticulo ORDER BY Codigo DESC) 
          WHERE ROWNUM <= 1;
 
 		IF (v_sUnidadAnterior IS NULL)
@@ -54,17 +54,16 @@ BEGIN
 		INSERT INTO HistorialFacturas 
 			(Codigo,NumFactura, cont_O_credit, CantidadDiasCredit, Estado, CodigoBodega, 
 			CodigoArticulo, Fecha, Factura, CCF, Ticket, AjusteInventario, CodigoProveedor, eUnidad, ePrecio, eTotal, 
-			sUnidad, sCostoPromedio, sTotal, Detalle) 
+			sUnidad, sCostoPromedio, sTotal, Detalle, oUnidad, oPrecio, oTotal, oCliente) 
 	
 		VALUES 
-			(HistorialFacturaSeq.nextval, p_NumFactura, p_cont_O_credit, p_CantidadDiasCredit, p_Estado, p_CodigoBodega, p_CodigoArticulo, p_Fecha, p_Factura,
+			(p_Codigo, p_NumFactura, p_cont_O_credit, p_CantidadDiasCredit, p_Estado, p_CodigoBodega, p_CodigoArticulo, p_Fecha, p_Factura,
 			p_CCF, p_Ticket, p_AjusteInventario, p_CodigoProveedor, p_eUnidad, p_ePrecio, v_eTotal, v_sUnidad, v_sCostoPromedio, 
-			v_sTotal, p_Detalle);
+			v_sTotal, p_Detalle, 0, 0, 0, ' --- ');
 
 		UPDATE Articulos SET Existencia = Existencia + p_eUnidad WHERE CodigoArticulo = p_CodigoArticulo;
 END;
 /
-
 
 
 
@@ -191,6 +190,17 @@ BEGIN
 		VALUES
 			(HistorialFacturaSeq.nextval, '',0,0,0,NULL,p_CodigoArticulo, p_Fecha,NULL,NULL,NULL,'1',NULL,NULL,NULL,NULL,NULL, NULL, 
 			NULL,NULL,v_sUnidad,v_sCostoPromedio,v_sTotal,NULL);
+END;
+/
+
+
+
+
+CREATE OR REPLACE PROCEDURE insertarDetalleFact(p_codigo IN NUMBER, p_nit IN VARCHAR2, p_nrc IN VARCHAR2, p_giro IN VARCHAR2, p_dui IN VARCHAR2, p_direccion IN VARCHAR2,
+                                                    p_ivacreditofiscal IN VARCHAR2)
+AS
+BEGIN
+    INSERT INTO DetallesFactura (Codigo, Nit, NRC, Giro, Dui, Direccion, IvaCreditoFiscal) VALUES (p_codigo, p_nit, p_nrc, p_giro, p_dui, p_direccion, p_ivacreditofiscal);
 END;
 /
 

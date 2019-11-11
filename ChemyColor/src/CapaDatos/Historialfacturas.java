@@ -17,6 +17,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.NamedStoredProcedureQueries;
 import javax.persistence.NamedStoredProcedureQuery;
 import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureParameter;
@@ -32,26 +33,43 @@ import javax.persistence.TemporalType;
 @Table(name = "HISTORIALFACTURAS")
 @NamedQueries({
     @NamedQuery(name = "Historialfacturas.findAll", query = "SELECT h FROM Historialfacturas h")})
-@NamedStoredProcedureQuery(
+@NamedStoredProcedureQueries ({
+    @NamedStoredProcedureQuery(
         name = "Historialfacturas.EntraFactura",
         procedureName = "EntraFactura",
         parameters = {
+            @StoredProcedureParameter(name = "p_Codigo", mode = ParameterMode.IN, type = Integer.class),
             @StoredProcedureParameter(name = "p_NumFactura", mode = ParameterMode.IN, type = String.class),
             @StoredProcedureParameter(name = "p_cont_O_credit", mode = ParameterMode.IN, type = Integer.class),
             @StoredProcedureParameter(name = "p_CantidadDiasCredit", mode = ParameterMode.IN, type = Integer.class),
-        @StoredProcedureParameter(name = "p_Estado", mode = ParameterMode.IN, type = Integer.class),
-        @StoredProcedureParameter(name = "p_CodigoBodega", mode = ParameterMode.IN, type = Integer.class),
-        @StoredProcedureParameter(name = "p_CodigoArticulo", mode = ParameterMode.IN, type = Integer.class),
-        @StoredProcedureParameter(name = "p_Fecha", mode = ParameterMode.IN, type = Date.class),
-        @StoredProcedureParameter(name = "p_Factura", mode = ParameterMode.IN, type = String.class),
-        @StoredProcedureParameter(name = "p_CCF", mode = ParameterMode.IN, type = String.class),
-        @StoredProcedureParameter(name = "p_Ticket", mode = ParameterMode.IN, type = String.class),
-        @StoredProcedureParameter(name = "p_AjusteInventario", mode = ParameterMode.IN, type = String.class),
-        @StoredProcedureParameter(name = "p_CodigoProveedor", mode = ParameterMode.IN, type = Integer.class),
-        @StoredProcedureParameter(name = "p_eUnidad", mode = ParameterMode.IN, type = Integer.class),
-        @StoredProcedureParameter(name = "p_ePrecio", mode = ParameterMode.IN, type = Double.class),
-        @StoredProcedureParameter(name = "p_Detalle", mode = ParameterMode.IN, type = String.class),}
-)
+            @StoredProcedureParameter(name = "p_Estado", mode = ParameterMode.IN, type = Integer.class),
+            @StoredProcedureParameter(name = "p_CodigoBodega", mode = ParameterMode.IN, type = Integer.class),
+            @StoredProcedureParameter(name = "p_CodigoArticulo", mode = ParameterMode.IN, type = Integer.class),
+            @StoredProcedureParameter(name = "p_Fecha", mode = ParameterMode.IN, type = Date.class),
+            @StoredProcedureParameter(name = "p_Factura", mode = ParameterMode.IN, type = String.class),
+            @StoredProcedureParameter(name = "p_CCF", mode = ParameterMode.IN, type = String.class),
+            @StoredProcedureParameter(name = "p_Ticket", mode = ParameterMode.IN, type = String.class),
+            @StoredProcedureParameter(name = "p_AjusteInventario", mode = ParameterMode.IN, type = String.class),
+            @StoredProcedureParameter(name = "p_CodigoProveedor", mode = ParameterMode.IN, type = Integer.class),
+            @StoredProcedureParameter(name = "p_eUnidad", mode = ParameterMode.IN, type = Integer.class),
+            @StoredProcedureParameter(name = "p_ePrecio", mode = ParameterMode.IN, type = Double.class),
+            @StoredProcedureParameter(name = "p_Detalle", mode = ParameterMode.IN, type = String.class),}
+    ),
+
+    @NamedStoredProcedureQuery(
+        name = "Historialfacturas.insertarDetalleFact",
+        procedureName = "insertarDetalleFact",
+        parameters = {
+            @StoredProcedureParameter(name = "p_codigo", mode = ParameterMode.IN, type = Integer.class),
+            @StoredProcedureParameter(name = "p_nit", mode = ParameterMode.IN, type = String.class),
+            @StoredProcedureParameter(name = "p_nrc", mode = ParameterMode.IN, type = String.class),
+            @StoredProcedureParameter(name = "p_giro", mode = ParameterMode.IN, type = String.class),
+            @StoredProcedureParameter(name = "p_dui", mode = ParameterMode.IN, type = String.class),
+            @StoredProcedureParameter(name = "p_direccion", mode = ParameterMode.IN, type = String.class),
+            @StoredProcedureParameter(name = "p_ivacreditofiscal", mode = ParameterMode.IN, type = String.class),}
+    )
+})
+
 
 public class Historialfacturas implements Serializable {
 

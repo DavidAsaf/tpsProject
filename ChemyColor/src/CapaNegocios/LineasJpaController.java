@@ -23,6 +23,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureQuery;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -41,6 +43,22 @@ public class LineasJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
+    public void fillCombo(JComboBox cb, String codL) {
+        DefaultComboBoxModel dc = new DefaultComboBoxModel();
+        CapaDatos.Lineas l = new CapaDatos.Lineas();
+        CapaDatos.Grupos g = new CapaDatos.Grupos();
+        g.setCodigogrupo(BigDecimal.valueOf(Double.parseDouble(codL)));
+        l.setCodigogrupo(g);
+        
+        List<Lineas> ListaLineas = getEntityManager().createNamedQuery("Lineas.findByCodigoGrupo")
+                .setParameter("codigogrupo", g).getResultList();
+        cb.removeAllItems();
+
+        for (Lineas li : ListaLineas) {
+            cb.addItem(li.getNombrelineas());
+        }
+    }
+    
     public Lineas findIdLineas(String linea) {
         
         EntityManagerFactory factory = entityMain.getInstance();
@@ -49,12 +67,12 @@ public class LineasJpaController implements Serializable {
         em.getTransaction().begin();
         StoredProcedureQuery storedProcedure=em.createStoredProcedureQuery("idLineas");
         
-        storedProcedure.registerStoredProcedureParameter("lineas", String.class, ParameterMode.IN);
+        storedProcedure.registerStoredProcedureParameter("lin", String.class, ParameterMode.IN);
         storedProcedure.registerStoredProcedureParameter("idlineas", Integer.class, ParameterMode.OUT);
         
-        storedProcedure.setParameter("lineas", linea);        
+        storedProcedure.setParameter("lin", linea);        
         storedProcedure.execute();
-        
+        //idLineas(lineas IN VARCHAR2, idlineas out NUMBER) 
         Lineas tipo = new Lineas();
         Integer codigo = (Integer) storedProcedure.getOutputParameterValue("idlineas");
         tipo.setCodigolinea(BigDecimal.valueOf(codigo));

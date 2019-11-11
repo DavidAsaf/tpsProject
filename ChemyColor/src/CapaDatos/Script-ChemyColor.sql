@@ -148,7 +148,7 @@ create table Lineas
 (
 CodigoLinea int primary key,
 CodigoGrupo int, foreign key (CodigoGrupo) references Grupos(CodigoGrupo),
-NombreLineas varchar(50)
+NombreLineas varchar(50) unique
 );
 
 create table Articulos
@@ -227,7 +227,7 @@ Estado integer
 
 
 
---David 16-05-2019
+--David 
 CREATE TABLE HistorialFacturas
 (
 Codigo INT PRIMARY KEY,
@@ -280,7 +280,7 @@ CREATE TABLE DetallesFactura
 
 
 
---04-06-2019 DAVID
+-- DAVID
 
 CREATE TABLE UsuarioSesion
 (
@@ -324,6 +324,13 @@ MAXVALUE 9999999999999
 START WITH 1
 INCREMENT BY 1
 CACHE 20;
+
+create sequence Articulo 
+maxvalue 99999999999
+start with 1
+minvalue 1  
+cache 10;
+
 
 
 
