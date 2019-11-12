@@ -5,6 +5,7 @@
  */
 package CapaNegocios;
 
+import CapaDatos.Articulos;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
@@ -23,6 +24,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureQuery;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -39,6 +44,30 @@ public class HistorialfacturasJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
+    public void fillJTable(JTable jtable, int annio) {
+        //select * from historialfacturas h where extract(year from h.fecha) = 2019;
+        String[] titulos = {"Correlativo", "Fecha", "Factura", "CCF", "Ajuste Inventario",
+                        "Proveedor", "Entradas Unidad", "Entradas Precio", "Entradas Total", "Salidas Unidad",
+                        "Salidas Precio", "Salidas Total", "Saldos Unidad", "Saldos Cto. Prom.", "Saldo Total"};
+        String fecha = "fecha";
+        List<Historialfacturas> listado = getEntityManager() //like \"%" + busqueda + "%\""
+                .createQuery("SELECT h FROM Historialfacturas h WHERE EXTRACT(YEAR FROM h."+ fecha +") = 2019")
+                .getResultList();
+        DefaultTableModel Modelo = new DefaultTableModel(null, titulos);
+        int correlativo = 1;
+        
+        for (Historialfacturas h : listado) {
+            Modelo.addRow(new Object[]{correlativo, h.getFecha(), h.getFactura(), h.getCcf(), h.getAjusteinventario(), 
+                h.getCodigoproveedor().getNombres(), h.getEunidad(), h.getEprecio(), h.getEtotal(), h.getOunidad(), 
+                h.getOprecio(), h.getOtotal(), h.getSunidad(), h.getScostopromedio(), h.getStotal()});
+            
+            correlativo++;
+        }
+        jtable.setModel(Modelo);
+        jtable.setDefaultEditor(Object.class, null);
+    }
+    
+    
     public int findNextId() { 
 
         EntityManagerFactory factory = entityMain.getInstance();

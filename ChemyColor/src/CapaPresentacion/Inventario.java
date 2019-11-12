@@ -5,6 +5,7 @@
  */
 package CapaPresentacion;
 
+import CapaNegocios.HistorialfacturasJpaController;
 import CapaNegocios.clsExportarExcel;
 import static CapaPresentacion.Articulos1.tbpro;
 import java.io.IOException;
@@ -19,12 +20,16 @@ import javax.swing.table.DefaultTableModel;
  * @author mario
  */
 public class Inventario extends javax.swing.JFrame {
-clsExportarExcel obj;
+
+    clsExportarExcel obj;
+
     /**
      * Creates new form Inventario
      */
     public Inventario() {
         initComponents();
+        verTabla();
+        llenarTabla();
     }
 
     /**
@@ -154,7 +159,7 @@ clsExportarExcel obj;
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-          try {
+        try {
             obj = new clsExportarExcel();
             obj.exportarExcel(tabla);
         } catch (IOException ex) {
@@ -166,17 +171,17 @@ clsExportarExcel obj;
         try {
             tbpro = (new DefaultTableModel(
                     null, new String[]{ //16
-                        "Correlativo", "Fecha", "Factura", "CCF", "Factura", "Ajuste Inventario",
-                        "Proveedor", "Entradas Unidad", "Entradas Precio", "Entradas Total", "Salidas Unidad", 
+                        "Correlativo", "Fecha", "Factura", "CCF", "Ajuste Inventario",
+                        "Proveedor", "Entradas Unidad", "Entradas Precio", "Entradas Total", "Salidas Unidad",
                         "Salidas Precio", "Salidas Total", "Saldos Unidad", "Saldos Cto. Prom.", "Saldo Total"}) {
                 Class[] types = new Class[]{
                     java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class,
                     java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class,
                     java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class,
-                    java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                    java.lang.String.class, java.lang.String.class, java.lang.String.class
                 };
                 boolean[] canEdit = new boolean[]{
-                    false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false
+                    false, false, false, false, false, false, false, false, false, false, false, false, false, false, false
                 };
 
                 @Override
@@ -195,32 +200,19 @@ clsExportarExcel obj;
         }
     }
 
-    /*private void llenarTabla() {
-
+    public void llenarTabla() { //Nombre Código Producto Código Barra
+        int annio = 2019;
+        
         try {
-            Object A[] = null;
-            List<CapaDatos.Articulos> Listatipo;
-            Listatipo = articulo.findArticulosEntities();
-            for (int i = 0; i < Listatipo.size(); i++) {
-
-                tbpro.addRow(A);
-                tbpro.setValueAt(Listatipo.get(i).getCodigoarticulo(), i, 0);
-                tbpro.setValueAt(Listatipo.get(i).getNombrearticulo(), i, 1);
-                tbpro.setValueAt(Listatipo.get(i).getCodigoproductos(), i, 2);
-                tbpro.setValueAt(Listatipo.get(i).getCodigobarra(), i, 3);
-                tbpro.setValueAt(Listatipo.get(i).getExistencia(), i, 4);
-                tbpro.setValueAt(Listatipo.get(i).getExistenciamin(), i, 5);
-                tbpro.setValueAt(Listatipo.get(i).getUtilidad(), i, 6);
-                tbpro.setValueAt(Listatipo.get(i).getCodigobodega().getNombrebodega(), i, 7);
-                tbpro.setValueAt(Listatipo.get(i).getCodigogrupo().getNombregrupo(), i, 8);
-                tbpro.setValueAt(Listatipo.get(i).getCodigolinea().getNombrelineas(), i, 9);
-            }
+            HistorialfacturasJpaController llenado = new HistorialfacturasJpaController(entityMain.getInstance());
+            llenado.fillJTable(this.tabla, annio);
+            this.tabla.setDefaultEditor(Object.class, null);
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error: " + e.toString());
+            JOptionPane.showMessageDialog(null, "Hubo un error. " + e.toString());
         }
-    }*/
-    
+    }
+
     /**
      * @param args the command line arguments
      */

@@ -30,7 +30,7 @@ import javax.persistence.TemporalType;
  * @author Amaya
  */
 @Entity
-@Table(name = "HISTORIALFACTURAS")
+@Table(name = "HISTORIALFACTURAS") 
 @NamedQueries({
     @NamedQuery(name = "Historialfacturas.findAll", query = "SELECT h FROM Historialfacturas h")})
 @NamedStoredProcedureQueries ({

@@ -103,6 +103,54 @@ public class ArticulosJpaController implements Serializable {
         return codigo;
     }
     
+    public Double findPrecioArticulo(int codArticulo, int codBodega) {
+        
+        EntityManagerFactory factory = entityMain.getInstance();
+        EntityManager em = factory.createEntityManager();
+        
+        em.getTransaction().begin();
+        StoredProcedureQuery storedProcedure=em.createStoredProcedureQuery("precioArticulo");
+        //precioArticulo(idArticulo IN NUMBER, idBodega IN NUMBER, valor OUT NUMBER) 
+        storedProcedure.registerStoredProcedureParameter("idArticulo", Integer.class, ParameterMode.IN);
+        storedProcedure.registerStoredProcedureParameter("idBodega", Integer.class, ParameterMode.IN);
+        storedProcedure.registerStoredProcedureParameter("valor", Float.class, ParameterMode.OUT);
+        
+        storedProcedure.setParameter("idArticulo", codArticulo);        
+        storedProcedure.setParameter("idBodega", codBodega);        
+        storedProcedure.execute();
+        
+        Double precio = (Double) storedProcedure.getOutputParameterValue("valor");
+        
+        em.getTransaction().commit();
+        em.close();
+        
+        return precio;
+    }
+    
+    public int findExistenciaArticulo(int codArticulo, int codBodega) {
+        
+        EntityManagerFactory factory = entityMain.getInstance();
+        EntityManager em = factory.createEntityManager();
+        
+        em.getTransaction().begin();
+        StoredProcedureQuery storedProcedure=em.createStoredProcedureQuery("existenciaArticulo");
+        
+        storedProcedure.registerStoredProcedureParameter("idArticulo", Integer.class, ParameterMode.IN);
+        storedProcedure.registerStoredProcedureParameter("idBodega", Integer.class, ParameterMode.IN);
+        storedProcedure.registerStoredProcedureParameter("exis", Integer.class, ParameterMode.OUT);
+        
+        storedProcedure.setParameter("idArticulo", codArticulo);        
+        storedProcedure.setParameter("idBodega", codBodega);        
+        storedProcedure.execute();
+        
+        Integer existencia = (Integer) storedProcedure.getOutputParameterValue("exis");
+        
+        em.getTransaction().commit();
+        em.close();
+        
+        return existencia;
+    }
+    
     public void fillCombo(JComboBox cb, String codB) {
         DefaultComboBoxModel dc = new DefaultComboBoxModel();
         CapaDatos.Bodegas b = new CapaDatos.Bodegas();

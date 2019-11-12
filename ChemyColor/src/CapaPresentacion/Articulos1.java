@@ -404,13 +404,13 @@ public class Articulos1 extends javax.swing.JFrame {
         LineasJpaController l = new LineasJpaController(entityMain.getInstance());
         GruposJpaController grupo = new GruposJpaController(entityMain.getInstance());
         CapaDatos.Grupos g = new CapaDatos.Grupos();
-        
-        try{
+
+        try {
             g = grupo.findIdGrupo(cbLinea);
             idLinea = g.getCodigogrupo();
             llenarComboLineas(idLinea);
             this.cbsub.setEnabled(true);
-        } catch(Exception e){
+        } catch (Exception e) {
             //System.out.println("Error al llenar combo de productos." + e.toString());
             this.cbsub.setEnabled(false);
         }
@@ -421,7 +421,7 @@ public class Articulos1 extends javax.swing.JFrame {
         LimpiarControles();
         cbbodega.setSelectedIndex(0);
         cbgrupo.setSelectedIndex(0);
-        
+
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void bneliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bneliminarActionPerformed
@@ -432,25 +432,31 @@ public class Articulos1 extends javax.swing.JFrame {
         Busqueda(this.cmbTipoArt.getSelectedItem().toString());
     }//GEN-LAST:event_txtBusquedaKeyReleased
 
-    public void Busqueda(String columna){ //Nombre Código Producto Código Barra
+    public void Busqueda(String columna) { //Nombre Código Producto Código Barra
         String vColumna = "";
-        if (columna.equals("Nombre")) vColumna = "nombrearticulo";
-        if (columna.equals("Código Producto")) vColumna = "codigoproductos";
-        if (columna.equals("Código Barra")) vColumna = "codigobarra";
-        
+        if (columna.equals("Nombre")) {
+            vColumna = "nombrearticulo";
+        }
+        if (columna.equals("Código Producto")) {
+            vColumna = "codigoproductos";
+        }
+        if (columna.equals("Código Barra")) {
+            vColumna = "codigobarra";
+        }
+
         try {
-            String []titulos = {"Código", "Nombre", "Codigo Producto", "Codigo Barras", "Existencia", 
+            String[] titulos = {"Código", "Nombre", "Codigo Producto", "Codigo Barras", "Existencia",
                 "Existencia Min.", "Utilidad", "Bodega", "Grupo", "Sub Grupo"};
-        
-        CapaNegocios.ArticulosJpaController llenado = new CapaNegocios.ArticulosJpaController(entityMain.getInstance());
-        llenado.fillJTable(this.tabla, "Articulos", vColumna, this.txtBusqueda.getText(), titulos);
-        this.tabla.setDefaultEditor(Object.class,null);
-        
-        } catch(Exception e){
+
+            CapaNegocios.ArticulosJpaController llenado = new CapaNegocios.ArticulosJpaController(entityMain.getInstance());
+            llenado.fillJTable(this.tabla, "Articulos", vColumna, this.txtBusqueda.getText(), titulos);
+            this.tabla.setDefaultEditor(Object.class, null);
+
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Hubo un error en la búsqueda. " + e.toString());
         }
     }
-    
+
     public void Guardar() {
         String nombre = this.txtnomArticulos.getText();
         String codprod = this.txtcodpro.getText();
@@ -552,7 +558,6 @@ public class Articulos1 extends javax.swing.JFrame {
 
             if (r == JOptionPane.YES_OPTION) {
 
-                
                 try {
                     t.destroy(BigDecimal.valueOf(codigoA));
                     verTabla();
@@ -644,13 +649,13 @@ public class Articulos1 extends javax.swing.JFrame {
     DefaultComboBoxModel dc2 = new DefaultComboBoxModel();
 
     private void llenarComboLineas(BigDecimal linea) {
-        
+
         LineasJpaController l = new LineasJpaController(entityMain.getInstance());
         String val = linea.toString();
         l.fillCombo(this.cbsub, val);
-        
+
     }
-    
+
     public void LimpiarControles() {
         this.txtId.setText("");
         this.txtcodbarras.setText("");

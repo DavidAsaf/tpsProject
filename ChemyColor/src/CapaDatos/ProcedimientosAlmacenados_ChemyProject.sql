@@ -205,6 +205,17 @@ END;
 /
 
 
+CREATE OR REPLACE PROCEDURE precioArticulo(idArticulo IN NUMBER, idBodega IN NUMBER, valor out NUMBER) 
+AS
+BEGIN
+    SELECT Precio INTO valor FROM (SELECT (a.Utilidad + h.sCostoPromedio) AS Precio FROM Articulos a
+    INNER JOIN HistorialFacturas h ON a.CodigoArticulo = h.CodigoArticulo
+    WHERE a.CodigoBodega = idBodega AND a.CodigoArticulo = idArticulo
+    ORDER BY Precio desc)
+    WHERE rownum <=1;
+END;
+/
+
 
 
 

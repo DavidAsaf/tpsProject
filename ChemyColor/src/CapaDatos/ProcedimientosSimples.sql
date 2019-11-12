@@ -215,6 +215,13 @@ END;
 /
 
 
+CREATE OR REPLACE PROCEDURE existenciaArticulo(idArticulo IN NUMBER, idBodega IN NUMBER, exis OUT NUMBER) 
+AS
+BEGIN
+    SELECT Existencia INTO exis FROM Articulos WHERE CodigoArticulo = idArticulo AND CodigoBodega = idBodega;
+END;
+/
+
 
 
 
