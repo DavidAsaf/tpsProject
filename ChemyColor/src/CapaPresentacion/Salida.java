@@ -7,7 +7,10 @@ package CapaPresentacion;
 
 import CapaNegocios.ArticulosJpaController;
 import CapaNegocios.BodegasJpaController;
+import CapaNegocios.HistorialfacturasJpaController;
+import CapaNegocios.ProveedoresJpaController;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
@@ -78,6 +81,11 @@ public class Salida extends javax.swing.JFrame {
         jLabel1.setText("Salida de productos");
 
         jButton1.setText("Guardar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jLabel9.setText("Nº de Factura:");
 
@@ -416,28 +424,27 @@ public class Salida extends javax.swing.JFrame {
     }//GEN-LAST:event_comboBodegaKeyReleased
 
     private void comboProductosItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboProductosItemStateChanged
-        
+
     }//GEN-LAST:event_comboProductosItemStateChanged
 
-    private void precioArticulo(){
+    private void precioArticulo() {
         ArticulosJpaController a = new ArticulosJpaController(entityMain.getInstance());
         BodegasJpaController b = new BodegasJpaController(entityMain.getInstance());
-        
+
         try {
             int art = a.findIdArticulos(this.comboProductos.getSelectedItem().toString());
             int bod = b.findIdBodegaInteger(this.comboBodega.getSelectedItem().toString());
-            
+
             Double precio = a.findPrecioArticulo(art, bod);
             int existencia = a.findExistenciaArticulo(art, bod);
-            
+
             this.txtPrecio.setText(String.valueOf(precio));
             this.txtExistencia.setText(String.valueOf(existencia));
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Hubo un error. " + e.toString());
         }
     }
-    
+
     private void rbCreditoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rbCreditoItemStateChanged
         if (rbCredito.isSelected()) {
             this.comboDias.setEnabled(true);
@@ -456,6 +463,7 @@ public class Salida extends javax.swing.JFrame {
 
         }
     }
+
 
     private void comboDiasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboDiasActionPerformed
         // TODO add your handling code here:
@@ -485,6 +493,74 @@ public class Salida extends javax.swing.JFrame {
     private void txtExistenciaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtExistenciaKeyReleased
         // TODO add your handling code here:
     }//GEN-LAST:event_txtExistenciaKeyReleased
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        boolean est = Validaciones();
+
+        if (est == true) {
+            try {
+                int existencia = Integer.parseInt(this.txtExistencia.getText().toString());
+                int cantidad = Integer.parseInt(this.txtCantidad.getText().toString());
+
+                if (cantidad <= existencia) {
+                    Guardar();
+                } else {
+                    JOptionPane.showMessageDialog(null, "La cantidad de salida no puede ser mayor que la existencia.");
+                }
+            } catch (Exception e) {
+            }
+            
+        } else {
+            JOptionPane.showMessageDialog(null, "Uno de los campos requeridos está vacío.");
+        }
+
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private boolean Validaciones() {
+        boolean retorno = false;
+
+        if (this.txtNumFactura.getText().toString().length() != 0 || this.txtCantidad.getText().toString().length() != 0
+                || this.txtCliente.getText().toString().length() != 0 || this.txtFecha.getDate().toString().length() != 0) {
+            retorno = true;
+        }
+
+        return retorno;
+    }
+
+    private void Guardar() {
+
+        BodegasJpaController b = new BodegasJpaController(entityMain.getInstance());
+        ArticulosJpaController a = new ArticulosJpaController(entityMain.getInstance());
+        HistorialfacturasJpaController h = new HistorialfacturasJpaController(entityMain.getInstance());
+        String numFactura = this.txtNumFactura.getText();
+        int estadoCompra = 0;
+        if (rbCredito.isSelected() == true) {
+            estadoCompra = 1;
+        }
+        int cantidadDias = 0;
+
+        if (rbCredito.isSelected() == true) {
+            cantidadDias = Integer.parseInt(this.comboDias.getSelectedItem().toString());
+        }
+
+        int idBodega = b.findIdBodegaInteger(this.comboBodega.getSelectedItem().toString());
+        int articulo = a.findIdArticulos(this.comboProductos.getSelectedItem().toString());
+        Date fecha = txtFecha.getDate();
+        int cantidad = Integer.parseInt(this.txtCantidad.getText());
+        String cliente = this.txtCliente.getText().toString();
+
+        try {
+            int codigo = h.findNextId();
+            h.SalidaFactura(codigo, numFactura, estadoCompra, cantidadDias, idBodega, articulo, fecha, cantidad, cliente);
+
+            JOptionPane.showMessageDialog(null, "Salida guardada con éxito. ");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Hubo un error. " + e.toString());
+        }
+
+        /*int codigo, String numFactura, int contOcredit, int cantDiasCredito, int codigoBodega,
+            int codigoArticulo, Date fecha, int oUnidad, String cliente*/
+    }
 
     /**
      * @param args the command line arguments

@@ -87,7 +87,7 @@ public class MainForm extends javax.swing.JFrame {
         jPanel1.add(jPanel2, gridBagConstraints);
 
         btnAcercaDe.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/home.png"))); // NOI18N
-        btnAcercaDe.setText("Acerca De");
+        btnAcercaDe.setText("Backup");
         btnAcercaDe.setColorNormal(new java.awt.Color(153, 153, 153));
         btnAcercaDe.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnAcercaDe.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);

@@ -44,19 +44,48 @@ public class HistorialfacturasJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void fillJTable(JTable jtable, int annio) {
-        //select * from historialfacturas h where extract(year from h.fecha) = 2019;
+    //SELECT DISTINCT (EXTRACT(YEAR FROM h.fecha)) AS Fecha FROM Historialfacturas h WHERE CodigoBodega = 1 GROUP BY Fecha;
+//    public void fillComboAnnio(JComboBox cb, int codB) {
+//        DefaultComboBoxModel dc = new DefaultComboBoxModel();
+//        CapaDatos.Historialfacturas h = new CapaDatos.Historialfacturas();
+//        
+//       String fecha = "fecha";
+//       String nCodigo = "codigobodega";
+//        
+//        List<Historialfacturas> ListaHistorial = getEntityManager() 
+//                .createQuery("SELECT DISTINCT (EXTRACT(YEAR FROM h." + fecha + ")) AS Annio FROM Historialfacturas h "
+//                        + "WHERE h." + nCodigo + " = " + codB + " GROUP BY "+ fecha + "")
+//                .getResultList();
+//        cb.removeAllItems();
+//
+//        for (Historialfacturas li : ListaHistorial) {
+//            cb.addItem(li.getAnnio());
+//        }
+//    }
+    
+    public void fillJTable(JTable jtable, int codigo) {
+        
         String[] titulos = {"Correlativo", "Fecha", "Factura", "CCF", "Ajuste Inventario",
                         "Proveedor", "Entradas Unidad", "Entradas Precio", "Entradas Total", "Salidas Unidad",
                         "Salidas Precio", "Salidas Total", "Saldos Unidad", "Saldos Cto. Prom.", "Saldo Total"};
         String fecha = "fecha";
-        List<Historialfacturas> listado = getEntityManager() //like \"%" + busqueda + "%\""
-                .createQuery("SELECT h FROM Historialfacturas h WHERE EXTRACT(YEAR FROM h."+ fecha +") = 2019")
-                .getResultList();
+        String cb = "codigobodega";
+        String tabla = "Historialfacturas";
+        
+        CapaDatos.Bodegas b = new CapaDatos.Bodegas();
+        b.setCodigobodega(BigDecimal.valueOf(codigo));
+        
+        List<Historialfacturas> Lista = getEntityManager().createNamedQuery("Historialfacturas.findByCodigos")
+                .setParameter("codigobodega", b).getResultList();
+        
+//        List<Historialfacturas> listado = getEntityManager() 
+//                .createQuery("SELECT h FROM " + tabla + " h WHERE h." + cb + " = " + codigo + "")
+//                .getResultList();
+        
         DefaultTableModel Modelo = new DefaultTableModel(null, titulos);
         int correlativo = 1;
         
-        for (Historialfacturas h : listado) {
+        for (Historialfacturas h : Lista) {
             Modelo.addRow(new Object[]{correlativo, h.getFecha(), h.getFactura(), h.getCcf(), h.getAjusteinventario(), 
                 h.getCodigoproveedor().getNombres(), h.getEunidad(), h.getEprecio(), h.getEtotal(), h.getOunidad(), 
                 h.getOprecio(), h.getOtotal(), h.getSunidad(), h.getScostopromedio(), h.getStotal()});
@@ -64,7 +93,7 @@ public class HistorialfacturasJpaController implements Serializable {
             correlativo++;
         }
         jtable.setModel(Modelo);
-        jtable.setDefaultEditor(Object.class, null);
+        //jtable.setDefaultEditor(Object.class, null);
     }
     
     
@@ -126,6 +155,29 @@ public class HistorialfacturasJpaController implements Serializable {
         np.execute();
 
     }
+    
+    public void SalidaFactura(int codigo, String numFactura, int contOcredit, int cantDiasCredito, int codigoBodega,
+            int codigoArticulo, Date fecha, int oUnidad, String cliente) {
+
+        StoredProcedureQuery np = getEntityManager().createNamedStoredProcedureQuery("Historialfacturas.SalidaFactura")
+                .setParameter("p_Codigo", codigo)
+                .setParameter("p_NumFactura", numFactura)
+                .setParameter("p_Fecha", fecha)
+                .setParameter("p_cont_O_credit", contOcredit)
+                .setParameter("p_CantidadDiasCredit", cantDiasCredito)
+                .setParameter("p_oCliente", cliente)
+                .setParameter("p_CodigoArticulo", codigoArticulo)
+                .setParameter("p_oUnidad", oUnidad)
+                .setParameter("p_CodigoBodega", codigoBodega);
+                
+        np.execute();
+
+    }
+    
+    /*
+p_Codigo NUMBER, p_NumFactura VARCHAR2, p_Fecha DATE, p_cont_O_credit NUMBER, p_CantidadDiasCredit NUMBER,
+p_oCliente VARCHAR2,p_CodigoArticulo NUMBER, p_oUnidad NUMBER,p_CodigoBodega NUMBER
+*/
     
     public void create(Historialfacturas historialfacturas) throws PreexistingEntityException, Exception {
         EntityManager em = null;

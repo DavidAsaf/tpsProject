@@ -69,7 +69,8 @@ END;
 
 --Salida factura
 CREATE OR REPLACE PROCEDURE SalidaFactura (
-	p_NumFactura VARCHAR2,
+    p_Codigo NUMBER,
+    p_NumFactura VARCHAR2,
 	p_Fecha DATE,
 	p_cont_O_credit NUMBER,
 	p_CantidadDiasCredit NUMBER,
@@ -116,7 +117,7 @@ AS
 			(Codigo, NumFactura, cont_O_credit, CantidadDiasCredit, Estado,CodigoBodega, CodigoArticulo,Fecha, CCF, 
 			oUnidad, oPrecio, oTotal, oCliente, sUnidad, sCostoPromedio, sTotal)
 		VALUES 
-			(HistorialFacturaSeq.nextval, p_NumFactura, p_cont_O_credit, p_CantidadDiasCredit, v_Estado, p_CodigoBodega, p_CodigoArticulo, p_Fecha,
+			(p_Codigo, p_NumFactura, p_cont_O_credit, p_CantidadDiasCredit, v_Estado, p_CodigoBodega, p_CodigoArticulo, p_Fecha,
 			v_CCF, p_oUnidad, v_oPrecio, v_oTotal, p_oCliente, v_sUnidad, v_sCostoPromedio, v_sTotal);
 
 		UPDATE Articulos SET Existencia = Existencia - p_oUnidad WHERE CodigoArticulo = p_CodigoArticulo;

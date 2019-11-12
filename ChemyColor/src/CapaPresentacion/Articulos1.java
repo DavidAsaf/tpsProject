@@ -589,7 +589,7 @@ public class Articulos1 extends javax.swing.JFrame {
             pro = t.findIdBodegas(prov);
             retorno = Integer.parseInt(pro.getCodigobodega().toString());
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Hubo un error al encontrar el id del proveedor. " + e.toString());
+            JOptionPane.showMessageDialog(null, "Hubo un error al encontrar el id. " + e.toString());
         }
 
         return retorno;
@@ -669,7 +669,7 @@ public class Articulos1 extends javax.swing.JFrame {
         this.cbsub.setSelectedIndex(0);
     }
 
-    public static DefaultTableModel tbpro;
+    private static DefaultTableModel tbpro;
 
     private void verTabla() {
         try {

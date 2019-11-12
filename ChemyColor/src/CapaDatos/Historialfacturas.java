@@ -31,8 +31,9 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "HISTORIALFACTURAS") 
-@NamedQueries({
-    @NamedQuery(name = "Historialfacturas.findAll", query = "SELECT h FROM Historialfacturas h")})
+@NamedQueries({ 
+    @NamedQuery(name = "Historialfacturas.findAll", query = "SELECT h FROM Historialfacturas h")
+    , @NamedQuery(name = "Historialfacturas.findByCodigos", query = "SELECT h FROM Historialfacturas h WHERE h.codigobodega = :codigobodega")})
 @NamedStoredProcedureQueries ({
     @NamedStoredProcedureQuery(
         name = "Historialfacturas.EntraFactura",
@@ -67,9 +68,29 @@ import javax.persistence.TemporalType;
             @StoredProcedureParameter(name = "p_dui", mode = ParameterMode.IN, type = String.class),
             @StoredProcedureParameter(name = "p_direccion", mode = ParameterMode.IN, type = String.class),
             @StoredProcedureParameter(name = "p_ivacreditofiscal", mode = ParameterMode.IN, type = String.class),}
+    ),
+    
+    @NamedStoredProcedureQuery(
+        name = "Historialfacturas.SalidaFactura",
+        procedureName = "SalidaFactura",
+        parameters = {
+            @StoredProcedureParameter(name = "p_Codigo", mode = ParameterMode.IN, type = Integer.class),
+            @StoredProcedureParameter(name = "p_NumFactura", mode = ParameterMode.IN, type = String.class),
+            @StoredProcedureParameter(name = "p_Fecha", mode = ParameterMode.IN, type = Date.class),
+            @StoredProcedureParameter(name = "p_cont_O_credit", mode = ParameterMode.IN, type = Integer.class),
+            @StoredProcedureParameter(name = "p_CantidadDiasCredit", mode = ParameterMode.IN, type = Integer.class),
+            @StoredProcedureParameter(name = "p_oCliente", mode = ParameterMode.IN, type = String.class),
+            @StoredProcedureParameter(name = "p_CodigoArticulo", mode = ParameterMode.IN, type = Integer.class),
+            @StoredProcedureParameter(name = "p_oUnidad", mode = ParameterMode.IN, type = Integer.class),
+            @StoredProcedureParameter(name = "p_CodigoBodega", mode = ParameterMode.IN, type = Integer.class),}
     )
+
 })
 
+/*
+p_Codigo NUMBER, p_NumFactura VARCHAR2, p_Fecha DATE, p_cont_O_credit NUMBER, p_CantidadDiasCredit NUMBER,
+p_oCliente VARCHAR2,p_CodigoArticulo NUMBER, p_oUnidad NUMBER,p_CodigoBodega NUMBER
+*/
 
 public class Historialfacturas implements Serializable {
 
@@ -154,7 +175,7 @@ public class Historialfacturas implements Serializable {
     public void setCodigo(BigDecimal codigo) {
         this.codigo = codigo;
     }
-
+   
     public String getNumfactura() {
         return numfactura;
     }
